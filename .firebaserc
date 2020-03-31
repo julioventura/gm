@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gestormix-com": {
+      "hosting": {
+        "gm": [
+          "gestormix-com"
+        ]
+      }
+    }
+  }
+}

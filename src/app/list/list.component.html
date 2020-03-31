@@ -1,0 +1,580 @@
+<div class="container_principal">
+
+    <!-- Cabeçalho -->
+    <div class="header-toolbar">
+        <div class="fc-left">
+            <img src="http://gestormix.com/img/sair.png" class="img_nav" (click)="voltar()">
+            <img src="http://gestormix.com/img/home.png" class="img_nav" (click)="dados.home()">
+        </div>
+
+        <div class="fc-right">
+            <div *ngIf="dados.PARAMETRO=='FINANCEIRO'">
+                <img src="http://gestormix.com/img/vazio.png" class="img_nav">
+				<img src="http://gestormix.com/img/vazio.png" class="img_nav">
+				<!-- <img src="http://gestormix.com/img/config.png" class="img_nav" (click)="go('CONFIG_FINANCEIRO')"> -->
+            </div>
+
+            <!-- PARA USUARIOS INCLUIREM REGISTROS -->
+            <div *ngIf="dados.PARAMETRO=='PAGAMENTOS'
+			|| dados.PARAMETRO=='LANCAMENTOS_RECEITA'
+            || dados.PARAMETRO=='LANCAMENTOS_DESPESA'
+            ">
+                <img src="http://gestormix.com/img/vazio.png" class="img_nav">
+                <img *ngIf="dados.pode_incluir_lancamento" src="http://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
+                <img *ngIf="!dados.pode_incluir_lancamento" src="http://gestormix.com/img/vazio.png" class="img_nav">
+            </div>
+
+            <div *ngIf="dados.PARAMETRO!='PAGAMENTOS'
+            && dados.PARAMETRO!='LANCAMENTOS_RECEITA'
+			&& dados.PARAMETRO!='LANCAMENTOS_DESPESA'
+            && dados.PARAMETRO!='FINANCEIRO'">
+                <img src="http://gestormix.com/img/vazio.png" class="img_nav">
+                <img *ngIf="dados.pode_incluir" src="http://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
+                <img *ngIf="!dados.pode_incluir" src="http://gestormix.com/img/vazio.png" class="img_nav">
+            </div>
+        </div>
+
+        <div class="fc-center title">
+            <div class="espacador_vertical">&nbsp;</div>
+            <div *ngIf="titulo_lista">{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
+                <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
+                <!-- <span *ngIf="dados.PARAMETRO=='REVISOES' && dados.mes_de_revisao!=''"> de {{dados.mes_de_revisao}}</span> -->
+            </div>
+
+            <div *ngIf="(dados.usuario_logado.dataset != dados.usuario_logado.key)" class="fc-center sub_title red">
+                <span class="red">Usando clientes de {{ dados.usuario_logado.dataset_nome }}</span>
+            </div>
+        </div>
+        <div class="fc-clear"></div>
+    </div>
+
+    <!-- LISTAGENS com primeNG dataView -->
+    <div *ngIf="['FORNECEDORES','CLIENTES','EQUIPE','FINANCEIRO','RELATORIOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <!-- FILTRO -->
+        <div *ngIf="!['FINANCEIRO','RELATORIOS','BANCOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
+            <div class= "grid_container_busca">
+                <div class="grid_nome">
+                    <input class="input_filtro" [(ngModel)]="dados.filtro" (keyup)="dados.filterDatabase(dados.filtro)">
+                </div>
+            </div>
+            <div class="espacador_vertical">&nbsp;</div>
+        </div>
+        <!-- FILTRO -->
+
+		<div *ngIf="dados[config[dados.PARAMETRO].total_de] == -1">
+            <div class="espacador_vertical">&nbsp;</div>
+            <div class="container_interno">
+                <div class="center">
+                    <div class="espacador_vertical">&nbsp;</div>
+                    <p class="sub_title">Aguardando... </p>
+                    <div class="espacador_vertical">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] == 0">
+            <div class="espacador_vertical">&nbsp;</div>
+            <div class="container_interno">
+                <div class="center">
+                    <div class="espacador_vertical">&nbsp;</div>
+                    <p class="sub_title center">Nenhum registro.</p>
+                    <span>Use o botão de incluir no topo da tela.</span>
+                    <div class="espacador_vertical">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0 && dados[config[dados.PARAMETRO].filtered]?.length==0  && dados.filtro?.length > 0">
+             <div class="container_interno">
+                <div class="center">
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                    <span class="sub_title center">Nenhum registro com esse filtro</span>
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0">
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <p-dataView [value]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered] : dados[config[dados.PARAMETRO].selected]" [paginator]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0  ? dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO] : dados[config[dados.PARAMETRO].selected].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [emptyMessage]="no_records" [pageLinks]="links_de_paginas">
+               <p-header>{{config[dados.PARAMETRO].titulo_lista}}</p-header>
+                   <ng-template let-registro pTemplate="listItem">
+                       <div (click)="verRegistro(registro)">
+                           <div>{{registro.nome}}</div>
+                           <div *ngIf="registro.id && dados.usuario_logado.id_para_clientes" class="float-right bold">{{registro.id}}</div>
+                           <div class="fc-clear"></div>
+                       </div>
+                   </ng-template>
+                <p-footer>
+                    {{ !['FINANCEIRO','RELATORIOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO) ? (dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0) ? util.complementa(dados[config[dados.PARAMETRO].filtered].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : util.complementa(dados[config[dados.PARAMETRO].selected].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : '' }}
+                </p-footer>
+           </p-dataView>
+        </div>
+
+        <!-- RODAPÉ COM ICONES -->
+        <div *ngIf="['CLIENTES','EQUIPE','FORNECEDORES'].includes(dados.PARAMETRO)">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
+                <div>
+                    <div class="fc-left menu_home">
+                        <img src="http://gestormix.com/img/vazio.png" class="img_nav" />
+                    </div>
+                    <div class="float-right">
+                        <img src="http://gestormix.com/img/vazio.png" class="img_nav" />
+                    </div>
+                    <div class="float-center">
+                        <img src="http://gestormix.com/img/mail.png" class="img_nav_rodape margin_top_10" (click)="go('MALADIRETA')">
+                    </div>
+                    <div class="fc-clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- LISTAGENS com primeNG dataTable -->
+    <div *ngIf="[
+		'ATENDIMENTOS','ESTOQUE','HISTORICOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RESULTADOS',
+		'BANCOS'].includes(dados.PARAMETRO)">
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <!-- FILTRO -->
+        <div *ngIf="!['HISTORICOS','RESULTADOS','BANCOS'].includes(dados.PARAMETRO)">
+            <div class= "grid_container_busca">
+                <div class="grid_nome">
+                    <input class="input_filtro" [(ngModel)]="dados.filtro" (keyup)="dados.filterDatabase(dados.filtro)">
+                </div>
+            </div>
+            <div class="espacador_vertical">&nbsp;</div>
+        </div>
+        <!-- FILTRO -->
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] == 0">
+            <div class="espacador_vertical">&nbsp;</div>
+            <div class="container_interno">
+                <div class="center">
+                    <div class="espacador_vertical">&nbsp;</div>
+                    <p class="sub_title">Nenhum registro.</p>
+                    <span *ngIf="dados.PARAMETRO=='HISTORICOS'">Todas as ações serão listadas aqui.</span>
+                    <div class="espacador_vertical">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0 && dados[config[dados.PARAMETRO].filtered]?.length==0  && dados.filtro?.length > 0">
+             <div class="container_interno">
+                <div class="center">
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                    <span class="sub_title">Nenhum registro com esse filtro</span>
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0">
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
+                <p-table [value]="[{}]">
+                    <ng-template pTemplate="caption">
+                        RESULTADO
+                     </ng-template>
+                     <ng-template pTemplate="header">
+                          <tr>
+                              <th>Período</th>
+                              <th>Receita</th>
+                              <th>Despesa</th>
+                              <th>Saldo</th>
+                          </tr>
+                     </ng-template>
+                     <ng-template pTemplate="body" let-registro>
+                          <tr>
+                              <td>{{util.complementa(dados.lancamentos_por_dia.length, 'dia', 'dias')}}</td>
+                              <td class="right">{{dados.valor_total_receitas ? util.formata_valor(dados.valor_total_receitas) : ''}}</td>
+                              <td class="right">{{dados.valor_total_despesas ? util.formata_valor(dados.valor_total_despesas) : ''}}</td>
+                              <td *ngIf="dados.saldo_lancamentos>=0" class="blue right">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
+                              <td *ngIf="dados.saldo_lancamentos<0" class="red right">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
+                          </tr>
+                     </ng-template>
+                      <ng-template pTemplate="summary">
+                          <span *ngIf="dados.lancamentos_por_dia.length>0">
+                              Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
+                          </span>
+                      </ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.PARAMETRO == 'ESTOQUE'">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div *ngIf="dados.is_estoque_normal" class="ui-grid-col-20 menu_ficha_ativado" (click)="estoque_normal()">NORMAL</div>
+                    <div *ngIf="!dados.is_estoque_normal" class="ui-grid-col-20 menu_ficha" (click)="estoque_normal()">NORMAL</div>
+
+                    <div *ngIf="dados.is_estoque_excedente" class="ui-grid-col-20 menu_ficha_ativado" (click)="estoque_excedente()">EXCEDENTE</div>
+                    <div *ngIf="!dados.is_estoque_excedente" class="ui-grid-col-20 menu_ficha" (click)="estoque_excedente()">EXCEDENTE</div>
+
+                    <div *ngIf="dados.is_estoque_baixo" class="ui-grid-col-20 menu_ficha_ativado" (click)="estoque_baixo()">BAIXO</div>
+                    <div *ngIf="!dados.is_estoque_baixo" class="ui-grid-col-20 menu_ficha" (click)="estoque_baixo()">BAIXO</div>
+
+                    <div *ngIf="dados.is_estoque_vazio" class="ui-grid-col-20 menu_ficha_ativado" (click)="estoque_vazio()">VAZIO</div>
+                    <div *ngIf="!dados.is_estoque_vazio" class="ui-grid-col-20 menu_ficha" (click)="estoque_vazio()">VAZIO</div>
+
+                    <div *ngIf="dados.is_estoque_negativo" class="ui-grid-col-20 menu_ficha_ativado" (click)="estoque_negativo()">NEGATIVO</div>
+                    <div *ngIf="!dados.is_estoque_negativo" class="ui-grid-col-20 menu_ficha" (click)="estoque_negativo()">NEGATIVO</div>
+                </div>
+            </div>
+
+            <div *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div class="{{atendimento_hoje ? 'menu_atendimento_hoje' : 'menu_atendimento_apagado green2'}}" (click)="filtrar_atendimentos('hoje')">HOJE</div>
+                    <div class="{{atendimento_inativo ? 'menu_atendimento_inativo' : 'menu_atendimento_apagado darkgrey'}}" (click)="filtrar_atendimentos('inativo')">INATIVO</div>
+                    <div class="{{atendimento_aberto ? 'menu_atendimento_aberto' : 'menu_atendimento_apagado orange'}}" (click)="filtrar_atendimentos('aberto')">ABERTO</div>
+                    <div class="{{atendimento_em_curso ? 'menu_atendimento_em_curso' : 'menu_atendimento_apagado red'}}" (click)="filtrar_atendimentos('em_curso')">EM CURSO</div>
+                    <div class="{{atendimento_finalizado ? 'menu_atendimento_finalizado' : 'menu_atendimento_apagado blue'}}" (click)="filtrar_atendimentos('finalizado')">FINALIZADO</div>
+                </div>
+            </div>
+
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <p-table
+				[value]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered] : dados[config[dados.PARAMETRO].selected]"
+				[paginator]="dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO] : dados[config[dados.PARAMETRO].selected].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]"
+				[rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]">
+
+                <ng-template pTemplate="caption">
+                   <span *ngIf="dados.PARAMETRO != 'RESULTADOS'">{{config[dados.PARAMETRO].titulo_lista}}</span>
+                   <span *ngIf="dados.PARAMETRO == 'RESULTADOS'">DETALHAMENTO DIÁRIO</span>
+                </ng-template>
+                <ng-template pTemplate="header">
+
+                   <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'">
+                       <th class="w20 pleft">Data</th>
+                       <th class="w16">Horário</th>
+                       <th class="w32">Cliente</th>
+                       <th class="w32">Responsável</th>
+                   </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'">
+                       <th>Nome</th>
+                       <th class="center">Código</th>
+                       <th class="right">Preço</th>
+                       <th class="right">Qtd</th>
+                   </tr>
+
+				   <tr *ngIf="dados.PARAMETRO == 'BANCOS'">
+					   <th>Nome</th>
+                       <th>Tipo</th>
+                       <th>Agência</th>
+					   <th>Conta</th>
+				   </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'">
+                       <th class="pleft">Quando</th>
+                       <th>Seção</th>
+                       <th>Ação</th>
+                       <th>Referência</th>
+                   </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'">
+                       <th class="pleft">Data</th>
+                       <th>Centro de Custos</th>
+                       <th>Contraparte</th>
+                       <th class="right">Valor</th>
+                   </tr>
+
+                    <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'">
+                        <th class="pleft">Data</th>
+                        <th>Centro de Custos</th>
+                        <th>Contraparte</th>
+                        <th class="right">Valor</th>
+                    </tr>
+
+                    <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'">
+                        <th class="pleft">Data</th>
+                        <th class="right">Receita</th>
+                        <th class="right">Despesa</th>
+                        <th class="right">Saldo</th>
+                    </tr>
+
+                </ng-template>
+                <ng-template name="registro" pTemplate="body" let-registro>
+
+                   <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'" (click)="verRegistro(registro)" class="{{registro.data == dados.HOJE ? 'bold' : 'small'}}">
+                       <td class="{{registro.atendimento=='finalizado' ? 'blue w20 pleft' : registro.atendimento=='em_curso' ? 'red w20 pleft' : registro.atendimento=='aberto' ? 'orange w20 pleft' : 'w20 pleft'}}">{{util.diminui_data(registro.data)}}</td>
+                       <td class="{{registro.atendimento=='finalizado' ? 'blue w16 center' : registro.atendimento=='em_curso' ? 'red w16 center' : registro.atendimento=='aberto' ? 'orange w16 center' : 'w16 center'}}">{{registro.hora}}</td>
+                       <td class="{{registro.atendimento=='finalizado' ? 'blue w32' : registro.atendimento=='em_curso' ? 'red w32' : registro.atendimento=='aberto' ? 'orange w32' : 'w32'}}">{{registro.cliente}}</td>
+                       <td class="{{registro.atendimento=='finalizado' ? 'blue w32' : registro.atendimento=='em_curso' ? 'red w32' : registro.atendimento=='aberto' ? 'orange w32' : 'w32'}}">{{registro.responsavel_nome}}</td>
+                   </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'" (click)="verRegistro(registro)">
+                       <td>{{registro.nome}}</td>
+                       <td class="center">{{registro.id}}</td>
+                       <td class="right">{{registro.preco_venda}}</td>
+                       <td class="right">{{registro.quantidade}}</td>
+                   </tr>
+
+                  <tr *ngIf="dados.PARAMETRO == 'BANCOS'" (click)="verRegistro(registro)">
+                      <td>{{registro.nome}}</td>
+                      <td class="center">{{registro.corrente ? 'Corrente' : 'Poupança'}}</td>
+                      <td class="center">{{registro.agencia}}</td>
+                      <td class="center">{{registro.conta}}</td>
+                  </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'" (click)="verRegistro(registro)">
+                       <td>{{registro.criado_em}}</td>
+                       <td>{{registro.database}}</td>
+                       <td>{{registro.titulo}}</td>
+                       <td>{{registro.registro_nome}}</td>
+                   </tr>
+
+                   <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && !registro.excluido" (click)="verRegistro(registro)">
+                       <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
+                       <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
+                       <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
+                       <td class="{{registro.estorno ? 'estorno right' : 'normal right'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
+                   </tr>
+
+                    <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'" (click)="verRegistro(registro)">
+                        <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
+                        <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
+                        <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
+                        <td class="{{registro.estorno ? 'estorno right' : 'normal right'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
+                    </tr>
+
+                    <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'" (click)="seleciona_data(registro.data)">
+                        <td>{{util.diminui_data(registro.data)}}</td>
+                        <td class="right">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                        <td class="right">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                        <td *ngIf="registro.saldo>=0" class="blue right">{{util.formata_valor(registro.saldo)}}</td>
+                        <td *ngIf="registro.saldo<0" class="red right">{{util.formata_valor(registro.saldo)}}</td>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <span *ngIf="dados.PARAMETRO!='RESULTADOS'" >
+						<span *ngIf="dados.PARAMETRO!='BANCOS'">
+                        	{{ dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? util.complementa(dados[config[dados.PARAMETRO].filtered].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : util.complementa(dados[config[dados.PARAMETRO].selected].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) }}
+						</span>
+                    </span>
+                    <span *ngIf="dados.PARAMETRO=='RESULTADOS' && dados.lancamentos_por_dia.length>0">
+                        {{ util.complementa(dados.lancamentos_por_dia.length, 'dia', 'dias')}} &nbsp; | &nbsp; Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
+                    </span>
+                </ng-template>
+            </p-table>
+
+            <!-- <div *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div class="legenda_label">Legenda:</div>
+                    <div class="legenda_inativo">INATIVO</div>
+                    <div class="legenda_aberto">ABERTO</div>
+                    <div class="legenda_em_curso">EM CURSO</div>
+                    <div class="legenda_finalizado">FINALIZADO</div>
+                </div>
+            </div> -->
+
+            <div *ngIf="dados.mostrar_lancamentos_do_dia">
+                <div class="espacador_vertical_duplo">&nbsp;</div>
+
+               <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
+                   <p-table [value]="dados.lancamentos_do_dia">
+                       <ng-template pTemplate="caption">
+                           DETALHAMENTO DO DIA {{util.formata_maiusculas(util.formata_data_por_extenso(dados.data_selecionada))}}
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                             <tr>
+                                 <th>Contraparte</th>
+                                 <th>Receita</th>
+                                 <th>Despesa</th>
+                             </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-registro>
+                             <tr>
+                                 <td (click)="ver_lancamento(registro.registro)">{{registro.contraparte}}</td>
+                                 <td class="right blue" (click)="ver_lancamento(registro.registro)">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                                 <td class="right red" (click)="ver_lancamento(registro.registro)">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                             </tr>
+                        </ng-template>
+                         <ng-template pTemplate="summary">
+                             <span *ngIf="dados.lancamentos_do_dia.length>0">
+                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_do_dia)}} &nbsp;|&nbsp; Saldo do dia: {{util.formata_valor(dados.saldo_lancamentos_do_dia)}}
+                             </span>
+                         </ng-template>
+                   </p-table>
+               </div>
+            </div>
+        </div>
+    </div>
+
+
+	<!-- CENTROS_DE_CUSTOS_LISTA -->
+    <div *ngIf="dados.listar_centros_de_custos_lista">
+		<div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div class="center">
+            <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span> &nbsp;
+            <span class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </span>
+
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+        </div>
+
+        <div *ngIf="mostrar_opcao_1">
+			<p-table
+				[value]="dados.selected_receitas" [paginator]="dados.selected_receitas && dados.selected_receitas.length>config.QUANTOS_POR_PAGINA['RECEITAS']" [rows]="config.QUANTOS_POR_PAGINA['RECEITAS']">
+				<ng-template pTemplate="caption"> RECEITAS </ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Nome</th>
+						<th class="right">Código</th>
+					</tr>
+				</ng-template>
+				<ng-template name="registro" pTemplate="body" let-registro>
+					<tr>
+						<td>{{registro.nome}}</td>
+						<td class="right">{{registro.id}}</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<span *ngIf="dados.selected_receitas.length>0">
+						{{ util.complementa(dados.selected_receitas.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
+					</span>
+				</ng-template>
+			</p-table>
+        </div>
+
+        <div *ngIf="mostrar_opcao_2">
+			<p-table
+				[value]="dados.selected_despesas" [paginator]="dados.selected_despesas && dados.selected_despesas.length>config.QUANTOS_POR_PAGINA['DESPESAS']" [rows]="config.QUANTOS_POR_PAGINA['DESPESAS']">
+				<ng-template pTemplate="caption"> DESPESAS </ng-template>
+				<ng-template pTemplate="header">
+				   <tr>
+					   <th>Nome</th>
+					   <th class="right">Código</th>
+				   </tr>
+				</ng-template>
+				<ng-template name="registro" pTemplate="body" let-registro>
+				   <tr>
+					   <td>{{registro.nome}}</td>
+					   <td class="right">{{registro.id}}</td>
+				   </tr>
+				</ng-template>
+				<ng-template pTemplate="summary">
+					<span *ngIf="dados.selected_despesas.length>0">
+					{{ util.complementa(dados.selected_despesas.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
+					</span>
+				</ng-template>
+			</p-table>
+        </div>
+    </div>
+
+	<div class="espacador_vertical">&nbsp;</div>
+
+
+
+
+
+
+
+
+    <!-- RODAPÉ COM ICONES -->
+    <!-- <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div>
+            <div class="fc-left menu_home">
+                <img src="http://gestormix.com/img/vazio.png" class="img_nav" />
+            </div>
+            <div class="float-right">
+                <img src="http://gestormix.com/img/vazio.png" class="img_nav" />
+            </div>
+            <div class="float-center">
+                <img src="http://gestormix.com/img/mail.png" class="img_nav_rodape margin_top_10" (click)="go('MALADIRETA')">
+            </div>
+            <div class="fc-clear"></div>
+        </div>
+    </div> -->
+
+
+
+
+    <!-- USUARIOS -->
+    <div *ngIf="dados.listar_usuarios">
+
+        <!-- FILTRO -->
+        <!-- <div *ngIf="dados.total_de_usuarios>0">
+            <div class= "grid_container_busca">
+                <div class="grid_nome">
+                    <input class="input_filtro" type="text" [(ngModel)]="dados.filtro_digitado" (keyup)="dados.filterContainsUsuarios(dados.filtro_digitado)">
+                    <div class="espacador_vertical">&nbsp;</div>
+                </div>
+            </div>
+        </div> -->
+        <!-- FILTRO -->
+
+        <div *ngIf="dados.total_de_usuarios==-1">
+            <div class="center" *ngIf="dados.filtered_usuarios.length == 0">
+                <div style="text-align: -webkit-center">
+                    <p> &nbsp;</p>
+                    <p> &nbsp;</p>
+                    <p> &nbsp;</p>
+                    <p class="fa fa-spinner fa-pulse fa-4x fa-fw blue f40"></p>
+                    <p> &nbsp;</p>
+                    <h2>Carregando...</h2>
+                    <p> &nbsp;</p>
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dados.total_de_usuarios==0">
+            <div class="center">
+                <div *ngIf="dados.filtered_usuarios.length == 0" class="center">
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                    <span class="sub_title">Nenhum registro</span>
+                    <div class="espacador_vertical_duplo">&nbsp;</div>
+                </div>
+                <div class="espacador_vertical_duplo">&nbsp;</div>
+            </div>
+        </div>
+
+
+        <div *ngIf="dados.filtered_usuarios.length > 0">
+            <p-dataView [value]="dados.filtered_usuarios" [rows]="dados.rows" [paginator]="paginator_status" [pageLinks]="links_de_paginas">
+                    <p-header>Usuários</p-header>
+                    <ng-template let-registro pTemplate="listItem">
+                        <div (click)="verRegistro(registro)">
+                            <div>{{registro.nome}}</div>
+                            <div class="float-right"></div>
+                            <div class="fc-center-l"></div>
+                            <div class="fc-clear"></div>
+                        </div>
+                    </ng-template>
+                    <p-footer>&nbsp;
+                        <span *ngIf="dados.filtered_usuarios.length>0">
+                            {{util.complementa(dados.filtered_usuarios.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
+                        </span>
+                        &nbsp;
+                    </p-footer>
+            </p-dataView>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
