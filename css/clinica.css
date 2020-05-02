@@ -1,0 +1,1117 @@
+#container {
+    margin-top: 0pt;
+}
+
+
+form {
+    display: none;
+}
+table {
+    width: 100%;
+    border: none;
+}
+td, th {
+    text-align: center;
+    color: black;
+    font-size: smaller;
+}
+h2 {
+    margin-top: 0em;
+    color: #428BCA;
+    font-weight: bold;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+}
+h3{
+    font-weight: bold;
+    color: #428BCA;
+}
+h4{
+    font-weight: bold;
+    color: dodgerblue;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+}
+li{
+    font-weight: bold;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+}
+
+
+/*Personalizando o Bootstrap*/
+.btn-primary {
+    background-color: forestgreen;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-family: Helvetica, Arial, SunSans-Regular, sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    height: 2.5em;
+}
+.form-control {
+    font-weight: bold;
+    color: dodgerblue;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    background-color: azure;
+}
+.alert {
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+    font-size: small;
+    color: gray;
+    padding: 0pt;
+}
+
+a {
+    color: dodgerblue;
+}
+.menu {
+    font-size: smaller;
+    color: dodgerblue;
+}
+.menu-inativo {
+    font-size: smaller;
+    color: #dddddd;
+}
+
+.titulo {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: dodgerblue;
+    font-weight: bold;
+    font-size: 12pt;
+    text-align: center;
+    width: 100%;
+}
+.destaque {
+    color: red;
+    font-weight: bold;
+}
+.destaque_dentistas {
+    color: black;
+    font-weight: bold;
+}
+.login_message {
+    color: dodgerblue;
+    text-align: center;
+    font-size: smaller;
+}
+
+
+
+.debug {
+    color: red;
+    padding: 20px;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.Loading {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    font-size: x-large;
+    color: lightskyblue;
+    font-weight: bolder;
+    padding: 50pt;
+    padding-left: 0pt;
+    padding-right: 0pt;
+}
+
+.rodape {
+    color: dodgerblue;
+    font-size: smaller;
+    text-align: center;
+}
+
+#UserName {
+    color: dodgerblue;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    font-size: smaller;
+    text-align: center;
+}
+
+#CategoriaDestePerfil, #CategoriaDestePerfilDentistas  {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: green;
+    font-weight: bold;
+    font-size: 12pt;
+    text-align: center;
+    padding: 1em;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+#saudacaoHeader, #saudacaoHeaderPacientes, #saudacaoHeaderAlunos, #saudacaoHeaderProfessor, #saudacaoHeaderCoordenador, #saudacaoHeaderAuxiliar  {
+    width: 100%;
+    text-align: center;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    color: dodgerblue;
+    font-style: italic;
+}
+
+
+
+
+
+
+/*
+CHAT
+*/
+
+#post, #mypost {
+    border: 0.5pt solid darkblue;
+    margin-bottom: 15pt;
+    margin-top: 0pt;
+    background-color: #eeeeee;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+}
+#mypost {
+    background-color: #ccddff;
+}
+
+.colDataHora{
+}
+.Mensagem {
+    font-size: 13pt;
+    white-space: pre-wrap;
+}
+.Historico {
+    height: auto;
+    text-align: left;
+    background-color: #eeeeee;
+    border: 2pt solid white;
+    font-weight: bold;
+    color: black;
+    padding: 0.4em;
+    font-size: 12pt;
+    white-space: pre-wrap;
+}
+.Plano {
+    height: auto;
+    text-align: left;
+    background-color: #eeeeee;
+    border: 2pt solid white;
+    font-weight: bold;
+    color: black;
+    font-size: 12pt;
+    padding: 0.4em;
+    white-space: pre-wrap;
+}
+.colApelido, .colApelidoOutros {
+    font-size: 11pt;
+    font-weight: bold;
+    color: dodgerblue;
+}
+.colApelidoOutros {
+    color: gray;
+}
+
+
+
+.ChatMensagemBodyAutor {
+    padding: 1em;
+    background-color: #cdf;
+    text-align: left;
+}
+.ChatMensagemBodyDestinatario {
+    padding: 1em;
+    background-color: #def;
+    text-align: left;
+}
+.ChatMensagemBodyOutros {
+    padding: 1em;
+    background-color: #eee;
+    text-align: left;
+}
+
+
+.ChatMensagemHeaderAutor {
+    font-size: 13pt;
+    padding: 0.2em;
+    font-weight: bold;
+    padding-left: 1em;
+    border: 0pt;
+    background: dodgerblue;
+    color: white;
+}
+.ChatMensagemHeaderDestinatario {
+    font-size: 13pt;
+    padding: 0.2em;
+    border: 0pt;
+    font-weight: bold;
+    background: lightblue;
+    color: dodgerblue;
+}
+
+.ChatMensagemHeaderOutros {
+    font-size: 13pt;
+    background: #ccc;
+    color: gray;
+    padding: 0.2em;
+    border: 0pt;
+    font-weight: bold;
+}
+
+
+
+
+
+
+#txtChatApelido, #txtChatApelido1 {
+    font-size: 12pt;
+    background: lightgrey;
+}
+
+#txtChatMensagem, #txtChatMensagemResponder {
+    font-size: 12pt;
+    background: aliceblue;
+    white-space: pre-wrap;
+}
+
+
+
+.ChatMensagemData {
+    padding: 0.5em;
+}
+
+.colMensagemOptions {
+    text-align: right;
+    padding-right: 0.5em;
+}
+
+
+.mensagemEdit, .mensagemReply {
+
+}
+
+
+
+#txtLoginEmail, #txtLoginPass,
+#txtRegNome, #inputRegCodigo, #inputRegEmail, #inputRegPass, #inputRegPass2,
+#inputRegName, #inputRegEmail, #inputRegCelular, #inputRegTelefone, #inputRegEndereco, #inputRegCidade,
+#inputRegCpf, #inputRegIdentidade, #inputRegEmissor, #inputRegNacionalidade, #inputRegNaturalidade, #inputRegNascimento,
+#inputRegDatadoCadastro, #ddlRegEstado, #ddlRegSexo, #inputTriagem {
+    font-size: 12pt;
+    font-weight: normal;
+    background-color: aliceblue;
+    height: auto;
+}
+
+#inputRegCodigo {
+    background-color: antiquewhite;
+}
+
+
+#ddlRegCategoria {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    font-size: 12pt;
+    padding: 0.5em;
+    font-weight: bold;
+    background-color: antiquewhite;
+    height: auto;
+}
+
+/*
+RECOMENDACOES
+*/
+
+#notaquando {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    background-color:lightsteelblue;
+    color: dodgerblue;
+    margin-top: 1em;
+    margin-bottom: 0.1em;
+    padding: 0.2em;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 0.5pt solid grey;
+}
+#nota {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: #428BCA;
+    background: #cdf;
+    margin-top: 0.1em;
+    margin-bottom: 2em;
+    padding: 0.5em;
+    font-size: 12pt;
+    font-weight: normal;
+    border-bottom: 4pt solid white;
+    border-top: 8pt solid white;
+}
+#notaData, #notaTitulo {
+    font-size: 12pt;
+    text-align: left;
+    font-weight: normal;
+    padding: 0.5em;
+    border: 2pt solid white;
+    height: auto;
+}
+#notaData {
+}
+#notaTitulo {
+    font-size: 12pt;
+    text-align: left;
+    font-weight: bold;
+    width: 100%;
+}
+
+
+#txtNota, #txtNotaEditar,
+#txtNotasPaciente, #txtNotasPacienteEditar,
+#txtNotasAluno, #txtNotasAlunoEditar,
+#txtNotasTitulo, #txtNotasTituloEditar {
+    font-size: 12pt;
+    height: auto;
+    font-weight: bold;
+}
+
+
+#txtNota, #txtNotaEditar {
+    background: aliceblue;
+    white-space: pre-wrap;
+    font-weight: normal;
+}
+
+
+
+
+
+/*
+PACIENTES E ALUNOS
+*/
+
+
+#txtPacientes, #txtPacientesFocus, #txtAlunos, #txtAlunosFocus,
+#txtPacientesEscolher, #txtPacientesEscolherFocus,
+#txtDentistas {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    background: #eee;
+    padding: 0.5em;
+    font-size: 12pt;
+    border: 2pt solid white;
+}
+
+
+
+#txtPacientesFocus, #txtAlunosFocus, #txtDentistasFocus
+#txtPacientesEscolherFocus {
+    background-color: #ccddff;
+}
+
+
+#txtPaciente, #txtAluno {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: darkslategrey;
+    background: lightgray;
+    padding: 0.5em;
+    font-size: 12pt;
+    border: 1pt solid black;
+}
+
+
+#inputPacientesNome,
+#inputPacienteNome,
+#inputNovoPacienteNome, #inputTriagem {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    margin-top: 1em;
+    padding: 0.5em;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1pt solid black;
+    background-color: aliceblue;
+    height: auto;
+}
+#inputNovoPacienteNome, #inputTriagem {
+    color: dodgerblue;
+}
+#inputPacientesEmail,
+#inputPacienteEmail, #inputPacienteCelular, #inputPacienteCidade, #inputPacienteEstado, #inputPacienteSexo,
+#inputNovoPacienteEmail, #inputNovoPacienteCelular, #inputNovoPacienteCidade, #inputNovoPacienteEstado, #inputNovoPacienteSexo {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    padding: 0.5em;
+    font-size: 12pt;
+    border: 1pt solid black;
+    height: auto;
+}
+
+#inputNovoPacienteNome, #inputNovoPacienteEmail, #inputNovoPacienteCelular, #inputNovoPacienteCidade, #inputNovoPacienteEstado, #inputNovoPacienteSexo {
+    background-color: lightyellow;
+}
+
+#inputPacienteNome, #inputPacienteEmail, #inputPacienteCelular, #inputPacienteCidade, #inputPacienteEstado, #inputPacienteSexo {
+    background-color: aliceblue;
+}
+
+
+
+#txtName, #txtDentistasNome {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    margin-top: 1em;
+    padding: 0.5em;
+    font-size: 12pt;
+    font-weight: bold;
+    height: auto;
+    background-color: lightyellow;
+}
+
+#txtEmail, #txtSenha, #txtCelular, #txtCidade,
+#txtDentistasEmail, #txtDentistasCelular, #txtDentistasTelefone, #txtDentistasEndereco, #txtDentistasCidade,
+#txtDentistasCpf, #txtDentistasIdentidade, #txtDentistasEmissor,
+#txtDentistasNacionalidade, #txtDentistasNaturalidade, #txtDentistasNascimento, #txtDentistasTriagem {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    padding: 0.5em;
+    font-size: 12pt;
+    height: auto;
+    background-color: lightyellow;
+}
+#ddlCategoria, #ddlEstado, #ddlSexo,
+#ddlDentistasCategoria, #ddlDentistasEstado, #ddlDentistasSexo,
+#txtDentistasSenha, #txtDentistasCodigo  {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    font-size: 12pt;
+    padding: 0.5em;
+    font-weight: bold;
+    background-color: lightyellow;
+    height: auto;
+}
+
+#txtDentistasNome,
+#txtDentistasEmail, #txtDentistasCelular, #txtDentistasTelefone, #txtDentistasEndereco, #txtDentistasCidade,
+#txtDentistasCpf, #txtDentistasIdentidade, #txtDentistasEmissor,
+#txtDentistasNacionalidade, #txtDentistasNaturalidade, #txtDentistasNascimento,
+#ddlDentistasEstado, #ddlDentistasSexo  {
+    background-color: aliceblue;
+}
+#ddlDentistasCategoria, #txtDentistasSenha, #txtDentistasCodigo {
+    background-color: antiquewhite;
+}
+
+#importados {
+    font-weight: bold;
+    font-size: large;
+    color: red;
+}
+
+#inputAlunosNome, #inputAlunoNome, #inputNovoAlunoNome  {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    margin-top: 1em;
+    padding: 0.5em;
+    font-size: 12pt;
+    font-weight: bold;
+    border: 1pt solid black;
+}
+
+#inputAlunosEmail, #inputAlunoEmail, #inputAlunoCelular, #inputAlunoCidade, #inputAlunoEstado, #inputAlunoSexo, #inputNovoAlunoEmail    {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    color: black;
+    padding: 0.5em;
+    font-size: 12pt;
+    border: 1pt solid black;
+}
+
+#inputPacienteSexo, #inputAlunoSexo, #inputPacienteEstado, #inputAlunoEstado {
+    height: auto;
+}
+
+
+.pacienteVerItem, .alunoVerItem, .perfilVerItem, .triagemVerItem, .dentistasVerItem {
+    color: dodgerblue;
+    font-weight: normal;
+    text-align: left;
+    padding: 0.4em;
+    height: auto;
+    background-color: #cdf;
+    border: 2pt solid white;
+    font-size: 12pt;
+    width: 10%;
+}
+
+
+.pacienteVer, .dentistaVerEmail, .alunoVer, .perfilVer, .triagemVer, .dentistasVer, .dentista_relacionado_nome {
+    height: auto;
+    text-align: left;
+    background-color: #eeeeee;
+    border: 2pt solid white;
+    font-weight: bold;
+    color: black;
+    font-size: 12pt;
+    padding: 0.4em;
+}
+
+.dentistaVerEmail {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 10pt;
+}
+
+.dentista_relacionado_nome {
+    text-align: center;
+}
+
+.paciente {
+    font-weight: bold;
+}
+
+
+
+
+/*   DENTISTAS    */
+
+#butCoo, #butPro, #butAux, #butRec, #butDen, #butPac, #butPen, #butTod {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+#butArq  {
+    text-decoration: underline;
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+.dentistas, .dentistasCoordenador, .dentistasProfessor, .dentistasAuxiliar, .dentistasRecepcao, .dentistasAluno,
+.dentistasPaciente, .dentistasAdmin, .dentistasPendentes, .dentistasTriagem, .dentistasTriagemAtivados  {
+    padding: 0.5em;
+    font-size: 12pt;
+    border: 2pt solid white;
+    text-align: left;
+}
+
+.dentistas {
+    font-weight: bold;
+    background: #ddd;
+}
+.dentistasCoordenador {
+    background: lightblue;
+}
+.dentistasProfessor {
+    background: lightblue;
+}
+.dentistasRecepcao  {
+    background: lightblue;
+}
+.dentistasAuxiliar  {
+    background: lightblue;
+}
+.dentistasAluno  {
+    background: lightblue;
+}
+.dentistasPaciente  {
+    background: lightblue;
+}
+.dentistasAdmin  {
+    background: lightblue;
+}
+.dentistasPendentes  {
+    background: lightgoldenrodyellow;
+}
+.dentistasTriagemAtivados  {
+    background: #eee;
+    font-weight: normal;
+    color: darkgray;
+}
+.dentistasTriagem  {
+    background: #cdf;
+    font-weight: bold;
+    color: darkgray;
+    font-size: 14pt;
+}
+
+
+
+.tdnome {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    font-weight: bold;
+}
+.tdcategoria {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    font-weight: normal;
+}
+.tdcodigo {
+    text-align: right;
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    font-weight: bold;
+    font-size: medium;
+}
+
+
+.tdnomepaciente {
+    font-family: Verdana, Helvetica, Geneva, Arial, SunSans-Regular, sans-serif;
+    text-align: left;
+    width: 100%;
+    font-weight: bold;
+}
+
+.cabecalho, .cabecalho_left, .cabecalho_right, .cabecalho_left_sem_margem {
+    background-color: #cdf;
+    color: dodgerblue;
+    text-align: center;
+    font-size: medium;
+    font-weight: bold;
+    border: solid 2pt white;
+    padding: 0.4em;
+}
+.cabecalho_left {
+    padding-left: 70px;
+}
+
+.cabecalho_right {
+    width: 70px;
+}
+
+.menu_rodape, .menu_rodape_cinza, .menu_rodape_maior, .menu_rodape_detalhe {
+    background-color: #cdf;
+    color: dodgerblue;
+    text-align: center;
+    font-size: small;
+    font-weight: bold;
+    border: solid 2pt white;
+    padding: 0.4em;
+}
+.menu_rodape_cinza {
+    background-color: #eee;
+    color: gray;
+}
+.menu_rodape_maior {
+    font-size: medium;
+    text-decoration: underline;
+}
+.menu_rodape_detalhe {
+    font-size: medium;
+    text-align: left;
+    background-color: #eef;
+    white-space: pre-wrap;
+}
+
+.mostra_procedimentos_titulo {
+    background-color: #cdf;
+    color: dodgerblue;
+    text-align: center;
+    font-size: small;
+    font-weight: bold;
+    padding: 0.2em;
+    border: 0;
+    border-top: 2pt solid white;
+    border-bottom: 2pt solid white;
+}
+.mostra_procedimentos_texto {
+    height: auto;
+    text-align: left;
+    background-color: #eeeeee;
+    border: 2pt solid white;
+    border-right: 0pt;
+    border-left: 0pt;
+    font-weight: bold;
+    color: black;
+    font-size: 13pt;
+    padding: 0.4em;
+}
+
+.tabela_procedimentos, .tabela_procedimentos_titulo, .tabela_anamnese, .tabela_exame, .tabela_plano  {
+    background-color: aliceblue;
+    color: dodgerblue;
+    text-align: center;
+    padding: 0.5em;
+    font-size: smaller;
+    border: solid 2pt white;
+}
+
+.tabela_anamnese  {
+    font-size: medium;
+    text-align: left;
+    border: solid 2pt white;
+}
+.tabela_plano  {
+    font-size: medium;
+    text-align: left;
+    font-weight: bold;
+    border: solid 2pt white;
+}
+
+.an {
+    padding: 0.5em;
+    font-size: medium;
+    border: solid 2pt white;
+    text-align: center;
+    font-weight: bold;
+    background-color: #eee;
+    color: white;
+}
+
+/*
+.ans, .ann {
+    font-size: medium;
+    font-weight: bold;
+    color: white;
+}
+
+a:link.ans {
+    color: white;
+    text-decoration:none;
+}
+a:link.ann {
+    color: white;
+    text-decoration:none;
+}
+*/
+
+.iniciando {
+    font-size: 32px;
+    font-weight: bolder;
+    color: lightblue;
+    text-align: center;
+}
+.face, .face_left, .face_right {
+    height: 50px;
+    width: 12.5%;
+    background-color: #F5DB9B;
+    color: black;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: medium;
+    border: solid 1pt white;
+    text-align: center;
+    font-weight: bold;
+}
+.face_left, .face_right {
+    width: 18.75%;
+    background-color: #d2bc85;
+}
+a.face:link {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.face:visited {
+    color: #d2bc85;
+    text-decoration:none;
+}
+
+.dente_indice_face {
+    color: #d2bc85;
+}
+a.dente_indice_face:link {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice_face:visited {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice_face:active {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice_face:hover {
+    color: #d2bc85;
+    text-decoration:none;
+}
+
+.dente_indice {
+    color: white;
+    width: 12.5%;
+}
+a.dente_indice:link {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice:visited {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice:active {
+    color: #d2bc85;
+    text-decoration:none;
+}
+a.dente_indice:hover {
+    color: #d2bc85;
+    text-decoration:none;
+}
+
+.exame_hemiarcada, .exame_endo_hemiarcada, .exame_perio_hemiarcada, .exame_anexos_hemiarcada {
+    background-color: aliceblue;
+    border: solid 2pt white;
+    border-bottom: solid 4pt white;
+    text-align: center;
+    padding: 6pt;
+    padding-left: 0pt;
+    padding-right: 0pt;
+    width: 50%;
+}
+.img_dente, .img_dente_label, .img_dente_label_endo, .img_dente_label_perio, .img_dente_label_anexos {
+    font-size: medium;
+    width: 12.5%;
+    border: solid 3pt white;
+    border-top: solid 1pt white;
+    text-align: center;
+    color: white;
+}
+.img_dente {
+    background-color: #CCDDFF;
+    border-bottom: solid 1pt white;
+    padding: 6pt;
+}
+
+.img_dente_label, .img_dente_label_endo, .img_dente_label_perio, .img_dente_label_anexos {
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border-bottom: solid 6pt white;
+    font-weight: bold;
+    background-color: aliceblue;
+    color: white;
+}
+.face_menos_destacada {
+    border: solid 1pt white;
+    font-weight: bold;
+    font-size: large;
+    background-color: #EFE9E3;
+    color: dodgerblue;
+}
+.face_menos_destacada_branca {
+    border: solid 1pt white;
+}
+
+.exame_dente {
+    width: 12%;
+    background-color: aliceblue;
+    color: dodgerblue;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 1pt white;
+    border-top: solid 4pt white;
+    border-bottom: solid 4pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+.exame {
+    width: 12.5%;
+    height: 36px;
+    background-color: #eee;
+    color: white;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 3pt white;
+    border-top: solid 2pt white;
+    border-bottom: solid 2pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+.exame_dente_id {
+    width: 11%;
+    height: 25px;
+    background-color: aliceblue;
+    color: #C8C8C8;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 1pt white;
+    border-top: solid 4pt white;
+    border-bottom: solid 4pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+.exame_legenda {
+    width: 50%;
+    background-color: aliceblue;
+    color: dodgerblue;
+    padding: 5pt;
+    font-size: medium;
+    border: solid 1pt white;
+    text-align: left;
+}
+
+.exame_topo {
+    width: 11%;
+    color: dodgerblue;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;    
+    font-size: medium;
+    border: solid 1pt white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.exame_endo, .exame_endo_label, .exame_endo_label_um_canal, .td_exame_endo_labels_left, .exame_endo_left,
+.exame_endo_left_dente_id, .exame_endo_left_inativo, 
+.exame_endo_obs_view, .exame_endo_obs_view_inativo, .exame_endo_obs_edit, .exame_endo_obs_submit, .exame_endo_header {
+    height: 36px;
+    background-color: #eeeeee;
+    color: #aaa;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 3pt white;
+    border-top: solid 2pt white;
+    border-bottom: solid 2pt white;
+    font-size: medium;
+    text-align: center;
+}
+
+.exame_endo, .exame_endo_label {
+    width: 22.5%;
+}
+.exame_endo_label_um_canal {
+    width: 90%;
+}
+.exame_endo {
+        font-size: medium;
+}
+.exame_endo_obs_view, .exame_endo_obs_view_inativo, .exame_endo_obs_edit, .exame_endo_obs_submit {
+    width: 90%;
+    text-align: left;
+    color: #FF8B8B;
+    font-size: small;
+    font-weight: bold;
+    padding-left: 10pt;
+}
+.exame_endo_obs_view_inativo {
+    color: #bbb;
+}
+.exame_endo_obs_edit {
+    padding-left: 0pt;
+}
+.exame_endo_obs_submit, .exame_endo_obs_edit {
+    padding: 5pt;
+}
+.exame_endo_label, .exame_endo_label_um_canal, .td_exame_endo_labels_left {
+    font-size: smaller;
+    font-weight: bold;
+    background-color: white;
+    color: lightgray;
+    height: 20pt;
+}
+.td_exame_endo_labels_left {
+    background-color: white;
+}
+.exame_endo_left, .td_exame_endo_labels_left, .exame_endo_left_inativo {
+    width: 10%;
+    font-weight: bold;
+    color: dodgerblue;
+}
+.exame_endo_left_dente_id {
+        width: 10%;
+    background-color: dodgerblue;
+    color: white;
+        font-weight: bold;
+}
+.exame_endo_left_inativo {
+    background-color: #CCDDFF;
+}
+a.exame_endo_left_inativo:link {
+    color: dodgerblue;
+}
+a.exame_endo_left_inativo:visited {
+    color: dodgerblue;
+}
+a.exame_endo_left_inativo:active {
+    color: dodgerblue;
+}
+a.exame_endo_left_inativo:hover {
+    color: dodgerblue;
+}
+.exame_endo_left_link {
+    font-weight: bold;
+    color: white;
+    font-size: medium;
+    text-align: center;
+}
+.exame_endo_left_link_inativo {
+    font-weight: bold;
+    color: dodgerblue;
+    font-size: medium;
+    text-align: center;
+}
+a.exame_endo_left_link:link {
+    color: white;
+    text-decoration:none;
+}
+a.exame_endo_left_link:visited {
+    color: white;
+    text-decoration:none;
+}
+a.exame_endo_left_link:active {
+    color: white;
+    text-decoration:none;
+}
+a.exame_endo_left_link:hover {
+    color: blue;
+    text-decoration:none;
+}
+.exame_endo_header {
+    font-weight: bold;
+    background-color: dodgerblue;
+    color: white;
+    border-bottom: solid 2pt white;
+}
+.exame_endo_spacer {
+    height: 4pt;
+}
+.exame_endo_labels {
+    
+}
+
+
+.indices_titulo {
+    width: 100%;
+    background-color: #cdf;
+    color: dodgerblue;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 1pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+.indices_item {
+    width: 50%;
+    background-color: #eee;
+    color: dodgerblue;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 1pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+.indices_valor {
+    width: 50%;
+    background-color: aliceblue;
+    color: dodgerblue;
+    padding: 2pt;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: solid 1pt white;
+    font-size: medium;
+    text-align: center;
+    font-weight: bold;
+}
+
+.tabela_procedimentos_titulo {
+    color: white;
+    background-color: dodgerblue;
+    font-size: small;
+    font-weight: bold;
+}

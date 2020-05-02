@@ -1,0 +1,54 @@
+
+@keyframes animationName {
+    0%   { opacity:0; }
+    10%  { opacity:1; }
+    12%  { opacity:0; }
+    14%  { opacity:1; }
+    16%  { opacity:0; }
+    18%  { opacity:1; }
+    20%  { opacity:0; }
+    25%  { opacity:1; }
+    100% { opacity:0; }
+}
+@-o-keyframes animationName{
+    0%   { opacity:0; }
+    10%  { opacity:1; }
+    12%  { opacity:0; }
+    14%  { opacity:1; }
+    16%  { opacity:0; }
+    18%  { opacity:1; }
+    20%  { opacity:0; }
+    25%  { opacity:1; }
+    100% { opacity:0; }
+}
+@-moz-keyframes animationName{
+    0%   { opacity:0; }
+    10%  { opacity:1; }
+    12%  { opacity:0; }
+    14%  { opacity:1; }
+    16%  { opacity:0; }
+    18%  { opacity:1; }
+    20%  { opacity:0; }
+    25%  { opacity:1; }
+    100% { opacity:0; }
+}
+@-webkit-keyframes animationName{
+    0%   { opacity:0; }
+    10%  { opacity:1; }
+    12%  { opacity:0; }
+    14%  { opacity:1; }
+    16%  { opacity:0; }
+    18%  { opacity:1; }
+    20%  { opacity:0; }
+    25%  { opacity:1; }
+    100% { opacity:0; }
+}
+.elementToFadeInAndOut {
+    -webkit-animation: animationName 1s infinite;
+    -moz-animation: animationName 1s infinite;
+    -o-animation: animationName 1s infinite;
+    animation: animationName 10s;
+    padding: 10px;
+    background-color: rgba(0, 255, 0, 0.2);
+    color: green;
+}

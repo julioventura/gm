@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ConfigService } from '../config/config.service';
-import { UtilService } from '../util/util.service';
+import {Subject, Observable} from 'rxjs';
+import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
+
 import { DadosService } from '../dados/dados.service';
+import { UtilService } from '../util/util.service';
+import { ConfigService } from '../config/config.service';
+
+import {ConfirmationService} from 'primeng/api';
+import {Message} from 'primeng/api';
+
 
 // import {ConfirmationService} from 'primeng/api';
 // import {MessageService} from 'primeng/api';
@@ -13,30 +20,38 @@ import { DadosService } from '../dados/dados.service';
 @Component({
     selector: 'app-edit',
     templateUrl: './edit.component.html',
-    styleUrls: ['./edit.component.styl']
+    styleUrls: ['./edit.component.css'],
+    styles: [`
+        :host ::ng-deep button {
+            margin-right: .25em;
+        }
+    `],
+
+    providers: [ConfirmationService]
 })
+
 export class EditComponent implements OnInit {
+
+    msgs: Message[] = [];
+    position: string;
 
     constructor(
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
-        // private confirmationService: ConfirmationService,
-        // private messageService: MessageService
+        private confirmationService: ConfirmationService
     ) { }
-
-    // msgs: Message[] = [];
-    position: string;
 
     public pode_fazer_upload : boolean = false;
     public label_nome : string = '';
     public label_obs : string = '';
 
     // popup de alerta
-    public popupAlerta : boolean = false;
+    // public popupAlerta : boolean = false;
     public alerta_titulo : string = '';
-    public alerta_linha1 : string = '';
-    public alerta_linha2 : string = '';
+    public alerta_mensagem : string = '';
+    // public alerta_linha1 : string = '';
+    // public alerta_linha2 : string = '';
 
     public popupSairSemSalvar : boolean = false;
 
@@ -53,6 +68,7 @@ export class EditComponent implements OnInit {
     public button8 : string = '';
 
     public listar_clientes : boolean = false;
+    public listar_socios : boolean = false;
     public listar_fornecedores : boolean = false;
     public listar_equipe : boolean = false;
 
@@ -74,8 +90,9 @@ export class EditComponent implements OnInit {
     public paginator_status_profissionais : boolean = true;
 
     public pode_excluir : boolean = false;
-    public listar_estoque : boolean = false;
+    public pode_estornar : boolean = false;
 
+    public listar_estoque : boolean = false;
 
     public imagem_normal : boolean = true;
     public imagem_maior1 : boolean = false;
@@ -84,18 +101,50 @@ export class EditComponent implements OnInit {
     public vendaDiretaDialog : boolean = false;
     public confirmar_atendimento_sem_obs : boolean = false;
 
-
-    public excluir_dialog : boolean = false;
+    public estornar_ou_excluir_dialog : boolean = false;
     public confirmar_estorno_dialog : boolean = false;
     public confirmar_exclusao_dialog : boolean = false;
 
     public ultimo_cadastrado : string = '';
 
+    public TEMP : any = {
+        idade : ''
+    }
+
+    // toggle webcam on/off
+    public showWebcam : boolean = false;
+    public allowCameraSwitch = true;
+    public multipleWebcamsAvailable = false;
+    public deviceId: string;
+    public videoOptions: MediaTrackConstraints = {
+    // width: {ideal: 1024},
+    // height: {ideal: 576}
+    };
+    public errors: WebcamInitError[] = [];
+
+    // latest snapshot
+    public webcamImage: WebcamImage = null;
+
+    // webcam snapshot trigger
+    private trigger: Subject<void> = new Subject<void>();
+    // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
+    private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
+
+
+
     ngOnInit(): void {
         console.log("\n\nINIT edit");
         console.log(this.dados.PARAMETRO);
         console.log(this.dados.selected_edit);
+        console.log("===========================");
+        console.log("this.dados.voltar_pilha");
+        console.log(this.dados.voltar_pilha);
+        console.log("===========================");
 
+        WebcamUtil.getAvailableVideoInputs()
+              .then((mediaDevices: MediaDeviceInfo[]) => {
+                this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+              });
 
         this.dados.salvou_registro = false;
 
@@ -104,6 +153,10 @@ export class EditComponent implements OnInit {
 
         // EXCLUIR REGISTRO (pode_excluir)
         this.pode_excluir = this.config[this.dados.PARAMETRO].pode_excluir ? this.config[this.dados.PARAMETRO].pode_excluir : false;
+
+        // ESTORNAR (pode_estornar)
+        this.pode_estornar = ['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(this.dados.PARAMETRO);
+
 
         if(this.dados.PARAMETRO == 'ORCAMENTOS'){
             console.log("this.dados.cliente");
@@ -186,73 +239,51 @@ export class EditComponent implements OnInit {
         if(this.dados.selected_edit.nome){
             console.log("nome = " + this.dados.selected_edit.nome);
         }
-        console.log("key = " + this.dados.selected_edit.key);
 
         if(this.dados.retorno){
             console.log("RETORNO + " + this.dados.retorno);
         }
 
-        console.log("ORIGEM = " + this.dados.origem);
-        if(this.dados.origem == 'CLIENTES'){
-            console.log(this.dados.cliente);
-            this.dados.selected_edit.contraparte = this.dados.cliente.nome ? this.dados.cliente.nome : '';
-            this.dados.selected_edit.contraparte_key = this.dados.cliente.key ? this.dados.cliente.key : '';
-            this.dados.selected_edit.contraparte_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
+        // console.log("*********  ORIGEM = " + this.dados.origem);
+        // if(this.dados.origem == 'CLIENTES' && this.dados.PARAMETRO ){
+        //     console.log("if(this.dados.origem == 'CLIENTES')");
+        //     console.log(this.dados.cliente);
+            // this.dados.selected_edit.contraparte = this.dados.cliente.nome ? this.dados.cliente.nome : '';
+            // this.dados.selected_edit.contraparte_key = this.dados.cliente.key ? this.dados.cliente.key : '';
+            // this.dados.selected_edit.contraparte_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
 
-            this.mostrar_lista_de_orcamentos();
-        }
+            // this.mostrar_lista_de_orcamentos();
+        // }
 
 
         // Registro de procedimentos na ficha do cliente e historicos para o usuario
         this.dados.historicos = {};
         this.dados.historicos.titulo = '';
 
-        // if (this.dados.PARAMETRO == "REL_DINHEIRO"
-        //     || this.dados.PARAMETRO == "REL_CHEQUES_PRE"
-        //     || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"){
-        //
-        //     this.dados.set_titulo_barra();
-        //     console.log("this.dados.set_titulo_barra() em REL_DINHEIRO, REL_CHEQUES_PRE ou REL_CHEQUES_A_VISTA")
-        // }
-        // else if (this.dados.selected.nome){
-        //     this.dados.set_titulo_barra(this.dados.selected.nome);
-        //     console.log("this.dados.set_titulo_barra(this.dados.selected.nome)")
-        // }
-        // else if(this.dados.selected.cliente_nome){
-        //     this.dados.set_titulo_barra(this.dados.selected.cliente_nome);
-        //     console.log("this.dados.set_titulo_barra(this.dados.selected.cliente_nome)")
-        // }
-        // else {
-        //     this.dados.set_titulo_barra(' ');
-        //     console.log("limpou titulo_barra");
-        // }
 
 
-
-
-        // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
-
-        this.util.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
+        this.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
         this.pode_fazer_upload = this.config[this.dados.PARAMETRO].pode_fazer_upload;
 
         this.label_nome = this.config[this.dados.PARAMETRO].label_nome ? this.config[this.dados.PARAMETRO].label_nome : "Nome";
         this.label_obs = this.config[this.dados.PARAMETRO].label_obs ? this.config[this.dados.PARAMETRO].label_obs : "Obs";
 
         this.dados.incluiu = false;
-
         this.dados.alta_anterior = this.dados.selected_edit.alta;
 
         if(!this.dados.selected_edit.key) {
             // REGISTRO NOVO
             console.log("incluindo registro em PARAMETRO " + this.dados.PARAMETRO);
 
-            console.log("this.dados.selected_clientes_ultimos_incluidos")
-            console.log(this.dados.selected_clientes_ultimos_incluidos)
+            // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
 
             // ULTIMO CADASTRADO
             switch(this.dados.PARAMETRO) {
                 case 'CLIENTES':
                 this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos?.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
+                break;
+                case 'SOCIOS':
+                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos?.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
                 break;
                 case 'FORNECEDORES':
                 this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
@@ -277,8 +308,6 @@ export class EditComponent implements OnInit {
         }
 
         if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-            console.log("Avaliar atendimentos com this.avalia_atendimentos()");
-            console.log(this.dados.selected_edit)
             this.avalia_atendimentos();
         }
 
@@ -293,6 +322,13 @@ export class EditComponent implements OnInit {
             this.dados.filterDatabase(this.dados.selected_edit.contraparte,'CLIENTES');
             this.listar_clientes = true;
             console.log("listar_clientes");
+
+            if(this.config.ATIVAR_SOCIOS){
+                this.dados.filterDatabase(this.dados.selected_edit.contraparte,'SOCIOS');
+                this.listar_socios = true;
+                console.log("listar_socios");
+            }
+
         }
         else if (this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA'){
             this.dados.filterDatabase(this.dados.selected_edit.contraparte,'FORNECEDORES');
@@ -428,6 +464,7 @@ export class EditComponent implements OnInit {
                 this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario;
                 this.dados.selected_edit.quantidade = 1;
             }
+
             if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
                 this.dados.selected_edit.valor = this.dados.selected_edit.valor - this.dados.selected_edit.desconto;
             }
@@ -441,6 +478,62 @@ export class EditComponent implements OnInit {
         this.dados.selected_edit.valor_total = this.util.formata_valor(this.dados.selected_edit.valor_total);
         this.dados.selected_edit.comissao = this.util.formata_valor(this.dados.selected_edit.comissao);
     }
+
+
+
+    public ajusta_valor_receita(){
+        if(this.dados.selected_edit.desconto && this.dados.util.isString(this.dados.selected_edit.desconto)){
+            this.dados.selected_edit.desconto = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.desconto);
+        }
+        if(this.dados.selected_edit.valor_unitario && this.dados.util.isString(this.dados.selected_edit.valor_unitario)){
+            this.dados.selected_edit.valor_unitario = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor_unitario);
+        }
+        if(this.dados.selected_edit.valor && this.dados.util.isString(this.dados.selected_edit.valor)){
+            this.dados.selected_edit.valor = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor);
+        }
+        if(this.dados.selected_edit.comissao && this.dados.util.isString(this.dados.selected_edit.comissao)){
+            this.dados.selected_edit.comissao = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.comissao);
+        }
+        if(this.dados.selected_edit.valor_total && this.dados.util.isString(this.dados.selected_edit.valor_total)){
+            this.dados.selected_edit.valor_total = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor_total);
+        }
+
+        if(['R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo)){
+            // Venda Direta
+            if(this.dados.selected_edit.valor_unitario && this.dados.selected_edit.quantidade && this.dados.selected_edit.quantidade > 0){
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_unitario * this.dados.selected_edit.quantidade;
+            }
+            else {
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_unitario;
+                this.dados.selected_edit.quantidade = 1;
+            }
+            if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_total - this.dados.selected_edit.desconto;
+            }
+        }
+        if(!['R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo)){
+            // Não é Venda Direta
+            if(this.dados.selected_edit.valor_unitario && this.dados.selected_edit.quantidade && this.dados.selected_edit.quantidade > 0){
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario * this.dados.selected_edit.quantidade;
+            }
+            else {
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario;
+                this.dados.selected_edit.quantidade = 1;
+            }
+            if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor - this.dados.selected_edit.desconto;
+            }
+        }
+
+
+        // Formata os valores para exibir na tela
+        this.dados.selected_edit.desconto = this.util.formata_valor(this.dados.selected_edit.desconto);
+        this.dados.selected_edit.valor_unitario = this.util.formata_valor(this.dados.selected_edit.valor_unitario);
+        this.dados.selected_edit.valor = this.util.formata_valor(this.dados.selected_edit.valor);
+        this.dados.selected_edit.valor_total = this.util.formata_valor(this.dados.selected_edit.valor_total);
+        this.dados.selected_edit.comissao = this.util.formata_valor(this.dados.selected_edit.comissao);
+    }
+
 
 
     public ajusta_valor_despesa(){
@@ -477,6 +570,12 @@ export class EditComponent implements OnInit {
     }
 
 
+    public mostrar_socios(){
+        this.dados.filterDatabase(this.dados.selected_edit.socio,'SOCIOS');
+        this.listar_socios = true;
+    }
+
+
     public escolherCliente(registro){
         console.log(registro);
         this.dados.selected_edit.cliente = registro.nome;
@@ -487,6 +586,19 @@ export class EditComponent implements OnInit {
         this.dados.registro = registro;
 
         this.listar_clientes = false;
+    }
+
+
+    public escolherSocio(registro){
+        console.log(registro);
+        this.dados.selected_edit.socio = registro.nome;
+        this.dados.selected_edit.socio_key = registro.key;
+
+        // reproduz o registro do socio identificando-o em dados.socio e abre a observação de orçamentos desse socio
+        this.dados.socio = registro;
+        this.dados.registro = registro;
+
+        this.listar_socios = false;
     }
 
 
@@ -501,6 +613,15 @@ export class EditComponent implements OnInit {
         this.dados.cliente = registro;
         console.log(registro);
         this.dados.registro = registro;
+
+        if(this.dados.PARAMETRO=='SOCIOS'){
+            this.listar_socios = false;
+
+            // reproduz o registro do socio identificando-o em dados.socio
+            this.dados.socio = registro;
+            console.log(registro);
+            this.dados.registro = registro;
+        }
 
         // Abre lista de orcamentos
         if(this.dados.PARAMETRO!='PAGAMENTOS'){
@@ -522,20 +643,6 @@ export class EditComponent implements OnInit {
 
         // Abre lista de orcamentos
         // this.mostrar_lista_de_orcamentos();
-    }
-
-
-    public dialogExcluir() {
-        console.log("dialogExcluir")
-        //
-        // this.confirmationService.confirm({
-        //     message: 'Confirma a EXCLUSÃO?',
-        //     accept: () => {
-        //         //Actual logic to perform a confirmation
-        //     }
-        // });
-
-        this.excluir_dialog = true;
     }
 
 
@@ -561,7 +668,11 @@ export class EditComponent implements OnInit {
     public escolherBanco(registro, campo, local_na_pagina){
         console.log("escolherBanco(registro," + campo + ")\n");
         console.log(registro);
-        this.dados.selected_edit[campo] = registro.codigo + ' - ' + registro.nome;
+        this.dados.selected_edit[campo] = registro.nome;
+
+        this.dados.selected_edit.agencia = registro.agencia;
+        this.dados.selected_edit.conta = registro.conta;
+
         this[local_na_pagina] = false;
     }
 
@@ -755,6 +866,11 @@ export class EditComponent implements OnInit {
         console.log("destino = " + destino);
 
         if(destino == 'lista'){
+
+            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE','BANCOS'].includes(this.dados.PARAMETRO)){
+                this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
+            }
+
             this.config.DISPLAY.Lista = true;
             this.config.DISPLAY.Registro = false;
             this.config.DISPLAY.Editar = false;
@@ -806,13 +922,22 @@ export class EditComponent implements OnInit {
         if(opcao=='7'){ this.button7 = 'button_brown'; this.dados.selected_edit.meio_de_pagamento = ''; }
         if(opcao=='8'){ this.button8 = 'button_brown'; this.dados.selected_edit.meio_de_pagamento = ''; }
 
-        if ( ['dinheiro','debito','credito'].includes(this.dados.selected_edit.meio_de_pagamento) ){
+        if ( this.dados.PARAMETRO=='LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento=='credito') {
+            this.seta_data();  // vai configurar automaticamente a data de credito do cartão de credito
+        }
+
+        if ( ['dinheiro','debito'].includes(this.dados.selected_edit.meio_de_pagamento) ){
             // dinheiro, debito ou credito: já assinala como QUITADO também
             this.dados.selected_edit.quitado = true;
+        }
+        if ( this.dados.selected_edit.meio_de_pagamento != 'credito') {
+            this.dados.selected_edit.data_credito = '';
+            this.dados.selected_edit.aguardando = false;
         }
 
         // Limpa campo de data do cheque pré, pois se mudou a opção deixa de valer a data anterio
         this.dados.selected_edit.data_cheque_pre = '';
+
         this.ajusta_valor_despesa();
     }
 
@@ -833,7 +958,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'data_inicio'){
             if(editou=='editou'){
@@ -848,7 +975,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data_inicio = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'data_termino'){
             if(editou=='editou'){
@@ -863,10 +992,62 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data_termino = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         return hoje;
     }
+
+
+    public data_lancamento(param : string = '', editou : string = ''){
+        console.log("data_lancamento()");
+
+        let hoje = this.dados.HOJE;
+
+        if(param == 'data'){
+            if(editou=='editou'){
+                this.dados.selected_edit.data = this.util.formata_data(this.dados.selected_edit.data,'recente');
+            }
+            else {
+                if(this.dados.selected_edit.data != hoje){
+                    this.dados.selected_edit.data = hoje;
+                }
+                else {
+                    // alterna limpando o campo caso já fosse o mesmo valor
+                    this.dados.selected_edit.data = '';
+                }
+            }
+        }
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+            this.dados.selected_edit.data_credito = this.util.somar_dias_a_uma_data(this.dados.selected_edit.data, this.config.dias_pra_credito_do_cartao);
+            this.dados.selected_edit.aguardando = true;
+            this.dados.selected_edit.aguardando_data = this.dados.selected_edit.data_credito;
+        }
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+        }
+    }
+
+    public seta_data(is_hoje : boolean = false){
+        console.log("seta_data()");
+
+        if(is_hoje) {
+            this.dados.selected_edit.data = this.dados.HOJE;
+        }
+
+        this.dados.selected_edit.data = this.util.formata_data(this.dados.selected_edit.data,'recente');
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+            this.dados.selected_edit.data_credito = this.util.somar_dias_a_uma_data(this.dados.selected_edit.data, this.config.dias_pra_credito_do_cartao);
+            this.dados.selected_edit.aguardando = true;
+        }
+    }
+
 
 
     public agora(param : string = '', editou : string = ''){
@@ -886,7 +1067,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'hora_inicio'){
             if(editou=='editou'){
@@ -901,7 +1084,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora_inicio = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'hora_termino'){
             if(editou=='editou'){
@@ -916,7 +1101,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora_termino = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         return hora;
     }
@@ -925,9 +1112,8 @@ export class EditComponent implements OnInit {
     public avalia_atendimentos(){
         console.log("avalia_atendimentos()");
 
-        if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+        if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
             let status = 'inativo';
-
 
             if(this.dados.selected_edit.data && this.dados.selected_edit.data.length>0){
                 status = 'aberto';
@@ -1009,7 +1195,7 @@ export class EditComponent implements OnInit {
     public calcula_retorno ()  {
         if (this.dados.selected_edit.alta && this.dados.selected_edit.revisao){
             // converte alta para quando_em_milisegundos
-            let altaObj = this.util.getDateObjFromDataHora(this.dados.selected_edit.alta);
+            let altaObj = this.util.myDateObjFromDataHora(this.dados.selected_edit.alta);
             let altaMilisegundos = altaObj.quando;
             let revisao_ms = Number(this.dados.selected_edit.revisao) * this.util.milisegundos_de_um_mes;
             let retorno = this.util.formata_data_de_quando_em_milisegundos(altaMilisegundos + revisao_ms);
@@ -1061,11 +1247,6 @@ export class EditComponent implements OnInit {
 
 
         if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-
-            // if( (this.dados.selected.atendimento_termino && this.dados.selected.atendimento_termino.length == 5) && (!this.dados.selected_edit.obs || this.dados.selected_edit.obs.length==0) ){
-            //     this.popup_atendimento();
-            //     return;
-            // }
             let data_hora, data_hora_quando;
 
             this.avalia_atendimentos();
@@ -1099,12 +1280,18 @@ export class EditComponent implements OnInit {
             }
         }
 
+        // TESTANDO CAMPOS
         if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA'){
+            console.log("TESTANDO CAMPOS")
+            console.log(this.dados.selected_edit);
+
             if(!this.dados.selected_edit.data){
+                console.log("if(!this.dados.selected_edit.data){");
+
                 this.popup_alerta('ATENÇÃO','Preencha a DATA');
                 return;
             }
-            if(!this.dados.selected_edit.produto && !this.dados.selected_edit.nome){
+            if(['R-001','R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo) && (!this.dados.selected_edit.produto && !this.dados.selected_edit.nome)){
                 this.popup_alerta('ATENÇÃO','Indique o PRODUTO');
                 return;
             }
@@ -1123,6 +1310,7 @@ export class EditComponent implements OnInit {
             else if(!this.dados.selected_edit.contraparte){
                 this.dados.selected_edit.contraparte_key = '';
                 this.dados.selected_edit.contraparte_cpf = '';
+                this.dados.selected_edit.contraparte_cnpj = '';
 
                 this.popup_alerta('ATENÇÃO','Indique o PAGADOR');
                 return;
@@ -1150,7 +1338,7 @@ export class EditComponent implements OnInit {
                 this.popup_alerta('ATENÇÃO','Preencha a DATA');
                 return;
             }
-            if(!this.dados.selected_edit.valor){
+            else if(!this.dados.selected_edit.valor){
                 this.popup_alerta('ATENÇÃO','Preencha o VALOR');
                 return;
             }
@@ -1167,10 +1355,7 @@ export class EditComponent implements OnInit {
             }
         }
 
-        //
-        // console.log("this.dados.selected_edit.centros_de_custos = " + this.dados.selected_edit.centros_de_custos);
-        // console.log("this.dados.filtered_lancamentos_receita.length = " + this.dados.filtered_lancamentos_receita.length)
-        //
+
         // if(this.dados.selected_edit.centros_de_custos_codigo=='R-001' && this.dados.filtered_lancamentos_receita.length<1){
         //     this.vendaDiretaDialog = true;
         //     return;
@@ -1181,7 +1366,7 @@ export class EditComponent implements OnInit {
 
         if (this.dados.salvou_registro) {
             console.log("salvou registro")
-            this.dados.selected = this.util.deepClone(this.dados.selected_edit);
+            // this.dados.selected = this.util.deepClone(this.dados.selected_edit);
         }
 
         if(this.dados.incluindo){
@@ -1192,27 +1377,159 @@ export class EditComponent implements OnInit {
             // continua na pagina
         }
         else {
-            console.log("voltar após salvar registro em edit.component")
+            console.log("voltar após salvar registro em edit.component");
             this.voltar();
         }
     }
 
 
-    public popup_alerta(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
-        if(!this.dados.selected_edit.key || this.dados.selected_edit.key==''){
-            this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
-            this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
-            this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
-            this.popupAlerta = true;
-        }
+    // ========= CAMERA ================================
+    public ativar_camera() : void {
+        this.showWebcam = !this.showWebcam;
+    }
+    public handleImage(webcamImage: WebcamImage): void {
+      console.info('received webcam image', webcamImage);
+      this.webcamImage = webcamImage;
+    }
+    public triggerSnapshot(): void {
+       this.trigger.next();
+     }
+     public handleInitError(error: WebcamInitError): void {
+       this.errors.push(error);
+     }
+     public showNextWebcam(directionOrDeviceId: boolean|string): void {
+       // true => move forward through devices
+       // false => move backwards through devices
+       // string => move to device with given deviceId
+       this.nextWebcam.next(directionOrDeviceId);
+     }
+     public cameraWasSwitched(deviceId: string): void {
+       console.log('active device: ' + deviceId);
+       this.deviceId = deviceId;
+     }
+     public get triggerObservable(): Observable<void> {
+       return this.trigger.asObservable();
+     }
+     public get nextWebcamObservable(): Observable<boolean|string> {
+       return this.nextWebcam.asObservable();
+     }
+     // ========= CAMERA ================================
+
+
+    //  function previewFile() {
+    //   var preview = document.querySelector("#img_preview");
+    //   var file    = document.querySelector('input[type=file]').files[0];
+    //   var reader  = new FileReader();
+    //
+    //   reader.onloadend = function () {
+    //     preview.src = reader.result;
+    //   }
+    //
+    //   if (file) {
+    //     reader.readAsDataURL(file);
+    //   } else {
+    //     preview.src = "";
+    //   }
+    // }
+
+     public uploadImage(){
+         console.log("uploadImage");
+         let preview = document.querySelector("#img_preview");
+
+         // let file    = document.querySelector('input[type=file]').files[0];
+
+         let input = document.querySelector('input[type=file]');
+         let file = input.files[0],
+
+         let reader  = new FileReader();
+         let  base64String;
+
+         reader.onloadend = function () {
+               preview.src = reader.result;
+
+               base64String = window.btoa(reader.result);
+               console.log("base64String = " + base64String)
+               alert('File converted to base64 successfuly!\nCheck in Textarea');
+         }
+
+         this.dados.selected_edit.img_base64 = base64String;
+
+
+         if (file) {
+           reader.readAsDataURL(file);
+         } else {
+           // preview.src = "";
+         }
+
+                          // Check for the File API support.
+                         // if (window.File && window.FileReader && window.FileList && window.Blob) {
+                         //   document.getElementById('files').addEventListener('change', handleFileSelect, false);
+                         // } else {
+                         //   alert('The File APIs are not fully supported in this browser.');
+                         // }
+                         //
+                         // function handleFileSelect(evt) {
+                         //     console.log("uploadImage");
+                         //     console.log(evt);
+                         //
+                           // var f = evt.target.files[0]; // FileList object
+
+                         //   var f = this.dados.selected_edit.img_url3;
+                         //   console.log(f)
+                         //
+                         //   var reader = new FileReader();
+                         //   // Closure to capture the file information.
+                         //   reader.onload = (function(theFile) {
+                         //     return function(e) {
+                         //       var binaryData = e.target.result;
+                         //       //Converting Binary Data to base 64
+                         //       var base64String = window.btoa(binaryData);
+                         //       console.log("base64String = " + base64String)
+                         //       alert('File converted to base64 successfuly!\nCheck in Textarea');
+                         //     };
+                         //   })(f);
+                         //   // Read in the image file as a data URL.
+                         //   reader.readAsBinaryString(f);
+                         // // }
+     }
+
+
+    public popup_alerta(cabecalho:string='', mensagem:string='') {
+        console.log("popup_alerta()")
+
+        // if(!this.dados.selected_edit.key || this.dados.selected_edit.key==''){
+            // this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
+            // this.alerta_mensagem = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
+
+            this.confirmationService.confirm({
+                message: mensagem,
+                header: cabecalho,
+                // styleClass: "confirmComponent",
+                acceptLabel: 'OK',
+                rejectLabel: 'Não',
+                rejectVisible: false,
+                // icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                    // this.msgs = [{severity:'info', summary:'Confirmado', detail:''}];
+                    console.log("popup_alerta() => accept")
+                    return true;
+                },
+                reject: () => {
+                    // this.msgs = [{severity:'info', summary:'Cancelado', detail:''}];
+                    console.log("popup_alerta() => reject")
+                    return false;
+                }
+            });
+
+        // }
     }
 
-    public popup_alerta_fechar(){
-        this.alerta_titulo = '';
-        this.alerta_linha1 = '';
-        this.alerta_linha2 = '';
-        this.popupAlerta = false;
-    }
+    // public popup_alerta_fechar(){
+    //     this.alerta_titulo = '';
+    //     this.alerta_linha1 = '';
+    //     this.alerta_linha2 = '';
+    //     this.popupAlerta = false;
+    // }
 
     public popup_sair_sem_salvar() {
         this.popupSairSemSalvar = true;
@@ -1238,13 +1555,19 @@ export class EditComponent implements OnInit {
         }
     }
 
-
-    public excluir() {
-        this.confirmar_exclusao_dialog = false;
-        this.dados.excluir();
-        this.voltar('lista');
+    public dialogExcluir() {
+        this.estornar_ou_excluir_dialog = true;
     }
 
+    public confirmar_estorno(){
+        this.estornar_ou_excluir_dialog = false;
+        this.confirmar_estorno_dialog = true;
+    }
+
+    public confirmar_exclusao(){
+        this.estornar_ou_excluir_dialog = false;
+        this.confirmar_exclusao_dialog = true;
+    }
 
     public estornar() {
         this.confirmar_estorno_dialog = false;
@@ -1252,97 +1575,15 @@ export class EditComponent implements OnInit {
         this.voltar('lista');
     }
 
+    public excluir() {
+        this.confirmar_exclusao_dialog = false;
+        this.dados.excluir();
+        this.voltar('lista');
+    }
 
-
-
-
-
-    // show() {
-    //     this.msgs.push({severity:'info', summary:'Info Message', detail:'PrimeNG rocks'});
-    // }
-    //
-    // hide() {
-    //     this.msgs = [];
-    // }
-
-    //
-    // addSingle() {
-    //     this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-    // }
-    //
-    // addMultiple() {
-    //     this.messageService.addAll([{severity:'success', summary:'Service Message', detail:'Via MessageService'},
-    //                     {severity:'info', summary:'Info Message', detail:'Via MessageService'}]);
-    // }
-
-    // clear() {
-    //     this.messageService.clear();
-    // }
-
-
-    //     showSuccess() {
-    //         this.msgs = [];
-    //         this.msgs.push({severity:'success', summary:'Success Message', detail:'Order submitted'});
-    //     }
-    //
-    //     showInfo() {
-    //         this.msgs = [];
-    //         this.msgs.push({severity:'info', summary:'Info Message', detail:'PrimeNG rocks'});
-    //     }
-    //
-    //     showWarn() {
-    //         this.msgs = [];
-    //         this.msgs.push({severity:'warn', summary:'Warn Message', detail:'There are unsaved changes'});
-    //     }
-    //
-    //     showError() {
-    //         this.msgs = [];
-    //         this.msgs.push({severity:'error', summary:'Error Message', detail:'Validation failed'});
-    //     }
-    //
-    //     showMultiple() {
-    //         this.msgs = [];
-    //         this.msgs.push({severity:'info', summary:'Message 1', detail:'PrimeNG rocks'});
-    //         this.msgs.push({severity:'info', summary:'Message 2', detail:'PrimeUI rocks'});
-    //         this.msgs.push({severity:'info', summary:'Message 3', detail:'PrimeFaces rocks'});
-    //     }
-    //
-    //     showViaService() {
-    //         this.messageService.add({severity:'success', summary:'Service Message', detail:'Via MessageService'});
-    //     }
-    //
-    //     clear() {
-    //         this.messageService.clear();
-    //         this.msgs = [];
-    //     }
-    //
-    // confirm1() {
-    //     this.confirmationService.confirm({
-    //         message: 'Are you sure that you want to proceed?',
-    //         header: 'Confirmation',
-    //         icon: 'pi pi-exclamation-triangle',
-    //         accept: () => {
-    //             this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-    //         },
-    //         reject: () => {
-    //             this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-    //         }
-    //     });
-    // }
-    //
-    // confirm2() {
-    //     this.confirmationService.confirm({
-    //         message: 'Do you want to delete this record?',
-    //         header: 'Delete Confirmation',
-    //         icon: 'pi pi-info-circle',
-    //         accept: () => {
-    //             this.msgs = [{severity:'info', summary:'Confirmed', detail:'Record deleted'}];
-    //         },
-    //         reject: () => {
-    //             this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-    //         }
-    //     });
-    // }
-
+    public mudou_nascimento(){
+        this.dados.selected_edit.nascimento = this.util.formata_data(this.dados.selected_edit.nascimento);
+        this.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
+    }
 
 }

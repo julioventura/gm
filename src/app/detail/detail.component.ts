@@ -68,11 +68,22 @@ export class DetailComponent implements OnInit {
     public lancamentos_receita_do_orcamento : any = [];
     public links_de_paginas : number = 5;
     public centro_de_custos_fixo : string = 'Centro de custos fixo. Não pode ser editado.';
-
+    public map : any;
+    public mapa_url : string = '';
 
     ngOnInit(){
         console.log("\n\nINIT detail");
         console.log(this.dados.PARAMETRO);
+        console.log("===========================");
+        console.log("this.dados.voltar_pilha");
+        console.log(this.dados.voltar_pilha);
+        console.log("===========================");
+
+
+        if( ['EQUIPE','USUARIOS','PERFIL'].includes(this.dados.PARAMETRO) ){
+            this.mapa_url = "https://www.google.com/maps/search/" + this.dados.selected.latitude + "," + this.dados.selected.longitude;
+        }
+
 
         this.dados.HOJE = this.util.hoje();
         this.dados.HOJE_QUANDO = this.util.converte_data_para_milisegundos(this.dados.HOJE);
@@ -171,6 +182,19 @@ export class DetailComponent implements OnInit {
             console.log(this.dados.filtered_atendimentos)
         }
 
+        if(this.dados.PARAMETRO == 'SOCIOS'){
+            this.dados.origem = 'SOCIOS';
+            this.dados.socio = this.dados.selected;
+
+            this.dados.filterDatabase(this.dados.selected.key,'LANCAMENTOS_RECEITA');
+            console.log("this.dados.filtered_lancamentos_receita")
+            console.log(this.dados.filtered_lancamentos_receita)
+
+            this.dados.filterDatabase(this.dados.selected.key,'ATENDIMENTOS');
+            console.log("this.dados.filtered_atendimentos")
+            console.log(this.dados.filtered_atendimentos)
+        }
+
         if(this.dados.PARAMETRO == "ORCAMENTOS"){
             console.log(this.dados.PARAMETRO);
 
@@ -219,6 +243,133 @@ export class DetailComponent implements OnInit {
             // this.dados.orcamentos$.update(orcamento.key, orcamento);
             this.dados.selected = this.util.deepClone(orcamento);
         }
+
+
+
+
+
+        // =======================================================
+        // //function that gets the location and returns it
+        // function getLocation() {
+        //   if(navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(showPosition);
+        //   } else {
+        //     console.log("Geo Location not supported by browser");
+        //   }
+        // }
+        // //function that retrieves the position
+        // function showPosition(position) {
+        //   var location = {
+        //     longitude: position.coords.longitude,
+        //     latitude: position.coords.latitude
+        //   }
+        //   console.log(location)
+        //
+        //   console.log("latlon = " + latlon);
+        //
+        //   var KEY = 'AIzaSyBocTURt9IMb4_yIKyXv2giD85IrEP3Yoc';
+        //
+        //   var latlon = position.coords.latitude + "," + position.coords.longitude;
+        //
+        //   var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=";
+        //   img_url += latlon;
+        //   img_url += "&zoom=14&size=400x300&sensor=false&key=" + KEY;
+
+        // if(['EQUIPE','USUARIOS','PERFIL'].includes(this.dados.PARAMETRO)){
+        //
+        //   let html = "<iframe  frameborder='0' height='350' marginheight='0' ";
+        //   html = html + "marginwidth='0' scrolling='no' width='425' ";
+        //
+        //   html = html + "src='//www.openstreetmap.org/export/embed.html?";
+        //
+        //   html = html + "bbox=";
+        //   html = html + (this.dados.selected.longitude + 0.1) + "," + (this.dados.selected.latitude + 0.1);
+        //   html = html + ",";
+        //   html = html + (this.dados.selected.longitude - 0.1) + "," + (this.dados.selected.latitude  - 0.1);
+        //
+        //   html = html + "&amp;marker=";
+        //   html = html + this.dados.selected.latitude + ",";
+        //   html = html + this.dados.selected.longitude;
+        //
+        //   html = html + "&amp;layer=mapnik'>";
+        //   html = html + "</iframe>";
+        //
+        //   console.log("html");
+        //   console.log(html);
+        //
+        //  var map = document.querySelector("mapholder");
+        //  map.innerHTML = html;
+        //
+        //   // map.innerHTML = "<img src='"+img_url+"'>";
+        //   // map.innerHTML = "Localização: " + latlon;
+        //   // }
+        // }
+
+        //request for location
+        // getLocation();
+        // =======================================================
+
+        // var KEY = 'AIzaSyBocTURt9IMb4_yIKyXv2giD85IrEP3Yoc';
+        //
+        // var latlon = position.coords.latitude + "," + position.coords.longitude;
+        //
+        // var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=";
+        // img_url += latlon;
+        // img_url += "&zoom=14&size=400x300&sensor=false&key=" + KEY;
+
+        var marcalocal = this.dados.selected.latitude + "," + this.dados.selected.longitude;
+        var bbox1 = (this.dados.selected.longitude + 0.1) + "," + (this.dados.selected.latitude + 0.1);
+        var bbox2 = (this.dados.selected.longitude - 0.1) + "," + (this.dados.selected.latitude  - 0.1);
+
+                // =======================================================
+                //function that gets the location and returns it
+                function getLocation() {
+                  if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                  } else {
+                    console.log("Geo Location not supported by browser");
+                  }
+                }
+                //function that retrieves the position
+                function showPosition(position) {
+                  var location = {
+                    longitude: position.coords.longitude,
+                    latitude: position.coords.latitude
+                  }
+                  console.log(location)
+
+
+                  var html = "<iframe frameborder='0' height='350' marginheight='0' ";
+                  html += "marginwidth='0' scrolling='no' width='425' ";
+
+                  html += "src='//www.openstreetmap.org/export/embed.html?";
+
+                  html += "bbox=";
+                  html += bbox1;
+                  // html += latlon;
+                  html += ",";
+                  html += bbox2;
+                  // html += latlon;
+
+                  html += "&amp;marker=";
+                  // html += "marker=";
+                  // html += "-23.009133199999997,-43.3443513";
+                  html += marcalocal;
+
+                  // html += latlon;
+                  html += "&amp;layer=mapnik'>";
+                  html += "</iframe>";
+
+                  var map = document.querySelector("mapholder");
+                  map.innerHTML = html;
+                  // map.innerHTML = "<img src='"+img_url+"'>";
+                  // map.innerHTML = "Localização: " + latlon;
+                }
+
+                //request for location
+                getLocation();
+                // =======================================================
+
         this.mostrar_tela();
     }
 
@@ -235,6 +386,7 @@ export class DetailComponent implements OnInit {
         || this.dados.PARAMETRO == "REL_CHEQUES_PRE"
         || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"
         || this.dados.PARAMETRO == "RESULTADOS"
+        || this.dados.PARAMETRO == "DISPONIBILIDADE"
         || this.dados.PARAMETRO == "REL_RECEITAS_E_DESPESAS"){
             this.button1 = 'button_off';
             this.button2 = 'button_off';
@@ -252,7 +404,7 @@ export class DetailComponent implements OnInit {
             if(this.dados.selected.meio_de_pagamento == 'credito'){ this.button5 = 'button_brown'; }
 
             if(this.dados.selected.estorno) {
-				this.dados.pode_editar = false;
+				// this.dados.pode_editar = false;
                 // Popup de aviso
                 this.aviso_titulo = "REGISTRO ESTORNADO";
                 // this.aviso_mensagem = "Não é permitido editar registros estornados.";
@@ -268,16 +420,22 @@ export class DetailComponent implements OnInit {
         || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"){
             this.dados.set_titulo_barra();
         }
+        else if(this.dados.PARAMETRO == 'RESULTADOS'){
+            this.dados.set_titulo_pagina('LANÇAMENTO');
+        }
+        else if(this.dados.PARAMETRO == 'HISTORICOS'){
+            this.dados.set_titulo_barra(this.dados.selected.criado_em);
+        }
         else if (this.dados.selected.nome){
             this.dados.set_titulo_barra(this.dados.selected.nome);
         }
         else if(this.dados.selected.cliente_nome){
             this.dados.set_titulo_barra(this.dados.selected.cliente_nome);
         }
-
-        if(this.dados.PARAMETRO == 'RESULTADOS'){
-            this.dados.set_titulo_pagina('LANÇAMENTO');
+        else if(this.dados.selected.socio_nome){
+            this.dados.set_titulo_barra(this.dados.selected.socio_nome);
         }
+
 
         // MENSAGEM
         this.mensagem = "Olá " + this.dados.selected.nome + "\n\n\n\n\n";
@@ -299,6 +457,8 @@ export class DetailComponent implements OnInit {
         else {
             this.ativo = true;
         }
+
+        this.util.goTop();  // sobe a tela pro topo
     }
 
     public verRegistro(registro : any, parametro : string = '') : void {
@@ -321,6 +481,10 @@ export class DetailComponent implements OnInit {
         }
         else {
             if(this.dados.PARAMETRO == 'CLIENTES'){
+                this.dados.PARAMETRO = 'LANCAMENTOS_RECEITA';
+                this.config.DISPLAY.Registro = true;
+            }
+            if(this.dados.PARAMETRO == 'SOCIOS'){
                 this.dados.PARAMETRO = 'LANCAMENTOS_RECEITA';
                 this.config.DISPLAY.Registro = true;
             }
@@ -360,6 +524,44 @@ export class DetailComponent implements OnInit {
         this.mostrar_tela();
     }
 
+
+    //
+    // public clientes_ficha() {
+    //     this.dados.is_clientes_ficha = !this.dados.is_clientes_ficha;
+    //
+    //     if(this.dados.is_clientes_ficha){
+    //         this.dados.is_clientes_ficha = true;
+    //         this.dados.is_clientes_atendimentos = false;
+    //         this.dados.is_clientes_receitas = false;
+    //     }
+	// 	this.dados.filtro = '';
+    //     this.dados.filterDatabase(' ','CLIENTES');
+    // }
+    //
+    // public clientes_atendimentos() {
+    //     this.dados.is_clientes_atendimentos = !this.dados.is_clientes_atendimentos;
+    //
+    //     if(this.dados.is_clientes_atendimentos){
+    //         this.dados.is_clientes_ficha = false;
+    //         this.dados.is_clientes_atendimentos = true;
+    //         this.dados.is_clientes_receitas = false;
+    //     }
+	// 	this.dados.filtro = '';
+    //     this.dados.filterDatabase(' ','CLIENTES');
+    // }
+    //
+    // public clientes_receitas() {
+    //         this.dados.is_clientes_receitas = !this.dados.is_clientes_receitas;
+    //
+    //         if(this.dados.is_clientes_receitas){
+    //             this.dados.is_clientes_ficha = false;
+    //             this.dados.is_clientes_atendimentos = false;
+    //             this.dados.is_clientes_receitas = true;
+    //         }
+    // 		this.dados.filtro = '';
+    //         this.dados.filterDatabase(' ','CLIENTES');
+    //     }
+    //
 
 
     public avalia_atendimentos(){
@@ -436,7 +638,7 @@ export class DetailComponent implements OnInit {
         this.mensagem_encoded = this.util.url_encode(this.mensagem);
 
         this.url = "https://api.whatsapp.com/send?phone=" + this.util.formata_whatsapp_para_envio(this.dados.selected.whatsapp);
-        this.url_web = "http://web.whatsapp.com/send?phone=" + this.util.formata_whatsapp_para_envio(this.dados.selected.whatsapp);
+        this.url_web = "https://web.whatsapp.com/send?phone=" + this.util.formata_whatsapp_para_envio(this.dados.selected.whatsapp);
 
         this.url += "&text=" + this.mensagem_encoded;
         this.url_web  += "&text=" + this.mensagem_encoded;
@@ -455,7 +657,6 @@ export class DetailComponent implements OnInit {
         if (confirmado){
             // registra no historico
 
-            this.dados.historicos.local = this.dados.PARAMETRO;
             this.dados.historicos.database = this.dados.PARAMETRO;
             this.dados.historicos.titulo = "Mensagem";
             this.dados.historicos.mensagem = true;
@@ -469,6 +670,12 @@ export class DetailComponent implements OnInit {
                 this.dados.historicos.destinatario_key = this.dados.cliente && this.dados.cliente.key ? this.dados.cliente.key : '';
                 this.dados.historicos.registro_nome = this.dados.cliente && this.dados.cliente.nome ? this.dados.cliente.nome : '';
                 this.dados.historicos.registro_key = this.dados.cliente && this.dados.cliente.key ? this.dados.cliente.key : '';
+            }
+            if(this.dados.whatsapp_destino=='SOCIOS'){
+                this.dados.historicos.destinatario_nome = this.dados.socio && this.dados.socio.nome ? this.dados.socio.nome : '';
+                this.dados.historicos.destinatario_key = this.dados.socio && this.dados.socio.key ? this.dados.socio.key : '';
+                this.dados.historicos.registro_nome = this.dados.socio && this.dados.socio.nome ? this.dados.socio.nome : '';
+                this.dados.historicos.registro_key = this.dados.socio && this.dados.socio.key ? this.dados.socio.key : '';
             }
             else if(this.dados.whatsapp_destino=='EQUIPE'){
                 this.dados.historicos.destinatario_nome = this.dados.responsavel && this.dados.responsavel.nome ? this.dados.responsavel.nome : '';
@@ -520,8 +727,34 @@ export class DetailComponent implements OnInit {
         this.dados.go(destino);
     }
 
-
     public voltar() {
+        console.log("voltar()");
+
+        if(this.dados.voltar_pilha && this.dados.voltar_pilha.length > 0) {
+
+            console.log("this.dados.voltar_pilha");
+            console.log(this.dados.voltar_pilha);
+
+            let voltar = this.dados.voltar_pilha.pop();
+            console.log("voltar = this.dados.voltar_pilha.pop();");
+            console.log(voltar);
+        }
+
+
+        if(this.dados.esconder_lista == true){
+            this.config.DISPLAY.Registro = false;
+            this.dados.esconder_lista = false;
+        }
+        else {
+            this.voltar2();
+            // this.config.DISPLAY.Registro = false;
+            // this.config.DISPLAY.Lista = true;
+        }
+    }
+
+
+    public voltar2() {
+        console.log("voltar2()");
 
         if(this.dados.voltar_para){
 
@@ -639,7 +872,7 @@ export class DetailComponent implements OnInit {
             console.log("Registro estornado =");
             console.log(this.dados.selected);
             console.log("====================");
-            this.voltar();
+            // this.voltar();
         }
     }
 
@@ -663,11 +896,11 @@ export class DetailComponent implements OnInit {
         this.popupAlerta = false;
     }
 
-    public tentou_editar(){
-        if(!this.dados.voltar_para && this.config[this.dados.PARAMETRO].pode_editar && this.dados.pode_editar) {
-            this.popup_pedir_confirmacao('EDITAR ?', 'EDITAR ESTE REGISTRO?');
-        }
-    }
+    // public tentou_editar(){
+    //     if(!this.dados.voltar_para && this.config[this.dados.PARAMETRO].pode_editar && this.dados.pode_editar) {
+    //         this.popup_pedir_confirmacao('EDITAR ?', 'EDITAR ESTE REGISTRO?');
+    //     }
+    // }
 
     public popup_pedir_confirmacao(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
         console.log("popup_pedir_confirmacao");

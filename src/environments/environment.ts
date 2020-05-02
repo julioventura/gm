@@ -5,7 +5,7 @@
 export const environment = {
     production : false,
     dominio : 'GESTORMIX',
-    footer_img : "http://gestormix.com/img/rodape.png",
+    footer_img : "https://gestormix.com/img/rodape.png",
     footer_img_alt : "GestorMIX.com",
     firebaseConfig : {
         apiKey: "AIzaSyAwfYFSx_uGaErJd7Oqzp775Sh5ODGA2VI",

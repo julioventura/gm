@@ -1,0 +1,212 @@
+
+
+#agendaIncluirSelectDia, #agendaIncluirSelectMes, #agendaIncluirSelectAno, #agendaIncluirSelectHora, #agendaIncluirSelectMinutos, #agendaIncluirSelectLocal1, #agendaIncluirSelectLocal2 {
+    padding-right: 0.5em;
+    font-size: 12pt;
+}
+#agendaIncluirSelectAno, #agendaIncluirSelectLocal2 {
+    padding-right: 0em;
+
+}
+#agendaEditSelectDia, #agendaEditSelectMes, #agendaEditSelectAno, #agendaEditSelectHora, #agendaEditSelectMinutos, #agendaEditSelectLocal1, #agendaEditSelectLocal2 {
+    padding-right: 0.5em;
+
+}
+#agendaEditSelectAno, #agendaEditSelectLocal2 {
+    padding-right: 0em;
+}
+
+
+
+#inputAgendaIncluirPaciente, #inputAgendaIncluirDia, #inputAgendaIncluirMes, #inputAgendaIncluirAno, #inputAgendaIncluirHora, #inputAgendaIncluirMinutos, #inputAgendaIncluirLocal1, #inputAgendaIncluirLocal2, #inputAgendaIncluirObservacao,
+#inputAgendaEditPaciente, #inputAgendaEditDia, #inputAgendaEditMes, #inputAgendaEditAno, #inputAgendaEditHora, #inputAgendaEditMinutos, #inputAgendaEditLocal1, #inputAgendaEditLocal2, #inputAgendaEditObservacao,
+#inputAgendaRelato  {
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 0.5em;
+    border: 1pt solid lightgray;
+    height: auto;
+    background-color: lightyellow;
+    color: dodgerblue;
+}
+
+
+#inputAgendaIncluirObservacao,
+#inputAgendaEditarObservacao {
+    background-color: lightcyan;
+    border: 1pt solid lightgray;
+    height: auto;
+}
+
+#inputAgendaIncluirLocal1, #inputAgendaIncluirLocal2 {
+    background-color: aliceblue;
+}
+
+#inputAgendaEditPaciente, #inputAgendaEditDia, #inputAgendaEditMes, #inputAgendaEditAno, #inputAgendaEditHora, #inputAgendaEditMinutos, #inputAgendaEditLocal1, #inputAgendaEditLocal2, #inputAgendaEditObservacao {
+    background-color: aliceblue;
+}
+
+
+.agenda, .agendahora {
+    color: dodgerblue;
+    font-weight: bold;
+}
+.agendaVerItem {
+    color: dodgerblue;
+    font-weight: normal;
+    text-align: left;
+    padding: 0.4em;
+    height: auto;
+    background-color: #ccddff;
+    border: 2pt solid white;
+    font-size: 12pt;
+    width: 10%;
+}
+.agendaVer {
+    height: auto;
+    text-align: left;
+    background-color: #eeeeee;
+    border: 2pt solid white;
+    font-weight: bold;
+    color: black;
+    font-size: 13pt;
+    padding: 0.4em;
+}
+
+
+#AgendaVerPaciente, #AgendaVerAluno, #AgendaVerData, #AgendaVerDia, #AgendaVerMes, #AgendaVerAno, #AgendaVerHora, #AgendaVerMinutos, #AgendaVerLocal, #AgendaVerObservacao {
+    font-size: 14pt;
+    color: black;
+    height: auto;
+}
+#AgendaVerPaciente, #AgendaVerAluno {
+    font-weight: bold;
+}
+#AgendaVerObservacao {
+    font-size: 12pt;
+    color: black;
+    font-weight: normal;
+    font-style: italic;
+}
+
+
+
+
+
+
+
+
+.consulta {
+    background-color: #def;
+    height: auto;
+}
+
+.consultaantiga {
+    background-color: #eef;
+    height: auto;
+}
+
+.myconsulta {
+    background-color: lightblue;
+    height: auto;
+}
+
+.consultarecemvisualizada {
+    background-color: darkseagreen;
+    height: auto;
+}
+
+
+
+.novadata, .datahoje, .dataantiga {
+    font-weight: bold;
+    font-size: 14pt;
+    text-align: left;
+    background-color: #cdf;
+    color: dodgerblue;
+    padding: 0.5em;
+    height: auto;
+}
+.datahoje {
+    background-color: dodgerblue;
+    color: white;
+}
+.dataantiga {
+    background-color: #ccc;
+    color: white;
+}
+
+
+
+
+.colHora, .colConsulta, .colLocal {
+    text-align: left;
+    font-size: 13pt;
+    padding: 0.3em;
+    border: 2pt solid white;
+    height: auto;
+}
+
+.colConsulta {
+    border-right: 0pt;
+}
+
+.colHora {
+    width: 3.5em;
+    text-align: center;
+    border-left: 0pt;
+    color: black;
+}
+
+.colLocal {
+    text-align: center;
+    font-weight: bold;
+    width: 3em;
+    color: black;
+}
+
+
+
+.AgendaMapaData, .AgendaMapaBoxes, .AgendaMapaDataFocus {
+    background-color: lightblue;
+    border: solid 0.5em white;
+    padding: 0.5em;
+    font-weight: bold;
+    font-size: medium;
+    text-align: center;
+}
+.AgendaMapaBoxes {
+    background-color: darkgray;
+    color: lightgray;
+}
+.AgendaMapaDataFocus {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.AgendaMapaCadeira, .AgendaMapaCadeira1, .AgendaMapaCadeiraOcupada, .AgendaMapaCadeiraIndisponivel {
+    background-color: antiquewhite;
+    border: solid 0.5em white;
+    padding: 0.5em;
+    font-size: small;
+    text-align: center;
+    vertical-align: middle;
+    color: gray;
+}
+.AgendaMapaCadeira {
+    background-color: aliceblue;
+}
+.AgendaMapaCadeiraIndisponivel {
+    background-color: #eee;
+    color: lightgray;
+}
+.AgendaMapaCadeiraOcupada {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.AgendaCadeiraOcupada {
+    font-weight: bold;
+    color: white;
+}
+

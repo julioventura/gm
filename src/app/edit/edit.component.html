@@ -3,11 +3,11 @@
     <!-- CABEÇALHO  -->
     <div class="header-toolbar">
         <div class="fc-left">
-            <img src="http://gestormix.com/img/sair.png" (click)="voltar()" class="img_nav">
+            <img src="https://gestormix.com/img/sair.png" (click)="voltar()" class="img_nav">
         </div>
 
         <div class="fc-right title">
-            <img src="http://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
         </div>
 
         <div class="fc-center title">
@@ -17,6 +17,10 @@
         <div class="fc-clear"></div>
     </div>
     <div class="espacador_vertical_duplo">&nbsp;</div>
+
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+    <p-messages [value]="msgs"></p-messages>
+
 
     <!-- BARRA DE TITULO - titulo_barra -->
     <div class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_top back_blue">
@@ -29,24 +33,25 @@
     <div *ngIf="!config[dados.PARAMETRO].tem_sublista">
 
 		<!-- EXIBE O ULTIMO INCLUIDO -->
-		<div *ngIf="['CLIENTES','FORNECEDORES','ESTOQUE'].includes(dados.PARAMETRO) && ultimo_cadastrado" class="container_dialogBox_body back_white">
+		<div *ngIf="['CLIENTES','SOCIOS','FORNECEDORES','ESTOQUE'].includes(dados.PARAMETRO) && ultimo_cadastrado" class="container_dialogBox_body back_white">
 			<div class="espacador_vertical_metade">&nbsp;</div>
-            Último cadastrado: &nbsp; {{ultimo_cadastrado}}
+            <span class="small">Último cadastrado: &nbsp; {{ultimo_cadastrado}}</span>
 		</div>
+
 
         <div *ngIf="dados.PARAMETRO == 'CLIENTES'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
             <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
                 <div class="form_label_ext">{{label_nome}}</div>
-                <div class="form_content left">
-                    <input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autofocus autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].razaosocial" class="ui-grid-row">
                 <div class="form_label_ext">Razão Social</div>
-                <div class="form_content left">
-                    <input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
                 </div>
             </div>
 
@@ -58,138 +63,422 @@
 
             <div *ngIf="config[dados.PARAMETRO].sexo" class="ui-grid-row">
                 <div class="form_label_ext">Sexo (M/F)</div>
-                <div class="form_label left"><input pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
+                <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
             </div>
             <div class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].cpf && !dados.selected_edit.cnpj" class="ui-grid-row">
                 <div class="form_label_ext">CPF</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].cnpj && !dados.selected_edit.cpf" class="ui-grid-row">
                 <div class="form_label_ext">CNPJ</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].inscricaoestadual && dados.selected_edit.cnpj" class="ui-grid-row">
                 <div class="form_label_ext">Insc.Est.</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].cpf || config[dados.PARAMETRO].cnpj" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].nascimento">
                 <div class="ui-grid-row">
                     <div class="form_label_ext">Nasc.</div>
-                    <div class="w40 left">
-                        <input pInputText class="w100" [(ngModel)]="dados.selected_edit.nascimento" (change)="dados.selected_edit.nascimento = util.mudou_nascimento(dados.selected_edit.nascimento)" autocomplete="off" />
+                    <div class="fw43 left">
+                        <input pInputText [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
                     </div>
-                    <div class="w40">
-                        <span class="form_label_ext3">&nbsp; {{util.TEMP.idade}}</span>
+                    <div *ngIf="dados.selected_edit.nascimento" class="fw40">
+                        &nbsp; <span class="idade">{{TEMP.idade}}</span>
                     </div>
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].responsavel" class="ui-grid-row">
                 <div class="form_label_ext">Responsável</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.responsavel" (change)="dados.selected_edit.responsavel=util.capitalizar(dados.selected_edit.responsavel)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.responsavel" (change)="dados.selected_edit.responsavel=util.capitalizar(dados.selected_edit.responsavel)" autocomplete="off" /></div>
             </div>
 
             <div>
                 <div *ngIf="config[dados.PARAMETRO].identidade" class="ui-grid-row">
                     <div class="form_label_ext">Identidade</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
                 </div>
 
                 <div *ngIf="config[dados.PARAMETRO].especialidades" class="ui-grid-row">
                     <div class="form_label_ext">Especialidades</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.especialidades" (change)="dados.selected_edit.especialidades=util.capitalizar(dados.selected_edit.especialidades)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.especialidades" (change)="dados.selected_edit.especialidades=util.capitalizar(dados.selected_edit.especialidades)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].profissao" class="ui-grid-row">
                     <div class="form_label_ext">Profissão</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.profissao" (change)="dados.selected_edit.profissao=util.capitalizar(dados.selected_edit.profissao)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.profissao" (change)="dados.selected_edit.profissao=util.capitalizar(dados.selected_edit.profissao)" autocomplete="off" /></div>
                 </div>
 
                 <div *ngIf="config[dados.PARAMETRO].telefone" class="ui-grid-row">
                     <div class="form_label_ext">Telefone</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].whatsapp" class="ui-grid-row">
                     <div class="form_label_ext">Whatsapp</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].email" class="ui-grid-row">
                     <div class="form_label_ext">Email</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.email" (change)="dados.selected_edit.email=util.formata_email(dados.selected_edit.email)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.email" (change)="dados.selected_edit.email=util.formata_email(dados.selected_edit.email)" autocomplete="off" /></div>
                 </div>
 
-
+                <div class="espacador_vertical">&nbsp;</div>
 
                 <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
                     <div class="form_label_ext">Site</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
                 </div>
 
                 <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
                     <div class="form_label_ext">Imagem</div>
-                    <div class="form_content left normal"><input pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" /></div>
+                    <div class="fw83 normal"><input pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" /></div>
                 </div>
 
                 <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="espacador_vertical">&nbsp;</div>
                 <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="ui-grid-row">
                     <div class="form_label_ext">Foto</div>
-                    <div class="form_content left"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
+                    <div class="fw83"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
                 </div>
 
                 <div *ngIf="config[dados.PARAMETRO].facebook" class="espacador_vertical">&nbsp;</div>
                 <div *ngIf="config[dados.PARAMETRO].facebook" class="ui-grid-row">
                     <div class="form_label_ext">Facebook</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].instagram" class="ui-grid-row">
                     <div class="form_label_ext">Instagram</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].linkedin" class="ui-grid-row">
                     <div class="form_label_ext">Linkedin</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
                 </div>
+
 
                 <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
                 <div *ngIf="config[dados.PARAMETRO].endereco" class="ui-grid-row">
                     <div class="form_label_ext">Endereco</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].bairro" class="ui-grid-row">
                     <div class="form_label_ext">Bairro</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].cidade" class="ui-grid-row">
                     <div class="form_label_ext">Cidade</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].estado" class="ui-grid-row">
                     <div class="form_label_ext">Estado</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
+                    <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].cep" class="ui-grid-row">
                     <div class="form_label_ext">CEP</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
 
                 <div *ngIf="config[dados.PARAMETRO].indicacao" class="ui-grid-row">
                     <div class="form_label_ext">Indicação</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.indicacao" autocomplete="off" /></div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.indicacao" autocomplete="off" /></div>
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical"> &nbsp; </div>
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="2" cols="30" autoResize=false wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
         </div>
+
+
+        <div *ngIf="dados.PARAMETRO == 'EQUIPE'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+            <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
+                <div class="form_label_ext">{{label_nome}}</div>
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                </div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].sexo" class="ui-grid-row">
+                <div class="form_label_ext">Sexo (M/F)</div>
+                <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
+            </div>
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].cnpj && !dados.selected_edit.cpf" class="ui-grid-row">
+                <div class="form_label_ext">CNPJ</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].nascimento">
+                <div class="ui-grid-row">
+                    <div class="form_label_ext">Nasc.</div>
+                    <div class="fw43 left">
+                        <input pInputText [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
+                    </div>
+                    <div *ngIf="dados.selected_edit.nascimento" class="fw40">
+                        &nbsp; <span class="idade">{{TEMP.idade}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div *ngIf="config[dados.PARAMETRO].identidade" class="ui-grid-row">
+                    <div class="form_label_ext">Identidade</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].profissao" class="ui-grid-row">
+                    <div class="form_label_ext">Profissão</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.profissao" (change)="dados.selected_edit.profissao=util.capitalizar(dados.selected_edit.profissao)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].telefone" class="ui-grid-row">
+                    <div class="form_label_ext">Telefone</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].whatsapp" class="ui-grid-row">
+                    <div class="form_label_ext">Whatsapp</div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].email" class="ui-grid-row">
+                    <div class="form_label_ext">Email</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.email" (change)="dados.selected_edit.email=util.formata_email(dados.selected_edit.email)" autocomplete="off" /></div>
+                </div>
+
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
+                    <div class="form_label_ext">Site</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
+                    <div class="form_label_ext">Imagem</div>
+                    <div class="fw83 normal"><input pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="ui-grid-row">
+                    <div class="form_label_ext">Foto</div>
+                    <div class="fw83"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].facebook" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].facebook" class="ui-grid-row">
+                    <div class="form_label_ext">Facebook</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].instagram" class="ui-grid-row">
+                    <div class="form_label_ext">Instagram</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].linkedin" class="ui-grid-row">
+                    <div class="form_label_ext">Linkedin</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
+                </div>
+
+
+                <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].endereco" class="ui-grid-row">
+                    <div class="form_label_ext">Endereco</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].bairro" class="ui-grid-row">
+                    <div class="form_label_ext">Bairro</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].cidade" class="ui-grid-row">
+                    <div class="form_label_ext">Cidade</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].estado" class="ui-grid-row">
+                    <div class="form_label_ext">Estado</div>
+                    <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].cep" class="ui-grid-row">
+                    <div class="form_label_ext">CEP</div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
+                </div>
+                <div class="espacador_vertical">&nbsp;</div>
+
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical"> &nbsp; </div>
+            <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+                <div class="form_label_ext">{{label_obs}}</div>
+                <div class="fw83">
+                    <textarea pInputTextarea rows="2" cols="30" autoResize=false wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngIf="dados.PARAMETRO == 'SOCIOS'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+            <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
+                <div class="form_label_ext">{{label_nome}}</div>
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                </div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].razaosocial" class="ui-grid-row">
+                <div class="form_label_ext">Razão Social</div>
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
+                </div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].id && dados.usuario_logado.id_para_socios" class="ui-grid-row">
+                <div class="form_label_ext">ID</div>
+                <div class="form_label left"><input pInputText [(ngModel)]="dados.selected_edit.id" autocomplete="off" /></div>
+            </div>
+            <div *ngIf="config[dados.PARAMETRO].id && dados.usuario_logado.id_para_socios" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].sexo" class="ui-grid-row">
+                <div class="form_label_ext">Sexo (M/F)</div>
+                <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
+            </div>
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].cpf && !dados.selected_edit.cnpj" class="ui-grid-row">
+                <div class="form_label_ext">CPF</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
+            </div>
+            <div *ngIf="config[dados.PARAMETRO].cnpj && !dados.selected_edit.cpf" class="ui-grid-row">
+                <div class="form_label_ext">CNPJ</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
+            </div>
+            <div *ngIf="config[dados.PARAMETRO].inscricaoestadual && dados.selected_edit.cnpj" class="ui-grid-row">
+                <div class="form_label_ext">Insc.Est.</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
+            </div>
+            <div *ngIf="config[dados.PARAMETRO].cpf || config[dados.PARAMETRO].cnpj" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].nascimento">
+                <div class="ui-grid-row">
+                    <div class="form_label_ext">Nasc.</div>
+                    <div class="fw43 left">
+                        <input pInputText [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
+                    </div>
+                    <div *ngIf="dados.selected_edit.nascimento" class="fw40">
+                        &nbsp; <span class="idade">{{TEMP.idade}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].responsavel" class="ui-grid-row">
+                <div class="form_label_ext">Responsável</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.responsavel" (change)="dados.selected_edit.responsavel=util.capitalizar(dados.selected_edit.responsavel)" autocomplete="off" /></div>
+            </div>
+
+            <div>
+                <div *ngIf="config[dados.PARAMETRO].identidade" class="ui-grid-row">
+                    <div class="form_label_ext">Identidade</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].especialidades" class="ui-grid-row">
+                    <div class="form_label_ext">Especialidades</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.especialidades" (change)="dados.selected_edit.especialidades=util.capitalizar(dados.selected_edit.especialidades)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].profissao" class="ui-grid-row">
+                    <div class="form_label_ext">Profissão</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.profissao" (change)="dados.selected_edit.profissao=util.capitalizar(dados.selected_edit.profissao)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].telefone" class="ui-grid-row">
+                    <div class="form_label_ext">Telefone</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].whatsapp" class="ui-grid-row">
+                    <div class="form_label_ext">Whatsapp</div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].email" class="ui-grid-row">
+                    <div class="form_label_ext">Email</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.email" (change)="dados.selected_edit.email=util.formata_email(dados.selected_edit.email)" autocomplete="off" /></div>
+                </div>
+
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
+                    <div class="form_label_ext">Site</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
+                    <div class="form_label_ext">Imagem</div>
+                    <div class="fw83 normal"><input pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="ui-grid-row">
+                    <div class="form_label_ext">Foto</div>
+                    <div class="fw83"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].facebook" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].facebook" class="ui-grid-row">
+                    <div class="form_label_ext">Facebook</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].instagram" class="ui-grid-row">
+                    <div class="form_label_ext">Instagram</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].linkedin" class="ui-grid-row">
+                    <div class="form_label_ext">Linkedin</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="config[dados.PARAMETRO].endereco" class="ui-grid-row">
+                    <div class="form_label_ext">Endereco</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].bairro" class="ui-grid-row">
+                    <div class="form_label_ext">Bairro</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].cidade" class="ui-grid-row">
+                    <div class="form_label_ext">Cidade</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].estado" class="ui-grid-row">
+                    <div class="form_label_ext">Estado</div>
+                    <div class="fw20"><input pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].cep" class="ui-grid-row">
+                    <div class="form_label_ext">CEP</div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
+                </div>
+                <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
+
+                <div *ngIf="config[dados.PARAMETRO].indicacao" class="ui-grid-row">
+                    <div class="form_label_ext">Indicação</div>
+                    <div class="fw83"><input pInputText [(ngModel)]="dados.selected_edit.indicacao" autocomplete="off" /></div>
+                </div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical"> &nbsp; </div>
+            <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+                <div class="form_label_ext">{{label_obs}}</div>
+                <div class="fw83">
+                    <textarea pInputTextarea rows="2" cols="30" autoResize=false wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+                </div>
+            </div>
+        </div>
+
 
         <div *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
@@ -206,21 +495,21 @@
 
             <div *ngIf="config[dados.PARAMETRO].data" class="ui-grid-row">
                 <div class="form_label_ext2">Data</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.data" (change)="hoje('data','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="hoje('data')">HOJE</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="hoje('data')">HOJE</span>
                 </div>
             </div>
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Hora marcada</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.hora" (change)="agora('hora','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="agora('hora')">AGORA</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="agora('hora')">AGORA</span>
                 </div>
             </div>
 
@@ -229,12 +518,12 @@
             <!-- CLIENTE (CONTRAPARTE) -->
             <div *ngIf="config[dados.PARAMETRO].cliente" class="ui-grid-row">
                 <div class="form_label_ext2">Cliente</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cliente" (keyup)="mostrar_clientes()" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cliente" (keyup)="mostrar_clientes()" autocomplete="off" /></div>
             </div>
             <div *ngIf="listar_clientes">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2"> &nbsp; </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <div *ngIf="dados.selected_edit.cliente && dados.filtered_clientes.length > 0">
                             <p-dataView [value]="dados.filtered_clientes" [rows]="5" [paginator]="dados.filtered_clientes.length>5">
                                 <ng-template let-registro pTemplate="listItem">
@@ -250,18 +539,18 @@
 
             <div class="espacador_vertical_duplo">&nbsp;</div>
 
-            <!-- PROBLEMA -->
-            <div *ngIf="config[dados.PARAMETRO].problema" class="ui-grid-row">
-                <div class="form_label_ext2">Problema</div>
-                <div class="form_content left">
-                    <textarea pInputTextarea rows="3" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.problema"></textarea>
+            <!-- Objetivo -->
+            <div *ngIf="config[dados.PARAMETRO].objetivo" class="ui-grid-row">
+                <div class="form_label_ext2">Objetivo</div>
+                <div class="fw83">
+                    <textarea pInputTextarea rows="3" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.objetivo"></textarea>
                 </div>
             </div>
 
             <!-- URGENCIA -->
             <div *ngIf="config[dados.PARAMETRO].urgencia" class="ui-grid-row">
                 <div class="form_label_ext2">Urgência</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.urgencia" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.urgencia" autocomplete="off" /></div>
             </div>
 
             <div class="espacador_vertical">&nbsp;</div>
@@ -269,21 +558,21 @@
             <!-- // RESPONSAVEL QUE REALIZOU O PROCEDIMENTO -->
             <div *ngIf="config[dados.PARAMETRO].responsavel" class="ui-grid-row">
                 <div class="form_label_ext2">Responsável</div>
-                <div class="form_content left">
-                    <input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.responsavel_nome" (keyup)="mostrar_lista_de_equipe()" />
+                <div class="fw83">
+                    <input pInputText type="text" [(ngModel)]="dados.selected_edit.responsavel_nome" (keyup)="mostrar_lista_de_equipe()" />
                 </div>
             </div>
 
             <div *ngIf="listar_equipe">
                 <div *ngIf="dados.filtered_equipe.length >= 0" class="ui-grid-row">
                     <div class="form_label_ext2"> &nbsp; </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <p-dataView [value]="dados.filtered_equipe" [rows]="5" [paginator]="dados.filtered_equipe.length>5">
-                                <ng-template let-registro pTemplate="listItem">
-                                    <div (click)="escolherResponsavel(registro)">
-                                        {{registro.nome}}
-                                    </div>
-                                </ng-template>
+                            <ng-template let-registro pTemplate="listItem">
+                                <div (click)="escolherResponsavel(registro)">
+                                    {{registro.nome}}
+                                </div>
+                            </ng-template>
                         </p-dataView>
                     </div>
                 </div>
@@ -294,41 +583,41 @@
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Data início</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.data_inicio" (change)="hoje('data_inicio','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="hoje('data_inicio')">HOJE</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="hoje('data_inicio')">HOJE</span>
                 </div>
             </div>
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Hora início</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.hora_inicio" (change)="agora('hora_inicio','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="agora('hora_inicio')">AGORA</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="agora('hora_inicio')">AGORA</span>
                 </div>
             </div>
 
             <div class="espacador_vertical_duplo">&nbsp;</div>
 
-			<div class="ui-grid-row">
+            <div class="ui-grid-row">
                 <div class="form_label_ext2">Data término</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.data_termino" (change)="hoje('data_termino','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="hoje('data_termino')">HOJE</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="hoje('data_termino')">HOJE</span>
                 </div>
             </div>
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Hora término</div>
-                <div class="ui-grid-col-9 left">
+                <div class="fw43">
                     <input pInputText [(ngModel)]="dados.selected_edit.hora_termino" (change)="agora('hora_termino','editou')" autocomplete="off" />
                 </div>
-                <div class="ui-grid-col-4 pad5">
-                    <span class="button_brown white" (click)="agora('hora_termino')">AGORA</span>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="agora('hora_termino')">AGORA</span>
                 </div>
             </div>
 
@@ -336,69 +625,113 @@
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="3" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
-
-            <div class="espacador_vertical">&nbsp;</div>
-
         </div>
+
 
         <div *ngIf="dados.PARAMETRO == 'ESTOQUE'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
             <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
                 <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].id" class="ui-grid-row">
                 <div class="form_label_ext2">Código</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.id" (change)="dados.selected_edit.id = util.formata_maiusculas(dados.selected_edit.id)" autocomplete="off" /></div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.id" (change)="dados.selected_edit.id = util.formata_maiusculas(dados.selected_edit.id)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].codigodebarras" class="ui-grid-row">
                 <div class="form_label_ext2">Barcode EAN-13</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.codigodebarras" (change)="dados.selected_edit.codigodebarras = util.verificaEAN13(dados.selected_edit.codigodebarras)" autocomplete="off" /></div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.codigodebarras" (change)="dados.selected_edit.codigodebarras = util.verificaEAN13(dados.selected_edit.codigodebarras)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].categoria || config[dados.PARAMETRO].descricao" class="espacador_vertical_metade">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].categoria" class="ui-grid-row">
                 <div class="form_label_ext2">Categoria</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.categoria" (change)="dados.selected_edit.categoria = util.capitalizar(dados.selected_edit.categoria)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.categoria" (change)="dados.selected_edit.categoria = util.capitalizar(dados.selected_edit.categoria)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].descricao" class="ui-grid-row">
                 <div class="form_label_ext2">Descricão</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.descricao" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.descricao" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].material" class="ui-grid-row">
                 <div class="form_label_ext2">Material</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.material" (change)="dados.selected_edit.material = util.capitalizar(dados.selected_edit.material)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.material" (change)="dados.selected_edit.material = util.capitalizar(dados.selected_edit.material)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].cor" class="ui-grid-row">
                 <div class="form_label_ext2">Cor</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cor" (change)="dados.selected_edit.cor = util.capitalizar(dados.selected_edit.cor)" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cor" (change)="dados.selected_edit.cor = util.capitalizar(dados.selected_edit.cor)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].img_url" class="espacador_vertical_metade">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
                 <div class="form_label_ext2">Imagem</div>
-                <div class="form_content left"><input pInputText class="w100 normal small" type="text" [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" /></div>
+                <div class="fw63"><input pInputText class="normal small" type="text" [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" /></div>
+                <div class="fw20">
+                    <img src="https://gestormix.com/img/camera.png" (click)="ativar_camera()" class="img_camera">
+                </div>
             </div>
+
+
+            <div *ngIf="showWebcam" id="fotografar">
+                <div class="espacador_vertical_duplo">&nbsp;</div>
+                <webcam [height]="300" [width]="300" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                [videoOptions]="videoOptions"
+                [imageQuality]="1"
+                (cameraSwitched)="cameraWasSwitched($event)"
+                (initError)="handleInitError($event)"
+                ></webcam>
+
+                <div class="espacador_vertical">&nbsp;</div>
+                <button class="actionBtn" (click)="triggerSnapshot();">CAPTURAR IMAGEM</button>
+                <div class="espacador_vertical">&nbsp;</div>
+                <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Mudar Câmera</button>
+                <!-- <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label> -->
+                <div class="espacador_vertical">&nbsp;</div>
+                <!-- DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px">
+                <button (click)="showNextWebcam(deviceId);">Activate</button> -->
+
+                <div class="snapshot" *ngIf="webcamImage">
+                  <span class="sub_title_blue">IMAGEM CAPTURADA:</span>
+                  <img [src]="webcamImage.imageAsDataUrl"/>
+                </div>
+
+                <h4 *ngIf="errors.length > 0">Messages:</h4>
+                <ul *ngFor="let error of errors">
+                  <li>{{error | json}}</li>
+                </ul>
+                <div class="espacador_vertical_duplo">&nbsp;</div>
+            </div>
+
+
+
             <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
                 <div class="form_label_ext2">Imagem 2</div>
-                <div class="form_content left"><input pInputText class="w100 normal small" type="text" [(ngModel)]="dados.selected_edit.img_url2" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText class="normal small" type="text" [(ngModel)]="dados.selected_edit.img_url2" autocomplete="off" /></div>
             </div>
+
+            <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
+                <div class="form_label_ext2">Imagem 3 TESTE</div>
+                <div class="fw83"><input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/gif" id="files" name="files" (change)="uploadImage()" [(ngModel)]="dados.selected_edit.img_url3" autocomplete="off" /></div>
+            </div>
+            <img id="img_preview" src="" height="200" alt="Prévia da imagem...">
+
+
             <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url">
                 <div class="espacador_vertical_metade">&nbsp;</div>
                 <div class="ui-grid-row">
                     <div class="form_label_ext2"> &nbsp; </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"> &nbsp;
                         <img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url2)}}" class="img_url">
                     </div>
@@ -409,56 +742,57 @@
 
             <div *ngIf="config[dados.PARAMETRO].url" class="ui-grid-row">
                 <div class="form_label_ext2">URL</div>
-                <div class="form_content left"><input pInputText class="w100 normal small" type="text" [(ngModel)]="dados.selected_edit.url" autocomplete="off" /></div>
+                <div class="fw83"><input pInputText class="normal small" type="text" [(ngModel)]="dados.selected_edit.url" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].preco_venda || config[dados.PARAMETRO].preco_custo" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].preco_venda" class="ui-grid-row">
                 <div class="form_label_ext2">Preço Venda</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.preco_venda" (change)="dados.selected_edit.preco_venda=util.formata_valor(dados.selected_edit.preco_venda)" autocomplete="off" /></div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.preco_venda" (change)="dados.selected_edit.preco_venda=util.formata_valor(dados.selected_edit.preco_venda)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].preco_custo" class="ui-grid-row">
                 <div class="form_label_ext2">Preço Custo</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.preco_custo" (change)="dados.selected_edit.preco_custo=util.formata_valor(dados.selected_edit.preco_custo)" autocomplete="off" /></div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.preco_custo" (change)="dados.selected_edit.preco_custo=util.formata_valor(dados.selected_edit.preco_custo)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].quantidade" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].quantidade" class="ui-grid-row">
                 <div class="form_label_ext2">Quantidade</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.quantidade" autocomplete="off" /></div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].quantidade_minima" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].quantidade_minima" class="ui-grid-row">
                 <div class="form_label_ext2">Quantidade Mínima</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.quantidade_minima" autocomplete="off" /></div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade_minima" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].quantidade_maxima" class="ui-grid-row">
                 <div class="form_label_ext2">Quantidade Máxima</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.quantidade_maxima" autocomplete="off" /></div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade_maxima" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].unidade" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].unidade" class="ui-grid-row">
                 <div class="form_label_ext2">Unidade de medida</div>
-                <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.unidade" (change)="dados.selected_edit.unidade = util.capitalizar(dados.selected_edit.unidade)" autocomplete="off" /></div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.unidade" (change)="dados.selected_edit.unidade = util.capitalizar(dados.selected_edit.unidade)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext2">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="2" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
         </div>
+
 
         <div *ngIf="dados.PARAMETRO == 'BANCOS'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
@@ -546,30 +880,187 @@
         </div>
 
 
+        <div *ngIf="dados.PARAMETRO == 'MOVIMENTACAO'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+            <div *ngIf="config[dados.PARAMETRO].data" class="ui-grid-row">
+                <div class="form_label_ext2">Data</div>
+                <div class="fw43">
+                    <input name='data' pInputText [(ngModel)]="dados.selected_edit.data" (change)="seta_data()" autocomplete="off" />
+                </div>
+                <div class="fw40">
+                    <span class="botao_hoje" (click)="seta_data(true)">HOJE</span>
+                </div>
+            </div>
+
+
+            <div *ngIf="config[dados.PARAMETRO].nome && !['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
+                <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}:</div>
+                <div class="fw83">
+                    <input name='nome' pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                </div>
+            </div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+           <div class="form_label_ext">Banco</div>
+               <div class="fw83"> <input name='banco' pInputText [(ngModel)]="dados.selected_edit.banco" (keyup)="mostrar_lista_de_bancos('todos','banco','listar_bancos_2')" autocomplete="off" /> </div>
+           </div>
+
+           <div *ngIf="listar_bancos_2">
+               <div *ngIf="dados.selected_edit.banco" class="ui-grid-row">
+                   <div class="form_label_ext2"> &nbsp; </div>
+                   <div class="fw83">
+                       <div *ngIf="dados.filtered_codigos_de_bancos.length > 0">
+
+                           <p-dataView [value]="dados.filtered_codigos_de_bancos" [rows]="5" [paginator]="dados.filtered_codigos_de_bancos.length>5">
+                               <ng-template let-registro pTemplate="listItem">
+                                   <div (click)="escolherBanco(registro,'banco','listar_bancos_2')">
+                                       {{registro.codigo}} - {{registro.nome}}
+                                   </div>
+                               </ng-template>
+                               <p-footer></p-footer>
+                           </p-dataView>
+
+                           <div class="espacador_vertical_duplo">&nbsp;</div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+           <div class="form_label_ext">Agência</div>
+               <div class="fw43"> <input name='agencia' pInputText [(ngModel)]="dados.selected_edit.agencia" autocomplete="off" /> </div>
+           </div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+           <div class="form_label_ext">Conta</div>
+               <div class="fw43"> <input name='conta' pInputText [(ngModel)]="dados.selected_edit.conta" autocomplete="off" /> </div>
+           </div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+           <div class="form_label_ext">Cheque nº</div>
+               <div class="fw43"> <input name='cheque_numero' pInputText [(ngModel)]="dados.selected_edit.cheque_numero" autocomplete="off" /> </div>
+           </div>
+
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+                <div class="form_label_ext">{{label_obs}}</div>
+                <div class="fw83">
+                    <textarea pInputTextarea rows="2" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+                </div>
+            </div>
+            <div class="espacador_vertical">&nbsp;</div>
+
+        </div>
+
+
+        <div *ngIf="dados.PARAMETRO == 'CONFIGURACAO'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config.ATIVAR_CLIENTES">
+                <div class="sub_title_menor left">
+                    MOSTRAR CAMPO DE CÓDIGO PARA CLIENTES?
+                </div>
+                <div class="float_clear"></div>
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <div class="left">
+                    <p-checkbox name="id_para_clientes" [(ngModel)]="dados.selected_edit.id_para_clientes" binary="true"></p-checkbox>
+                    &nbsp; <span *ngIf="dados.selected_edit.id_para_clientes" class="config_item red">COM CAMPO DE CÓDIGO DO CLIENTE (ID)</span>
+                    &nbsp; <span *ngIf="!dados.selected_edit.id_para_clientes" class="config_item grey">SEM CAMPO DE CÓDIGO DO CLIENTE</span>
+                </div>
+                <div class="float_clear"></div>
+            </div>
+
+            <div *ngIf="config.ATIVAR_SOCIOS">
+                <div class="sub_title_menor left">
+                    MOSTRAR CAMPO DE CÓDIGO PARA SOCIOS?
+                </div>
+                <div class="float_clear"></div>
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <div class="left">
+                    <p-checkbox name="id_para_socios" [(ngModel)]="dados.selected_edit.id_para_socios" binary="true"></p-checkbox>
+                    &nbsp; <span *ngIf="dados.selected_edit.id_para_socios" class="config_item red">COM CAMPO DE CÓDIGO DO SOCIO (ID)</span>
+                    &nbsp; <span *ngIf="!dados.selected_edit.id_para_socios" class="config_item grey">SEM CAMPO DE CÓDIGO DO SOCIO</span>
+                </div>
+                <div class="float_clear"></div>
+            </div>
+
+
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div class="sub_title_menor left">
+                TÍTULO PROFISSIONAL PARA USAR NAS MENSAGENS
+            </div>
+            <div class="float_clear"></div>
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].titulo_profissional" class="ui-grid-row">
+                <div class="form_label_ext2 red">TITULO</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.titulo_profissional" /></div>
+            </div>
+            <div class="float_clear"></div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+
+            <div class="sub_title_menor left">
+                VALORES INICIAIS PARA SUGERIR NOS FORMULÁRIOS
+            </div>
+            <div class="float_clear"></div>
+            <div class="espacador_vertical">&nbsp;</div>
+            <div>
+                <div *ngIf="config[dados.PARAMETRO].cidade_default" class="ui-grid-row">
+                    <div class="form_label_ext2">CIDADE INICIAL</div>
+                    <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cidade_default" (change)="dados.selected_edit.cidade_default=util.formata_cidade(dados.selected_edit.cidade_default)" autocomplete="off" /></div>
+                </div>
+
+                <div *ngIf="config[dados.PARAMETRO].estado_default" class="ui-grid-row">
+                    <div class="form_label_ext2">ESTADO INICIAL</div>
+                    <div class="fw43"><input pInputText [(ngModel)]="dados.selected_edit.estado_default" (change)="dados.selected_edit.estado_default=util.formata_maiusculas(dados.selected_edit.estado_default)" autocomplete="off" /></div>
+                </div>
+            </div>
+
+            <div class="espacador_vertical">&nbsp;</div>
+        </div>
+
+
+
+
+        <!-- <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="espacador_vertical">&nbsp;</div>
+        <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+            <div class="form_label_ext pad_top_5">ENTREGUE</div>
+            <div class="fw83">
+                <p-checkbox [(ngModel)]="dados.selected_edit.depositado" binary="true"></p-checkbox>
+               <span *ngIf="dados.selected_edit.depositado" class="status_lancamento green"> &nbsp; ENTREGUE</span>
+               <span *ngIf="!dados.selected_edit.depositado" class="status_lancamento red"> &nbsp; NÃO ENTREGUE</span>
+            </div>
+        </div> -->
+
+
         <div *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
             <div *ngIf="config[dados.PARAMETRO].data" class="ui-grid-row">
                 <div class="form_label_ext2">Data</div>
-                    <div class="ui-grid-col-9 left">
-                        <input name='data' pInputText [(ngModel)]="dados.selected_edit.data" (change)="hoje('data','editou')" autocomplete="off" />
+                    <div class="fw43">
+                        <input name='data' pInputText [(ngModel)]="dados.selected_edit.data" (change)="data_lancamento('data','editou')" autocomplete="off" />
                     </div>
-                    <div class="ui-grid-col-4 pad5">
-                        <span class="button_brown white" (click)="hoje('data')">HOJE</span>
+                    <div class="fw40">
+                        <span class="botao_hoje" (click)="data_lancamento('data')">HOJE</span>
                     </div>
             </div>
 
             <!-- CAMPO DO FORMULARIO DO CENTRO DE CUSTOS -->
             <div *ngIf="config[dados.PARAMETRO].centro_de_custos" class="ui-grid-row">
                 <div class="form_label_ext2">Centro de Custos</div>
-                <div class="form_content left">
-                    <input name='centro_de_custos' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.centro_de_custos" (keyup)="mostrar_centros_de_custos()">
+                <div class="fw83">
+                    <input name='centro_de_custos' pInputText type="text" [(ngModel)]="dados.selected_edit.centro_de_custos" (keyup)="mostrar_centros_de_custos()" autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="listar_centros_de_custos_receita">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2"> &nbsp; </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <div *ngIf="listar_centros_de_custos_receita && dados.filtered_receitas.length > 0">
                             <p-dataView [value]="dados.filtered_receitas" [rows]="5" [paginator]="dados.filtered_receitas.length>5">
                                 <ng-template let-registro pTemplate="listItem">
@@ -588,8 +1079,8 @@
 
             <div *ngIf="config[dados.PARAMETRO].nome && !['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}:</div>
-                <div class="form_content left">
-                    <input name='nome' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                <div class="fw83">
+                    <input name='nome' pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
                 </div>
             </div>
 
@@ -598,11 +1089,11 @@
             <!-- CAMPO DO FORMULARIO DO PRODUTO -->
             <div *ngIf="['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo) && config[dados.PARAMETRO].produto" class="ui-grid-row">
                 <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}</div>
-                <div *ngIf="dados.selected_edit.centro_de_custos_codigo=='R-001'" class="form_content left">
-                    <input name='produto' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.produto" (keyup)="mostrar_produtos_estoque()" (change)="definiu_produto()" />
+                <div *ngIf="dados.selected_edit.centro_de_custos_codigo=='R-001'" class="fw83">
+                    <input name='produto' pInputText type="text" [(ngModel)]="dados.selected_edit.produto" (keyup)="mostrar_produtos_estoque()" (change)="definiu_produto()" autocomplete="off" />
                 </div>
-                <div *ngIf="dados.selected_edit.centro_de_custos_codigo=='R-002'" class="form_content left">
-                    <input name='produto' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.produto" (change)="definiu_produto()" />
+                <div *ngIf="dados.selected_edit.centro_de_custos_codigo=='R-002'" class="fw83">
+                    <input name='produto' pInputText type="text" [(ngModel)]="dados.selected_edit.produto" (change)="definiu_produto()" autocomplete="off" />
                 </div>
             </div>
 
@@ -611,10 +1102,10 @@
             <div *ngIf="listar_estoque && dados.filtered_estoque.length > 0">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2">
-                        <img *ngIf="config[dados.PARAMETRO].listar_imagens && dados.mostrar_imagens_na_lista_estoque" src="http://gestormix.com/img/camera_ativada.png" (click)="mostrar_imagens()" class="img_nav">
-                        <img *ngIf="config[dados.PARAMETRO].listar_imagens && !dados.mostrar_imagens_na_lista_estoque" src="http://gestormix.com/img/camera.png" (click)="mostrar_imagens()" class="img_nav">
+                        <img *ngIf="config[dados.PARAMETRO].listar_imagens && dados.mostrar_imagens_na_lista_estoque" src="https://gestormix.com/img/camera_ativada.png" (click)="mostrar_imagens()" class="img_nav">
+                        <img *ngIf="config[dados.PARAMETRO].listar_imagens && !dados.mostrar_imagens_na_lista_estoque" src="https://gestormix.com/img/camera.png" (click)="mostrar_imagens()" class="img_nav">
                     </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <p-table [value]="dados.filtered_estoque" [rows]="5" [paginator]="dados.filtered_estoque.length > 5">
 
                             <ng-template pTemplate="caption">
@@ -651,14 +1142,14 @@
             <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="espacador_vertical">&nbsp;</div>
             <div class="ui-grid-row">
                 <div class="form_label_ext"> </div>
-                <div *ngIf="imagem_normal" class="form_content left">
+                <div *ngIf="imagem_normal" class="fw83">
                     <img *ngIf="dados.selected_edit.img_url" src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url_menor" (click)="zoom_da_imagem(1)"> &nbsp;
                     <img *ngIf="dados.selected_edit.img_url2" src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url2)}}" class="img_url_menor" (click)="zoom_da_imagem(2)">
                 </div>
-                <div *ngIf="imagem_maior1 && dados.selected_edit.img_url" class="form_content left" (click)="zoom_da_imagem()">
+                <div *ngIf="imagem_maior1 && dados.selected_edit.img_url" class="fw83" (click)="zoom_da_imagem()">
                     <img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url_maior">
                 </div>
-                <div *ngIf="imagem_maior2 && dados.selected_edit.img_url2" class="form_content left" (click)="zoom_da_imagem()">
+                <div *ngIf="imagem_maior2 && dados.selected_edit.img_url2" class="fw83" (click)="zoom_da_imagem()">
                     <img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url2)}}" class="img_url_maior">
                 </div>
             </div>
@@ -667,56 +1158,54 @@
 
             <div *ngIf="!['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo) && config[dados.PARAMETRO].valor" class="ui-grid-row">
                 <div class="form_label_ext2">Preço</div>
-                <div class="form_content left">
-                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor" (change)="ajusta_valor()" />
+                <div class="fw43">
+                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_unitario" (change)="ajusta_valor()" autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">Preço</div>
-                <div class="form_content left">
-                    <input name='valor_unitario' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_unitario" (change)="ajusta_valor()" />
+                <div class="fw43">
+                    <input name='valor_unitario' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_unitario" (change)="ajusta_valor()" autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">Quantidade</div>
-                <div class="form_content left">
-                    <span class="w60 left">
-                        <input name='quantidade' pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" (keyup)="ajusta_valor()"/>
-                    </span>
-                    <span *ngIf="dados.selected_edit.produto && dados.selected_edit.centro_de_custos_codigo!='R-002'" class="w40">
-                        <span *ngIf="dados.produto_escolhido.quantidade>0"> &nbsp; <span class="blue bold">Em estoque: {{dados.produto_escolhido.quantidade}}</span></span>
-                        <span *ngIf="dados.produto_escolhido.quantidade<1"> &nbsp; <span class="red bold">Fora de estoque: {{dados.produto_escolhido.quantidade}}</span></span>
-                    </span>
+                <div class="fw20">
+                        <input name='quantidade' pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" (keyup)="ajusta_valor()" autocomplete="off" />
+                </div>
+                <div class="fw63" *ngIf="dados.selected_edit.produto && dados.selected_edit.centro_de_custos_codigo!='R-002'">
+                    <span *ngIf="dados.produto_escolhido.quantidade>0"> <span class="lancamento_em_estoque">Em estoque: <span class="bold">{{dados.produto_escolhido.quantidade}}</span></span></span>
+                    <span *ngIf="dados.produto_escolhido.quantidade<1"> <span class="lancamento_fora_de_estoque">Fora de estoque: <span class="bold">{{dados.produto_escolhido.quantidade}}</span></span></span>
                 </div>
             </div>
 
             <div *ngIf="['R-001','R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">Desconto</div>
-                <div class="form_content left">
-                        <input name='desconto' pInputText type="text" [(ngModel)]="dados.selected_edit.desconto" (change)="ajusta_valor()"/>
+                <div class="fw43">
+                        <input name='desconto' pInputText type="text" [(ngModel)]="dados.selected_edit.desconto" (change)="ajusta_valor()" autocomplete="off"/>
                 </div>
             </div>
 
             <div *ngIf="['R-001'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">Valor Total</div>
-                <div class="form_content left">
-                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor" />
+                <div class="fw43">
+                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor"  autocomplete="off"/>
                 </div>
             </div>
 
             <div *ngIf="['R-002'].includes(dados.selected_edit.centro_de_custos_codigo)" class="ui-grid-row">
                 <div class="form_label_ext2">Valor Total</div>
-                <div class="form_content left">
+                <div class="fw43">
                     <input name='valor_total' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_total" (change)="ajusta_valor()" />
                 </div>
             </div>
 
             <div *ngIf="dados.selected_edit.centro_de_custos_codigo=='R-002'" class="ui-grid-row">
                 <div class="form_label_ext2">Comissão</div>
-                <div class="form_content left">
-                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor" (change)="ajusta_valor()" />
+                <div class="fw43">
+                    <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor" (change)="ajusta_valor()" autocomplete="off"/>
                 </div>
             </div>
 
@@ -725,7 +1214,7 @@
             <div *ngIf="dados.selected_edit.centro_de_custos_codigo != 'R-002'">
                 <div *ngIf="config[dados.PARAMETRO].meio_de_pagamento" class="ui-grid-row">
                     <div class="form_label_ext2 pad_top_2">Meio de Pagamento</div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <span class="{{button1}}" (click)="opt('1')">Dinheiro</span>
                         <span class="{{button2}}" (click)="opt('2')">Cheque</span>
                         <span class="{{button3}}" (click)="opt('3')">Cheque Pré</span>
@@ -734,10 +1223,11 @@
                     </div>
                 </div>
             </div>
+
             <div *ngIf="dados.selected_edit.centro_de_custos_codigo == 'R-002'">
                 <div *ngIf="config[dados.PARAMETRO].meio_de_pagamento" class="ui-grid-row">
                     <div class="form_label_ext2 pad_top_2">Meio de Pagamento</div>
-                    <div class="form_content left">
+                    <div class="fw43">
                         <span class="button_brown">Comissão a receber</span>
                     </div>
                 </div>
@@ -745,10 +1235,17 @@
             <div class="espacador_vertical">&nbsp;</div>
 
 
+            <div *ngIf="dados.selected_edit.meio_de_pagamento=='credito'" class="ui-grid-row">
+                <div class="form_label_ext">Crédito em</div>
+                <div class="fw43">
+                    <input name='data_credito' pInputText [(ngModel)]="dados.selected_edit.data_credito" (change)="dados.selected_edit.data_credito=util.formata_data(dados.selected_edit.data_credito,'recente')" autocomplete="off" />
+                </div>
+            </div>
+            <div *ngIf="dados.selected_edit.meio_de_pagamento=='credito'" class="espacador_vertical"></div>
 
             <div *ngIf="dados.selected_edit.meio_de_pagamento=='cheque_pre'" class="ui-grid-row">
                 <div class="form_label_ext">Cheque para</div>
-                <div class="form_content left">
+                <div class="fw43">
                     <input name='data_cheque_pre' pInputText [(ngModel)]="dados.selected_edit.data_cheque_pre" (change)="dados.selected_edit.data_cheque_pre=util.formata_data(dados.selected_edit.data_cheque_pre,'recente')" autocomplete="off" />
                 </div>
             </div>
@@ -756,13 +1253,13 @@
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Banco</div>
-               <div class="form_content left"> <input name='banco' pInputText [(ngModel)]="dados.selected_edit.banco" (keyup)="mostrar_lista_de_bancos('todos','banco','listar_bancos_2')" autocomplete="off" /> </div>
+               <div class="fw83"> <input name='banco' pInputText [(ngModel)]="dados.selected_edit.banco" (keyup)="mostrar_lista_de_bancos('todos','banco','listar_bancos_2')" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="listar_bancos_2">
                <div *ngIf="dados.selected_edit.banco" class="ui-grid-row">
                    <div class="form_label_ext2"> &nbsp; </div>
-                   <div class="form_content left">
+                   <div class="fw83">
                        <div *ngIf="dados.filtered_codigos_de_bancos.length > 0">
 
                            <p-dataView [value]="dados.filtered_codigos_de_bancos" [rows]="5" [paginator]="dados.filtered_codigos_de_bancos.length>5">
@@ -782,46 +1279,71 @@
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Agência</div>
-               <div class="form_content left"> <input name='agencia' pInputText [(ngModel)]="dados.selected_edit.agencia" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='agencia' pInputText [(ngModel)]="dados.selected_edit.agencia" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Conta</div>
-               <div class="form_content left"> <input name='conta' pInputText [(ngModel)]="dados.selected_edit.conta" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='conta' pInputText [(ngModel)]="dados.selected_edit.conta" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Cheque nº</div>
-               <div class="form_content left"> <input name='cheque_numero' pInputText [(ngModel)]="dados.selected_edit.cheque_numero" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='cheque_numero' pInputText [(ngModel)]="dados.selected_edit.cheque_numero" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="espacador_vertical">&nbsp;</div>
 
-            <div *ngIf="config[dados.PARAMETRO].quitado" class="ui-grid-row">
+           <div class="espacador_vertical">&nbsp;</div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+               <div class="form_label_ext pad_top_5">DEPOSITADO</div>
+               <div class="fw83">
+                   <p-checkbox [(ngModel)]="dados.selected_edit.depositado" binary="true"></p-checkbox>
+                   <span *ngIf="!dados.selected_edit.depositado" class="status_lancamento red">&nbsp; NÃO DEPOSITADO</span>
+                   <span *ngIf="dados.selected_edit.depositado" class="status_lancamento green">&nbsp; DEPOSITADO</span>
+               </div>
+           </div>
+
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+               <div class="form_label_ext">Depositado em</div>
+               <div class="fw43">
+                   <input name='data_depositado' pInputText [(ngModel)]="dados.selected_edit.data_depositado" (change)="dados.selected_edit.data_depositado=util.formata_data(dados.selected_edit.data_depositado,'recente')" autocomplete="off" />
+               </div>
+           </div>
+
+           <div  class="ui-grid-row">
                 <div class="form_label_ext pad_top_5">QUITADO</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <p-checkbox [(ngModel)]="dados.selected_edit.quitado" binary="true"></p-checkbox>
-                    &nbsp; <span *ngIf="dados.selected_edit.quitado" class="bold green">QUITADO</span>
-                    &nbsp; <span *ngIf="!dados.selected_edit.quitado" class="bold red">EM ABERTO</span>
+                    <span *ngIf="dados.selected_edit.quitado" class="status_lancamento green">&nbsp; QUITADO</span>
+                    <span *ngIf="!dados.selected_edit.quitado" class="status_lancamento red">&nbsp; EM ABERTO</span>
+                </div>
+            </div>
+
+            <div  *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)">
+                <div  class="ui-grid-row">
+                    <div class="form_label_ext">Quitado em</div>
+                    <div class="fw43">
+                        <input name='data_quitado' pInputText [(ngModel)]="dados.selected_edit.data_quitado" (change)="dados.selected_edit.data_quitado=util.formata_data(dados.selected_edit.data_quitado,'recente')" autocomplete="off" />
+                    </div>
                 </div>
             </div>
 
             <div class="espacador_vertical_duplo">&nbsp;</div>
 
 
-
-
             <!-- PAGADOR (CONTRAPARTE) -->
             <div>
                 <div *ngIf="config[dados.PARAMETRO].contraparte" class="ui-grid-row">
                     <div class="form_label_ext2">{{config[dados.PARAMETRO].label_contraparte}}</div>
-                    <div class="form_content left"><input name='contraparte' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte" (keyup)="mostrar_contrapartes()" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte" (keyup)="mostrar_contrapartes()" autocomplete="off" /></div>
                 </div>
 
                 <div *ngIf="listar_clientes">
                     <div class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
                             <div *ngIf="dados.selected_edit.contraparte && dados.filtered_clientes.length > 0">
 
                                 <div *ngIf="dados.filtered_clientes.length > 0">
@@ -848,11 +1370,11 @@
 
                 <div *ngIf="config[dados.PARAMETRO].contraparte_cpf && !dados.selected_edit.contraparte_cnpj" class="ui-grid-row">
                     <div class="form_label_ext2">CPF</div>
-                    <div class="form_content left"><input name='contraparte_cpf' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte_cpf" (change)="dados.selected_edit.contraparte_cpf=util.formata_cpf(dados.selected_edit.contraparte_cpf)" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte_cpf' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte_cpf" (change)="dados.selected_edit.contraparte_cpf=util.formata_cpf(dados.selected_edit.contraparte_cpf)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].contraparte_cnpj && !dados.selected_edit.contraparte_cpf" class="ui-grid-row">
                     <div class="form_label_ext2">CNPJ</div>
-                    <div class="form_content left"><input name='contraparte_cnpj' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte_cnpj" (change)="dados.selected_edit.contraparte_cnpj=util.formata_cnpj(dados.selected_edit.contraparte_cnpj)" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte_cnpj' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte_cnpj" (change)="dados.selected_edit.contraparte_cnpj=util.formata_cnpj(dados.selected_edit.contraparte_cnpj)" autocomplete="off" /></div>
                 </div>
 
                 <div class="espacador_vertical_duplo">&nbsp;</div>
@@ -864,8 +1386,8 @@
 
                 <div *ngIf="config[dados.PARAMETRO].orcamento && dados.selected_edit.orcamento_key" class="ui-grid-row">
                     <div class="form_label_ext2">{{config[dados.PARAMETRO].label_orcamento}}</div>
-                    <div class="form_content left">
-                        <input name='orcamento' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.orcamento" (keyup)="mostrar_lista_de_orcamentos()" />
+                    <div class="fw83">
+                        <input name='orcamento' pInputText type="text" [(ngModel)]="dados.selected_edit.orcamento" (keyup)="mostrar_lista_de_orcamentos()" autocomplete="off" />
                     </div>
                 </div>
 
@@ -874,7 +1396,7 @@
 
                     <div class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
 
                             <div *ngIf="dados.selected_edit.contraparte && this.orcamentos.length >= 0">
 
@@ -930,8 +1452,8 @@
 
                 <div *ngIf="config[dados.PARAMETRO].profissional_nome" class="ui-grid-row">
                     <div class="form_label_ext2">Profissional</div>
-                    <div class="form_content left">
-                        <input name='profissional_nome' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.profissional_nome" (keyup)="mostrar_lista_de_profissionais()" />
+                    <div class="fw83">
+                        <input name='profissional_nome' pInputText type="text" [(ngModel)]="dados.selected_edit.profissional_nome" (keyup)="mostrar_lista_de_profissionais()" autocomplete="off" />
                     </div>
                 </div>
 
@@ -941,7 +1463,7 @@
 
                     <div *ngIf="dados.filtered_registros.length >= 0" class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
                             <!-- <p-dataTable [value]="dados.filtered_registros.length>0 ? dados.filtered_registros : dados.selected_registros" [rows]="this.rows_profissionais" [paginator]="paginator_status_profissionais">
                                 <p-column field="nome">
                                     <ng-template let-registro="rowData" pTemplate="body">
@@ -969,106 +1491,38 @@
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="2" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
 
-            <div class="espacador_vertical">&nbsp;</div>
-
         </div>
-
-
-        <div *ngIf="dados.PARAMETRO == 'CONFIGURACAO'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
-            <div class="espacador_vertical">&nbsp;</div>
-            <div class="sub_title_menor left">
-                MOSTRAR CAMPO DE CÓDIGO PARA CLIENTES?
-            </div>
-            <div class="float_clear"></div>
-            <div class="espacador_vertical">&nbsp;</div>
-
-            <div class="left">
-                <p-checkbox name="id_para_clientes" [(ngModel)]="dados.selected_edit.id_para_clientes" binary="true"></p-checkbox>
-                &nbsp; <span *ngIf="dados.selected_edit.id_para_clientes" class="bold red">COM CAMPO DE CÓDIGO DO CLIENTE (ID)</span>
-                &nbsp; <span *ngIf="!dados.selected_edit.id_para_clientes" class="bold grey">SEM CAMPO DE CÓDIGO DO CLIENTE</span>
-            </div>
-            <div class="float_clear"></div>
-            <div class="espacador_vertical_duplo">&nbsp;</div>
-            <div class="espacador_vertical">&nbsp;</div>
-
-            <div class="sub_title_menor left">
-                TÍTULO PROFISSIONAL PARA USAR NAS MENSAGENS
-            </div>
-            <div class="float_clear"></div>
-            <div class="espacador_vertical">&nbsp;</div>
-
-            <div *ngIf="config[dados.PARAMETRO].titulo_profissional" class="ui-grid-row">
-                <div class="form_label_ext2 red">TITULO</div>
-                <div class="form_content left"><input pInputText type="text" [(ngModel)]="dados.selected_edit.titulo_profissional" /></div>
-            </div>
-            <div class="float_clear"></div>
-            <div class="espacador_vertical_duplo">&nbsp;</div>
-
-            <div class="sub_title_menor left">
-                VALORES INICIAIS PARA SUGERIR NOS FORMULÁRIOS
-            </div>
-            <div class="float_clear"></div>
-            <div class="espacador_vertical">&nbsp;</div>
-            <div>
-                <div *ngIf="config[dados.PARAMETRO].cidade_default" class="ui-grid-row">
-                    <div class="form_label_ext2">CIDADE INICIAL</div>
-                    <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cidade_default" (change)="dados.selected_edit.cidade_default=util.formata_cidade(dados.selected_edit.cidade_default)" autocomplete="off" /></div>
-                </div>
-
-                <div *ngIf="config[dados.PARAMETRO].estado_default" class="ui-grid-row">
-                    <div class="form_label_ext2">ESTADO INICIAL</div>
-                    <div class="form_content left"><input pInputText [(ngModel)]="dados.selected_edit.estado_default" (change)="dados.selected_edit.estado_default=util.formata_maiusculas(dados.selected_edit.estado_default)" autocomplete="off" /></div>
-                </div>
-            </div>
-
-            <div class="espacador_vertical">&nbsp;</div>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
         <div *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
             <div *ngIf="config[dados.PARAMETRO].data" class="ui-grid-row">
                 <div class="form_label_ext2">Data</div>
-                    <div class="ui-grid-col-9 left">
-                        <input name='data' pInputText [(ngModel)]="dados.selected_edit.data" (change)="hoje('data','editou')" autocomplete="off" />
+                    <div class="fw43">
+                        <input name='data' pInputText [(ngModel)]="dados.selected_edit.data" (change)="data_lancamento('data','editou')" autocomplete="off" />
                     </div>
-                    <div class="ui-grid-col-4 pad5">
-                        <span class="button_brown white" (click)="hoje('data')">HOJE</span>
+                    <div class="fw40">
+                        <span class="botao_hoje" (click)="data_lancamento('data')">HOJE</span>
                     </div>
             </div>
 
             <!-- CAMPO DO FORMULARIO DO CENTRO DE CUSTOS -->
             <div *ngIf="config[dados.PARAMETRO].centro_de_custos" class="ui-grid-row">
                 <div class="form_label_ext2">Centro de Custos</div>
-                <div class="form_content left">
-                    <input name='centro_de_custos' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.centro_de_custos" (keyup)="mostrar_centros_de_custos()">
+                <div class="fw83">
+                    <input name='centro_de_custos' pInputText type="text" [(ngModel)]="dados.selected_edit.centro_de_custos" (keyup)="mostrar_centros_de_custos()" autocomplete="off">
                 </div>
             </div>
 
             <div *ngIf="listar_centros_de_custos_despesa">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2"> &nbsp; </div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <div *ngIf="listar_centros_de_custos_despesa && dados.filtered_despesas.length > 0">
                             <p-dataView [value]="dados.filtered_despesas" [rows]="5" [paginator]="dados.filtered_despesas.length>5">
                                 <ng-template let-registro pTemplate="listItem">
@@ -1087,8 +1541,8 @@
 
             <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
                 <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}:</div>
-                <div class="form_content left">
-                    <input name='nome' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                <div class="fw83">
+                    <input name='nome' pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
                 </div>
             </div>
 
@@ -1096,28 +1550,28 @@
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Preço</div>
-                <div class="form_content left">
-                    <input name='valor_unitario' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_unitario" (change)="ajusta_valor_despesa()" />
+                <div class="fw43">
+                    <input name='valor_unitario' pInputText type="text" [(ngModel)]="dados.selected_edit.valor_unitario" (change)="ajusta_valor_despesa()" autocomplete="off" />
                 </div>
             </div>
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Quantidade</div>
-                <div class="form_content left">
-                        <input name='quantidade' pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" (change)="ajusta_valor_despesa()"/>
+                <div class="fw43">
+                        <input name='quantidade' pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" (change)="ajusta_valor_despesa()" autocomplete="off"/>
                 </div>
             </div>
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Desconto</div>
-                <div class="form_content left">
-                        <input name='desconto' pInputText type="text" [(ngModel)]="dados.selected_edit.desconto" (change)="ajusta_valor_despesa()"/>
+                <div class="fw43">
+                        <input name='desconto' pInputText type="text" [(ngModel)]="dados.selected_edit.desconto" (change)="ajusta_valor_despesa()" autocomplete="off"/>
                 </div>
             </div>
 
             <div class="ui-grid-row">
                 <div class="form_label_ext2">Valor Total</div>
-                <div class="form_content left">
+                <div class="fw43">
                     <input name='valor' pInputText type="text" [(ngModel)]="dados.selected_edit.valor" disabled='true' />
                 </div>
             </div>
@@ -1127,7 +1581,7 @@
             <div>
                 <div *ngIf="config[dados.PARAMETRO].meio_de_pagamento" class="ui-grid-row">
                     <div class="form_label_ext2 pad_top_2">Meio de Pagamento</div>
-                    <div class="form_content left">
+                    <div class="fw83">
                         <span class="{{button1}}" (click)="opt('1')">Dinheiro</span>
                         <span class="{{button2}}" (click)="opt('2')">Cheque</span>
                         <span class="{{button3}}" (click)="opt('3')">Cheque Pré</span>
@@ -1143,7 +1597,7 @@
 
             <div *ngIf="dados.selected_edit.meio_de_pagamento=='cheque_pre'" class="ui-grid-row">
                 <div class="form_label_ext">Cheque para</div>
-                <div class="form_content left">
+                <div class="fw43">
                     <input name='data_cheque_pre' pInputText [(ngModel)]="dados.selected_edit.data_cheque_pre" (change)="dados.selected_edit.data_cheque_pre=util.formata_data(dados.selected_edit.data_cheque_pre,'recente')" autocomplete="off" />
                 </div>
             </div>
@@ -1151,19 +1605,19 @@
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Banco</div>
-               <div class="form_content left"> <input name='banco' pInputText [(ngModel)]="dados.selected_edit.banco" (keyup)="mostrar_lista_de_bancos('meus','banco','listar_bancos_3')" autocomplete="off" /> </div>
+               <div class="fw83"> <input name='banco' pInputText [(ngModel)]="dados.selected_edit.banco" (keyup)="mostrar_lista_de_bancos('meus','banco','listar_bancos_3')" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="listar_bancos_3">
                <div *ngIf="dados.selected_edit.banco" class="ui-grid-row">
                    <div class="form_label_ext2"> &nbsp; </div>
-                   <div class="form_content left">
+                   <div class="fw83">
                        <div *ngIf="dados.filtered_bancos.length > 0">
 
                            <p-dataView [value]="dados.filtered_bancos" [rows]="5" [paginator]="dados.filtered_bancos.length>5">
                                <ng-template let-registro pTemplate="listItem">
                                    <div (click)="escolherBanco(registro,'banco','listar_bancos_3')">
-                                       {{registro.codigo}} - {{registro.nome}}
+                                       {{registro.nome}}
                                    </div>
                                </ng-template>
                                <p-footer></p-footer>
@@ -1177,45 +1631,68 @@
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Agência</div>
-               <div class="form_content left"> <input name='agencia' pInputText [(ngModel)]="dados.selected_edit.agencia" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='agencia' pInputText [(ngModel)]="dados.selected_edit.agencia" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Conta</div>
-               <div class="form_content left"> <input name='conta' pInputText [(ngModel)]="dados.selected_edit.conta" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='conta' pInputText [(ngModel)]="dados.selected_edit.conta" autocomplete="off" /> </div>
            </div>
 
            <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
            <div class="form_label_ext">Cheque nº</div>
-               <div class="form_content left"> <input name='cheque_numero' pInputText [(ngModel)]="dados.selected_edit.cheque_numero" autocomplete="off" /> </div>
+               <div class="fw43"> <input name='cheque_numero' pInputText [(ngModel)]="dados.selected_edit.cheque_numero" autocomplete="off" /> </div>
            </div>
 
-           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="espacador_vertical">&nbsp;</div>
+           <!-- <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="espacador_vertical">&nbsp;</div>
+           <div *ngIf="['cheque','cheque_pre'].includes(dados.selected_edit.meio_de_pagamento)" class="ui-grid-row">
+               <div class="form_label_ext pad_top_5">ENTREGUE</div>
+               <div class="fw83">
+                   <p-checkbox [(ngModel)]="dados.selected_edit.depositado" binary="true"></p-checkbox>
+                  <span *ngIf="dados.selected_edit.depositado" class="status_lancamento green"> &nbsp; ENTREGUE</span>
+                  <span *ngIf="!dados.selected_edit.depositado" class="status_lancamento red"> &nbsp; NÃO ENTREGUE</span>
+               </div>
+           </div> -->
+
+           <div *ngIf="dados.selected_edit.meio_de_pagamento=='cheque'" class="ui-grid-row">
+              <div class="form_label_ext">Entregue</div>
+              <div class="fw43">
+                  <input name='data_depositado' pInputText [(ngModel)]="dados.selected_edit.data_depositado" (change)="dados.selected_edit.data_depositado=util.formata_data(dados.selected_edit.data_depositado,'recente')" autocomplete="off" />
+              </div>
+           </div>
+
+            <!-- <div *ngIf="dados.selected_edit.meio_de_pagamento=='credito'" class="ui-grid-row">
+                <div class="form_label_ext">Autorizado</div>
+                <div class="fw83">
+                    <input name='data_depositado' pInputText [(ngModel)]="dados.selected_edit.data_depositado" (change)="dados.selected_edit.data_depositado=util.formata_data(dados.selected_edit.data_depositado,'recente')" autocomplete="off" />
+                </div>
+            </div> -->
+
+            <div class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].quitado" class="ui-grid-row">
                 <div class="form_label_ext pad_top_5">QUITADO</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <p-checkbox name="quitado" [(ngModel)]="dados.selected_edit.quitado" binary="true"></p-checkbox>
-                    &nbsp; <span *ngIf="dados.selected_edit.quitado" class="bold green">QUITADO</span>
-                    &nbsp; <span *ngIf="!dados.selected_edit.quitado" class="bold red">EM ABERTO</span>
+                    <span *ngIf="dados.selected_edit.quitado" class="status_lancamento green">&nbsp; QUITADO</span>
+                    <span *ngIf="!dados.selected_edit.quitado" class="status_lancamento red">&nbsp; EM ABERTO</span>
                 </div>
             </div>
 
             <div class="espacador_vertical_duplo">&nbsp;</div>
 
 
-
             <!-- CONTRAPARTE -->
             <div>
                 <div *ngIf="config[dados.PARAMETRO].contraparte" class="ui-grid-row">
                     <div class="form_label_ext2">{{config[dados.PARAMETRO].label_contraparte}}</div>
-                    <div class="form_content left"><input name='contraparte' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte" (keyup)="mostrar_contrapartes()" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte" (keyup)="mostrar_contrapartes()" autocomplete="off" /></div>
                 </div>
 
                 <div *ngIf="listar_fornecedores">
                     <div class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
                             <div *ngIf="dados.filtered_fornecedores.length > 0">
 
                                 <p-dataView [value]="dados.filtered_fornecedores" [rows]="5" [paginator]="dados.filtered_fornecedores.length>5">
@@ -1236,11 +1713,11 @@
 
                 <div *ngIf="config[dados.PARAMETRO].contraparte_cpf && !dados.selected_edit.contraparte_cnpj" class="ui-grid-row">
                     <div class="form_label_ext2">CPF</div>
-                    <div class="form_content left"><input name='contraparte_cpf' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte_cpf" (change)="dados.selected_edit.contraparte_cpf=util.formata_cpf(dados.selected_edit.contraparte_cpf)" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte_cpf' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte_cpf" (change)="dados.selected_edit.contraparte_cpf=util.formata_cpf(dados.selected_edit.contraparte_cpf)" autocomplete="off" /></div>
                 </div>
                 <div *ngIf="config[dados.PARAMETRO].contraparte_cnpj && !dados.selected_edit.contraparte_cpf" class="ui-grid-row">
                     <div class="form_label_ext2">CNPJ</div>
-                    <div class="form_content left"><input name='contraparte_cnpj' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.contraparte_cnpj" (change)="dados.selected_edit.contraparte_cnpj=util.formata_cnpj(dados.selected_edit.contraparte_cnpj)" autocomplete="off" /></div>
+                    <div class="fw83"><input name='contraparte_cnpj' pInputText type="text" [(ngModel)]="dados.selected_edit.contraparte_cnpj" (change)="dados.selected_edit.contraparte_cnpj=util.formata_cnpj(dados.selected_edit.contraparte_cnpj)" autocomplete="off" /></div>
                 </div>
 
                 <div class="espacador_vertical_duplo">&nbsp;</div>
@@ -1252,8 +1729,8 @@
 
                 <div *ngIf="config[dados.PARAMETRO].orcamento && dados.selected_edit.orcamento_key" class="ui-grid-row">
                     <div class="form_label_ext2">{{config[dados.PARAMETRO].label_orcamento}}</div>
-                    <div class="form_content left">
-                        <input name='orcamento' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.orcamento" (keyup)="mostrar_lista_de_orcamentos()" />
+                    <div class="fw83">
+                        <input name='orcamento' pInputText type="text" [(ngModel)]="dados.selected_edit.orcamento" (keyup)="mostrar_lista_de_orcamentos()" autocomplete="off" />
                     </div>
                 </div>
 
@@ -1262,7 +1739,7 @@
 
                     <div class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
 
                             <div *ngIf="dados.selected_edit.contraparte && this.orcamentos.length >= 0">
 
@@ -1319,8 +1796,8 @@
 
                 <div *ngIf="config[dados.PARAMETRO].profissional_nome" class="ui-grid-row">
                     <div class="form_label_ext2">Profissional</div>
-                    <div class="form_content left">
-                        <input name='profissional_nome' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.profissional_nome" (keyup)="mostrar_lista_de_profissionais()" />
+                    <div class="fw83">
+                        <input name='profissional_nome' pInputText type="text" [(ngModel)]="dados.selected_edit.profissional_nome" (keyup)="mostrar_lista_de_profissionais()" autocomplete="off" />
                     </div>
                 </div>
 
@@ -1330,7 +1807,7 @@
 
                     <div *ngIf="dados.filtered_registros.length >= 0" class="ui-grid-row">
                         <div class="form_label_ext2"> &nbsp; </div>
-                        <div class="form_content left">
+                        <div class="fw83">
                             <!-- <p-dataTable [value]="dados.filtered_registros.length>0 ? dados.filtered_registros : dados.selected_registros" [rows]="this.rows_profissionais" [paginator]="paginator_status_profissionais">
                                 <p-column field="nome">
                                     <ng-template let-registro="rowData" pTemplate="body">
@@ -1358,41 +1835,12 @@
 
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="2" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
 
-            <div class="espacador_vertical">&nbsp;</div>
-
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1400,120 +1848,122 @@
 
             <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
                 <div class="form_label_ext2">{{label_nome}}</div>
-                <div class="form_content left">
-                    <input name='nome' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+                <div class="fw83">
+                    <input name='nome' pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].razaosocial" class="ui-grid-row">
                 <div class="form_label_ext2">Razão Social</div>
-                <div class="form_content left">
-                    <input name='razaosocial' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
+                <div class="fw83">
+                    <input name='razaosocial' pInputText type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].cpf && !dados.selected_edit.cnpj" class="ui-grid-row">
                 <div class="form_label_ext2">CPF</div>
-                <div class="form_content left"><input name='cpf' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
+                <div class="fw83"><input name='cpf' pInputText type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].cnpj && !dados.selected_edit.cpf" class="ui-grid-row">
                 <div class="form_label_ext2">CNPJ</div>
-                <div class="form_content left"><input name='cnpj' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
+                <div class="fw83"><input name='cnpj' pInputText type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].inscricaoestadual && dados.selected_edit.cnpj" class="ui-grid-row">
                 <div class="form_label_ext2">Insc.Est.</div>
-                <div class="form_content left"><input name='inscricaoestadual' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
+                <div class="fw83"><input name='inscricaoestadual' pInputText type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].cpf || config[dados.PARAMETRO].cnpj" class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].sexo && !dados.selected_edit.cnpj" class="ui-grid-row">
                 <div class="form_label_ext2">Sexo (M/F)</div>
-                <div class="form_label left"><input name='sexo' pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
+                <div class="fw20"><input name='sexo' pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].nascimento">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2">Nasc.</div>
-                    <div class="w40 left">
-                        <input name='nascimento' pInputText class="w100" [(ngModel)]="dados.selected_edit.nascimento" (change)="dados.selected_edit.nascimento = util.mudou_nascimento(dados.selected_edit.nascimento)" autocomplete="off" />
+                    <div class="fw43 left">
+                        <input name='nascimento' pInputText [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
                     </div>
-                    <div class="w40">
-                        <span class="form_label_ext3">&nbsp; {{util.TEMP.idade}}</span>
+                    <div *ngIf="dados.selected_edit.nascimento" class="fw40">
+                        &nbsp; <span class="idade">{{TEMP.idade}}</span>
                     </div>
                 </div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].identidade" class="ui-grid-row">
                 <div class="form_label_ext2">Identidade</div>
-                <div class="form_content left"><input name='identidade' pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
+                <div class="fw83"><input name='identidade' pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].telefone" class="ui-grid-row">
                 <div class="form_label_ext2">Telefone</div>
-                <div class="form_content left"><input name='telefone' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
+                <div class="fw83"><input name='telefone' pInputText type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].whatsapp" class="ui-grid-row">
                 <div class="form_label_ext2">Whatsapp</div>
-                <div class="form_content left"><input name='whatsapp' pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
+                <div class="fw43"><input name='whatsapp' pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].email" class="ui-grid-row">
                 <div class="form_label_ext2 red">LOGIN</div>
-                <div class="form_content left"><input name='email' pInputText class="w100disabled" disabled="true" type="text" [(ngModel)]="dados.selected_edit.email" /></div>
+                <div class="fw83"><input name='email' pInputText class="w100disabled" disabled="true" type="text" [(ngModel)]="dados.selected_edit.email" autocomplete="off" /></div>
             </div>
+
+            <div class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
                 <div class="form_label_ext2">Site</div>
-                <div class="form_content left"><input name='site' pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
+                <div class="fw83"><input name='site' pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_site(dados.selected_edit.site)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].img_url" class="ui-grid-row">
                 <div class="form_label_ext2">Imagem</div>
-                <div class="form_content left normal"><input name='img_url' pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" /></div>
+                <div class="fw83 normal"><input name='img_url' pInputText [(ngModel)]="dados.selected_edit.img_url" autocomplete="off" (change)="dados.selected_edit.img_url=util.formata_site(dados.selected_edit.img_url)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="espacador_vertical">&nbsp;</div>
             <div *ngIf="config[dados.PARAMETRO].img_url && dados.selected_edit.img_url" class="ui-grid-row">
                 <div class="form_label_ext2">Foto</div>
-                <div class="form_content left"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
+                <div class="fw83"><img src="{{util.formata_site_com_protocolo(dados.selected_edit.img_url)}}" class="img_url"></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].facebook" class="espacador_vertical">&nbsp;</div>
             <div *ngIf="config[dados.PARAMETRO].facebook" class="ui-grid-row">
                 <div class="form_label_ext2">Facebook</div>
-                <div class="form_content left"><input name='facebook' pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
+                <div class="fw83"><input name='facebook' pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_site(dados.selected_edit.facebook)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].instagram" class="ui-grid-row">
                 <div class="form_label_ext2">Instagram</div>
-                <div class="form_content left"><input name='instagram' pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
+                <div class="fw83"><input name='instagram' pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_site(dados.selected_edit.instagram)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].linkedin" class="ui-grid-row">
                 <div class="form_label_ext2">Linkedin</div>
-                <div class="form_content left"><input name='linkedin' pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
+                <div class="fw83"><input name='linkedin' pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_site(dados.selected_edit.linkedin)" autocomplete="off" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
             <div *ngIf="config[dados.PARAMETRO].endereco" class="ui-grid-row">
                 <div class="form_label_ext2">Endereco</div>
-                <div class="form_content left"><input name='endereco' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
+                <div class="fw83"><input name='endereco' pInputText type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].bairro" class="ui-grid-row">
                 <div class="form_label_ext2">Bairro</div>
-                <div class="form_content left"><input name='bairro' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
+                <div class="fw83"><input name='bairro' pInputText type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].cidade" class="ui-grid-row">
                 <div class="form_label_ext2">Cidade</div>
-                <div class="form_content left"><input name='cidade' pInputText class="w100" type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
+                <div class="fw83"><input name='cidade' pInputText type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].estado" class="ui-grid-row">
                 <div class="form_label_ext2">Estado</div>
-                <div class="form_content left"><input name='estado' pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
+                <div class="fw20"><input name='estado' pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].cep" class="ui-grid-row">
                 <div class="form_label_ext2">CEP</div>
-                <div class="form_content left"><input name='cep' pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
+                <div class="fw43"><input name='cep' pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
             </div>
             <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
 
@@ -1521,7 +1971,7 @@
             <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical"> &nbsp; </div>
             <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
                 <div class="form_label_ext2">{{label_obs}}</div>
-                <div class="form_content left">
+                <div class="fw83">
                     <textarea pInputTextarea rows="2" cols="30" autoResize=false wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
                 </div>
             </div>
@@ -1531,8 +1981,7 @@
 
 
 
-
-        <div *ngIf="!['CLIENTES','PERFIL','ATENDIMENTOS','ESTOQUE','HISTORICOS','CONFIGURACAO','BANCOS','RECEITAS','DESPESAS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','REL_RECEITAS_E_DESPESAS','ORCAMENTOS'].includes(dados.PARAMETRO)" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+        <div *ngIf="!['CLIENTES','EQUIPE','PERFIL','ATENDIMENTOS','ESTOQUE','HISTORICOS','CONFIGURACAO','BANCOS','RECEITAS','DESPESAS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','REL_RECEITAS_E_DESPESAS','ORCAMENTOS'].includes(dados.PARAMETRO)" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
             <div *ngIf="config[dados.PARAMETRO].checaratividade" class="espacador_vertical">&nbsp;</div>
 
@@ -1613,11 +2062,11 @@
             <div *ngIf="config[dados.PARAMETRO].nascimento">
                 <div class="ui-grid-row">
                     <div class="form_label_ext2">Nasc.</div>
-                    <div class="w40 left">
-                        <input name='nascimento' pInputText class="w100" [(ngModel)]="dados.selected_edit.nascimento" (change)="dados.selected_edit.nascimento = util.mudou_nascimento(dados.selected_edit.nascimento)" autocomplete="off" />
+                    <div class="w43 left">
+                        <input name='nascimento' pInputText class="w100" [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
                     </div>
-                    <div class="w40">
-                        <span class="form_label_ext3">&nbsp; {{util.TEMP.idade}}</span>
+                    <div *ngIf="dados.selected_edit.nascimento" class="w40">
+                        &nbsp; <span class="idade">{{TEMP.idade}}</span>
                     </div>
                 </div>
             </div>
@@ -1716,7 +2165,7 @@
                     <div class="form_content left"><input name='email' pInputText class="w100disabled" disabled="true" type="text" [(ngModel)]="dados.selected_edit.email" /></div>
                 </div>
 
-
+                <div class="espacador_vertical">&nbsp;</div>
 
                 <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
                     <div class="form_label_ext2">Site</div>
@@ -1839,91 +2288,65 @@
 
 
 
-        <!-- RODAPÉ COM ICONES -->
-        <div class="ui-grid ui-grid-responsive ui-fluid">
-            <div>
-                <div class="fc-left menu_home">
-                    <img *ngIf="pode_excluir && dados.selected_edit.key" src="http://gestormix.com/img/lixo.png" (click)="dialogExcluir()" class="img_nav">
-                    <img *ngIf="!pode_excluir || !dados.selected_edit.key" src="http://gestormix.com/img/vazio.png" class="img_nav" />
-                </div>
-                <div class="float-right">
-                    <img src="http://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
-                </div>
-                <div class="float-center">
-
-                    <!-- Excluir  -->
-                    <div *ngIf="excluir_dialog">
-                        <div class="center">
-                            &nbsp; <br />
-                            <span class="button_orange" (click)="confirmar_estorno_dialog=true"> Estornar </span> &nbsp;
-                            <span class="button_red" (click)="confirmar_exclusao_dialog=true"> Excluir </span> &nbsp;
-                            <span class="button_green" (click)="excluir_dialog=false"> Cancelar </span>
-                        </div>
-                    </div>
-
-                    <!-- Confirmar Estorno -->
-                    <div *ngIf="confirmar_estorno_dialog">
-                        <div class="center">
-                            &nbsp; <br />
-                            <span class="button_red" (click)="estornar()"> CONFIRMAR o Estorno </span> &nbsp;
-                            <span class="button_green" (click)="confirmar_estorno_dialog=false"> Cancelar o Estorno </span>
-                        </div>
-                    </div>
-
-                    <!-- Confirmar Exclusão -->
-                    <div *ngIf="confirmar_exclusao_dialog">
-                        <div class="center">
-                            &nbsp; <br />
-                            <span class="button_red" (click)="excluir()"> CONFIRMAR a Exclusão </span> &nbsp;
-                            <span class="button_green" (click)="confirmar_exclusao_dialog=false"> Cancelar a Exclusão </span>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="fc-clear"></div>
+    <!-- RODAPÉ COM ICONES -->
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div>
+            <div class="fc-left menu_home">
+                <img *ngIf="pode_excluir && dados.selected_edit.key" src="https://gestormix.com/img/lixo.png" (click)="dialogExcluir()" class="img_nav">
+                <img *ngIf="!pode_excluir || !dados.selected_edit.key" src="https://gestormix.com/img/vazio.png" class="img_nav" />
             </div>
+            <div class="float-right">
+                <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+            </div>
+            <div class="float-center">
+
+                <!-- POPUPS DE ALERTA  -->
+
+                <!-- Excluir  -->
+                <div *ngIf="estornar_ou_excluir_dialog">
+                    <div class="center">
+                        &nbsp; <br />
+                        <span *ngIf="pode_estornar" class="button_orange" (click)="confirmar_estorno()"> Estornar </span> &nbsp;
+                        <span class="button_red" (click)="confirmar_exclusao()"> Excluir </span> &nbsp;
+                        <span class="button_green" (click)="estornar_ou_excluir_dialog=false"> Cancelar </span>
+                    </div>
+                </div>
+
+                <!-- Confirmar Estorno -->
+                <div *ngIf="confirmar_estorno_dialog">
+                    <div class="center">
+                        &nbsp; <br />
+                        <span class="button_red" (click)="estornar()"> Confirmar o Estorno </span> &nbsp;
+                        <span class="button_green" (click)="confirmar_estorno_dialog=false"> Cancelar o Estorno </span>
+                    </div>
+                </div>
+
+                <!-- Confirmar Exclusão -->
+                <div *ngIf="confirmar_exclusao_dialog">
+                    <div class="center">
+                        &nbsp; <br />
+                        <span class="button_red" (click)="excluir()"> Confirmar a Exclusão </span> &nbsp;
+                        <span class="button_green" (click)="confirmar_exclusao_dialog=false"> Cancelar a Exclusão </span>
+                    </div>
+                </div>
+
+
+
+                <!-- POPUP DE ALERTA -->
+                <!-- <div *ngIf="popupAlerta">
+                    <div class="center">
+                        <p class="bold">{{alerta_titulo}}</p>
+                        <p>{{alerta_linha1}}</p>
+                        <p *ngIf="alerta_linha2">{{alerta_linha2}}</p>
+                        <span class="button_orange" (click)="popup_alerta_fechar()"> &nbsp; OK &nbsp; </span> &nbsp;
+                    </div>
+                </div> -->
+
+
+            </div>
+            <div class="fc-clear"></div>
         </div>
-
-
-<!-- <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
-<p-confirmDialog [style]="{width: '50vw'}" key="positionDialog" [position]="position" [baseZIndex]="10000"></p-confirmDialog>
-
-<p-messages [(value)]="msgs"></p-messages>
-
-<button type="button" (click)="show()">Show</button>
-<button type="button" (click)="clear()">Hide</button>
-
-<p-messages [(value)]="msgs"></p-messages>
-
-<h3 class="first">Basic</h3>
-<div>
-    <button type="button" pButton (click)="showSuccess()" label="Success" class="ui-button-success"></button>
-    <button type="button" pButton (click)="showInfo()" label="Info" class="ui-button-info"></button>
-    <button type="button" pButton (click)="showWarn()" label="Warn" class="ui-button-warning"></button>
-    <button type="button" pButton (click)="showError()" label="Error" class="ui-button-danger"></button>
-    <button type="button" pButton (click)="showMultiple()" label="Multiple"></button>
-    <button type="button" pButton (click)="clear()" icon="pi pi-times" style="float:right" label="Clear"></button>
-</div>
-
-<h3>Message Service</h3>
-<button type="button" pButton (click)="showViaService()" label="Use Service"></button>
-
-<h3>Inline Message CSS</h3>
-<p>CSS helpers to display inline messages mostly within forms.</p>
-<p-message severity="info" text="PrimeNG Rocks"></p-message>
-<p-message severity="success" text="Record Saved"></p-message>
-<p-message severity="warn" text="Are you sure?"></p-message>
-<p-message severity="error" text="Field is required"></p-message>
-
-<div style="margin-top:30px">
-    <input type="text" pInputText placeholder="Username" class="ng-dirty ng-invalid">
-    <p-message severity="error" text="Field is required"></p-message>
-</div>
-
-<div style="margin-top:30px">
-    <input type="text" pInputText placeholder="Email" class="ng-dirty ng-invalid">
-    <p-message severity="error"></p-message>
-</div> -->
+    </div>
 
 
 
