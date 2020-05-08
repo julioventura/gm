@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 // import 'firebase/storage';
 
 import {Subject, Observable} from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
 import { UtilService } from '../util/util.service';
@@ -292,47 +292,47 @@ export class DetailComponent implements OnInit {
                 // =======================================================
                 //function that gets the location and returns it
                 function getLocation() {
-                  if(navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition);
-                  } else {
-                    console.log("Geo Location not supported by browser");
-                  }
+                  // if(navigator.geolocation) {
+                  //   navigator.geolocation.getCurrentPosition(showPosition);
+                  // } else {
+                  //   console.log("Geo Location not supported by browser");
+                  // }
                 }
                 //function that retrieves the position
                 function showPosition(position) {
-                  var location = {
-                    longitude: position.coords.longitude,
-                    latitude: position.coords.latitude
-                  }
-                  console.log(location)
-
-                  var html = "<iframe frameborder='0' height='350' marginheight='0' ";
-                  html += "marginwidth='0' scrolling='no' width='425' ";
-
-                  html += "src='//www.openstreetmap.org/export/embed.html?";
-
-                  html += "bbox=";
-                  html += bbox1;
-                  // html += latlon;
-                  html += ",";
-                  html += bbox2;
-                  // html += latlon;
-
-                  html += "&amp;marker=";
-                  // html += "marker=";
-                  // html += "-23.009133199999997,-43.3443513";
-                  html += marcalocal;
-
-                  // html += latlon;
-                  html += "&amp;layer=mapnik'>";
-                  html += "</iframe>";
-
-                  // var map = document.querySelector("mapholder");
-                  // map.innerHTML = html;
+                  // var location = {
+                  //   longitude: position.coords.longitude,
+                  //   latitude: position.coords.latitude
+                  // }
+                  // console.log(location)
+                  //
+                  // var html = "<iframe frameborder='0' height='350' marginheight='0' ";
+                  // html += "marginwidth='0' scrolling='no' width='425' ";
+                  //
+                  // html += "src='//www.openstreetmap.org/export/embed.html?";
+                  //
+                  // html += "bbox=";
+                  // html += bbox1;
+                  // // html += latlon;
+                  // html += ",";
+                  // html += bbox2;
+                  // // html += latlon;
+                  //
+                  // html += "&amp;marker=";
+                  // // html += "marker=";
+                  // // html += "-23.009133199999997,-43.3443513";
+                  // html += marcalocal;
+                  //
+                  // // html += latlon;
+                  // html += "&amp;layer=mapnik'>";
+                  // html += "</iframe>";
+                  //
+                  // // var map = document.querySelector("mapholder");
+                  // // map.innerHTML = html;
                 }
 
                 //request for location
-                getLocation();
+                // getLocation();
                 // =======================================================
 
         this.mostrar_tela();

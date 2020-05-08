@@ -22,7 +22,7 @@ import { UtilService } from './util/util.service';
 
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 
-import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
+// import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
 
 

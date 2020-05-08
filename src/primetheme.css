@@ -884,7 +884,7 @@ body .ui-slider .ui-slider-range {
   background-color: #007ad9;
 }
 body .ui-slider:not(.ui-state-disabled) .ui-slider-handle:hover {
-  background-color: 2px solid #666666;
+  background-color: #666666;
   border: 2px solid #007ad9;
 }
 body .ui-datepicker {
@@ -2708,10 +2708,9 @@ body .ui-treetable.ui-treetable-hoverable-rows .ui-treetable-tbody > tr:not(.ui-
 body .ui-treetable .ui-column-resizer-helper {
   background-color: #007ad9;
 }
-body .ui-carousel .ui-carousel-content .ui-carousel-prev,
-body .ui-carousel .ui-carousel-content .ui-carousel-next {
+body .ui-carousel .ui-carousel-content .ui-carousel-prev, body .ui-carousel .ui-carousel-content .ui-carousel-next {
   background-color: #ffffff;
-  border: solid 1px rgba(178, 193, 205, 0.64);
+  border: 1px solid rgba(178, 193, 205, 0.64);
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
@@ -2722,11 +2721,10 @@ body .ui-carousel .ui-carousel-content .ui-carousel-next {
   -webkit-transition: color 0.2s;
   transition: color 0.2s;
 }
-body .ui-carousel .ui-carousel-content .ui-carousel-prev:not(.ui-state-disabled):hover,
-body .ui-carousel .ui-carousel-content .ui-carousel-next:not(.ui-state-disabled):hover {
+body .ui-carousel .ui-carousel-content .ui-carousel-prev:not(.ui-state-disabled):hover, body .ui-carousel .ui-carousel-content .ui-carousel-next:not(.ui-state-disabled):hover {
   background-color: #ffffff;
   color: #007ad9;
-  border-color: solid 1px rgba(178, 193, 205, 0.64);
+  border-color: rgba(178, 193, 205, 0.64);
 }
 body .ui-carousel .ui-carousel-dots-container .ui-carousel-dot-item > .ui-button {
   border-color: transparent;

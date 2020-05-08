@@ -21,15 +21,20 @@
         <app-edit></app-edit>
     </div>
 
+
+
+
     <!-- RODAPE DE AUTENTICAÇÃO -->
-    <div class="espacador_vertical">&nbsp;</div>
-    <div class="small"> {{ user.displayName }} </div>
-    <div class="small"> {{ user.email }} </div>
-    <div class="espacador_vertical_metade">&nbsp;</div>
-    <div class="center">
-        <button (click)="logout()"> SAIR </button>
+    <div class="screen_only">
+        <div class="espacador_vertical">&nbsp;</div>
+        <div class="small"> {{ user.displayName }} </div>
+        <div class="small"> {{ user.email }} </div>
+        <div class="espacador_vertical_metade">&nbsp;</div>
+        <div class="center">
+            <button (click)="logout()"> SAIR </button>
+        </div>
+        <div class="espacador_vertical">&nbsp;</div>
     </div>
-    <div class="espacador_vertical">&nbsp;</div>
 
 </div>
 
@@ -37,10 +42,10 @@
 <ng-template #showLogin>
 
         <div class="espacador_vertical_duplo">&nbsp;</div>
-        <div class="container_home_logo">
+        <div class="container_logo">
             <div class="espacador_vertical_duplo">&nbsp;</div>
             <div align="center">
-                <img src="https://gestormix.com/img/logo.gif" width="300px" height="43px" alt="GestorMIX.com">
+                <img src="https://gestormix.com/img/logo.gif" class="container_logo_img" alt="GestorMIX.com">
             </div>
 
             <!-- RODAPE DE AUTENTICAÇÃO -->

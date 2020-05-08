@@ -1,4 +1,4 @@
-<div class="container_principal">
+<div class="container_principal" *ngIf="!dados.esconder_lista">
 
     <!-- Cabeçalho -->
     <div class="header-toolbar">
@@ -7,11 +7,13 @@
             <img src="https://gestormix.com/img/home.png" class="img_nav" (click)="dados.home()">
         </div>
 
+        <!-- *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','PAGAMENTOS','RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
+        <!-- *ngIf="['RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <div class="fc-right">
-            <div *ngIf="dados.PARAMETRO=='FINANCEIRO'">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav">
-				<img src="https://gestormix.com/img/vazio.png" class="img_nav">
-				<!-- <img src="https://gestormix.com/img/config.png" class="img_nav" (click)="go('CONFIG_FINANCEIRO')"> -->
+            <div *ngIf="dados.PARAMETRO=='FINANCEIRO' || dados.PARAMETRO=='RELATORIOS' || dados.PARAMETRO=='MOVIMENTACAO'">
+                <!-- <img src="https://gestormix.com/img/vazio.png" class="img_nav">
+                <img src="https://gestormix.com/img/vazio.png" class="img_nav"> -->
+                <div class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
 
             <!-- PARA USUARIOS INCLUIREM REGISTROS -->
@@ -19,41 +21,111 @@
 			|| dados.PARAMETRO=='LANCAMENTOS_RECEITA'
             || dados.PARAMETRO=='LANCAMENTOS_DESPESA'
             ">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav">
+                <img *ngIf="dados.pode_incluir_lancamento" src="https://gestormix.com/img/vazio.png" class="img_nav">
                 <img *ngIf="dados.pode_incluir_lancamento" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
-                <img *ngIf="!dados.pode_incluir_lancamento" src="https://gestormix.com/img/vazio.png" class="img_nav">
+                <div *ngIf="!dados.pode_incluir_lancamento" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
 
             <div *ngIf="dados.PARAMETRO!='PAGAMENTOS'
-            && dados.PARAMETRO!='LANCAMENTOS_RECEITA'
-			&& dados.PARAMETRO!='LANCAMENTOS_DESPESA'
-            && dados.PARAMETRO!='FINANCEIRO'">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav">
-                <img *ngIf="dados.pode_incluir" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
-                <img *ngIf="!dados.pode_incluir" src="https://gestormix.com/img/vazio.png" class="img_nav">
-            </div>
-        </div>
+                && dados.PARAMETRO!='LANCAMENTOS_RECEITA'
+                && dados.PARAMETRO!='LANCAMENTOS_DESPESA'
+                && dados.PARAMETRO!='RELATORIOS'
+                && dados.PARAMETRO!='MOVIMENTACAO'
+                && dados.PARAMETRO!='FINANCEIRO'">
 
-        <div class="fc-center title">
-            <div class="espacador_vertical">&nbsp;</div>
-            <div *ngIf="titulo_lista">{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
-                <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
-                <!-- <span *ngIf="dados.PARAMETRO=='REVISOES' && dados.mes_de_revisao!=''"> de {{dados.mes_de_revisao}}</span> -->
+                <img *ngIf="dados.imprimir_especial && !config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/impressos.png" class="img_nav {{dados.imprimir_etiquetas ? 'disabled' : ''}}" (click)="preview_imprimir()">
+                <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
+
+                <img *ngIf="!dados.imprimir_etiquetas && (dados.pode_incluir && !config.DISPLAY.PopupWhatsapp)" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
+                <img *ngIf="dados.imprimir_etiquetas" src="https://gestormix.com/img/impressos_2.png" class="img_nav" (click)="imprimir()">
             </div>
 
-            <div *ngIf="(dados.usuario_logado.dataset != dados.usuario_logado.key)" class="fc-center sub_title red">
-                <span class="red">Usando clientes de {{ dados.usuario_logado.dataset_nome }}</span>
-            </div>
         </div>
-        <div class="fc-clear"></div>
+
+        <div *ngIf="!dados.imprimir_etiquetas" class="print">
+
+            <div class="fc-center title">
+                <div class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="titulo_lista">&nbsp;<br />{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
+                    <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
+                    <!-- <span *ngIf="dados.PARAMETRO=='REVISOES' && dados.mes_de_revisao!=''"> de {{dados.mes_de_revisao}}</span> -->
+                </div>
+
+                <div *ngIf="(dados.usuario_logado.dataset != dados.usuario_logado.key)" class="fc-center sub_title red">
+                    <span class="red">Usando clientes de {{ dados.usuario_logado.dataset_nome }}</span>
+                </div>
+            </div>
+            <div class="fc-clear"></div>
+
+        </div>
     </div>
 
+
+    <!-- CALENDARIO  -->
+
+
+    <div *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','CAIXA','RESULTADOS','DISPONIBILIDADE', 'REL_CENTROS_DE_CUSTOS_TOTALIZADOS','MOVIMENTACAO'].includes(dados.PARAMETRO) && !dados.omitir_calendario" class="header-toolbar">
+        <span class="xx">
+            <div class="espacador_vertical">&nbsp;</div>
+
+            <p-calendar
+                [(ngModel)]="this.config.rangeDates"
+                (change)="onClose($event)"
+                (onFocus)="onFocus($event)"
+                (onClose)="onClose($event)"
+                [locale]="pt"
+                dateFormat="dd/mm/yy"
+                name="calendario"
+                selectionMode="range"
+                [touchUI]="true"
+                [readonlyInput]="true"
+                [showTransitionOptions]="'300ms'"
+                [hideTransitionOptions]="'300ms'"
+                [showIcon]="false"
+                [showButtonBar]="false"
+                rangeSeparator=" - "
+            >
+            </p-calendar>
+        </span>
+        <span class="yy" *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO) && !dados.omitir_refresh">
+            <!-- &nbsp; <img src="https://gestormix.com/img/refresh.png" (click)="refresh_calendar()" class="refresh_button"> -->
+        </span>
+
+            <!-- Para escolher mês: -->
+            <!-- <p-calendar [(ngModel)]="dateValue" view="month"  [locale]="pt" dateFormat="mm/yy" [yearNavigator]="true" yearRange="2000:2030"></p-calendar> -->
+    </div>
+
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+    <!-- <p-confirmDialog></p-confirmDialog> -->
+    <!-- <button type="button" (click)="confirm1()" pButton icon="pi pi-check" label="Confirmar"></button>
+    <button type="button" (click)="confirm2()" pButton icon="pi pi-times" label="Sair"></button> -->
+    <!-- <button type="button" (click)="confirm1()" pButton icon="pi pi-check"></button>
+    <button type="button" (click)="confirm2()" pButton icon="pi pi-times"></button> -->
+
+    <p-messages [value]="msgs"></p-messages>
+
+
+
+    <div *ngIf="['REL_DINHEIRO','REL_DEBITO','REL_CREDITO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)
+        && !dados.listar_dinheiro_dia && !dados.listar_debito_dia && !dados.listar_credito_dia && !dados.listar_cheque_pre_dia && !dados.listar_cheque_pre_dia_bom_para
+        && !dados.listar_cheque_dia"
+        class="header-toolbar">
+        <div id="x10" class="espacador_vertical_duplo">&nbsp;</div>
+        <span class="data_range">{{config.data_inicial}} a {{config.data_final}}</span>
+    </div>
+    <div *ngIf="dados.omitir_calendario" class="header-toolbar">
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+        <span class="data_range">{{config.data_inicial}} a {{config.data_final}}</span>
+    </div>
+
+
     <!-- LISTAGENS com primeNG dataView -->
-    <div *ngIf="['FORNECEDORES','CLIENTES','EQUIPE','FINANCEIRO','RELATORIOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
+    <div *ngIf="['FINANCEIRO','RELATORIOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
         <div class="espacador_vertical">&nbsp;</div>
 
         <!-- FILTRO -->
-        <div *ngIf="!['FINANCEIRO','RELATORIOS','BANCOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
+        <div *ngIf="!['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','FINANCEIRO','RELATORIOS','BANCOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO)">
             <div class= "grid_container_busca">
                 <div class="grid_nome">
                     <input class="input_filtro" [(ngModel)]="dados.filtro" (keyup)="dados.filterDatabase(dados.filtro)">
@@ -63,14 +135,19 @@
         </div>
         <!-- FILTRO -->
 
+
 		<div *ngIf="dados[config[dados.PARAMETRO].total_de] == -1">
             <div class="espacador_vertical">&nbsp;</div>
-            <div class="container_interno">
-                <div class="center">
-                    <div class="espacador_vertical">&nbsp;</div>
-                    <p class="sub_title">Aguardando... </p>
-                    <div class="espacador_vertical">&nbsp;</div>
-                </div>
+            <div class="container_interno center">
+                <div class="espacador_vertical">&nbsp;</div>
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <!-- <p-progressSpinner [style]="{width: '50px', height: '50px'}" strokeWidth="8" fill="#EEEEEE" animationDuration="1.5s"></p-progressSpinner> -->
+                <p-progressSpinner [style]="{width: '60px', height: '60px'}" strokeWidth="7" animationDuration="3s"></p-progressSpinner>
+
+                <div class="espacador_vertical">&nbsp;</div>
+                <span class="sub_title">Conectando...</span>
+                <div class="espacador_vertical">&nbsp;</div>
             </div>
         </div>
 
@@ -79,14 +156,13 @@
             <div class="container_interno">
                 <div class="center">
                     <div class="espacador_vertical">&nbsp;</div>
-                    <p class="sub_title center">Nenhum registro.</p>
-                    <span>Use o botão de incluir no topo da tela.</span>
+                    <span class="sub_title center">Nenhum registro.</span>
                     <div class="espacador_vertical">&nbsp;</div>
                 </div>
             </div>
         </div>
 
-        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0 && dados[config[dados.PARAMETRO].filtered]?.length==0  && dados.filtro?.length > 0">
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0 && dados[config[dados.PARAMETRO].filtered]?.length==0 && dados.filtro?.length > 0">
              <div class="container_interno">
                 <div class="center">
                     <div class="espacador_vertical_duplo">&nbsp;</div>
@@ -99,8 +175,8 @@
         <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0">
             <div class="espacador_vertical">&nbsp;</div>
 
-            <p-dataView [value]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered] : dados[config[dados.PARAMETRO].selected]" [paginator]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0  ? dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO] : dados[config[dados.PARAMETRO].selected].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [emptyMessage]="no_records" [pageLinks]="links_de_paginas">
-               <p-header>{{config[dados.PARAMETRO].titulo_lista}}</p-header>
+            <p-dataView [value]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered] : dados[config[dados.PARAMETRO].selected]" [paginator]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO] : dados[config[dados.PARAMETRO].selected].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]" [emptyMessage]="no_records" [pageLinks]="links_de_paginas">
+               <p-header>&nbsp;{{dados.sub_titulo_pagina}}&nbsp;</p-header>
                    <ng-template let-registro pTemplate="listItem">
                        <div (click)="verRegistro(registro)">
                            <div>{{registro.nome}}</div>
@@ -109,40 +185,22 @@
                        </div>
                    </ng-template>
                 <p-footer>
+                    &nbsp;
                     {{ !['FINANCEIRO','RELATORIOS','CAIXA','CONFIG_FINANCEIRO'].includes(dados.PARAMETRO) ? (dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0) ? util.complementa(dados[config[dados.PARAMETRO].filtered].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : util.complementa(dados[config[dados.PARAMETRO].selected].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : '' }}
+                    &nbsp;
                 </p-footer>
            </p-dataView>
-        </div>
-
-        <!-- RODAPÉ COM ICONES -->
-        <div *ngIf="['CLIENTES','EQUIPE','FORNECEDORES'].includes(dados.PARAMETRO)">
-            <div class="ui-grid ui-grid-responsive ui-fluid">
-                <div>
-                    <div class="fc-left menu_home">
-                        <img src="https://gestormix.com/img/vazio.png" class="img_nav" />
-                    </div>
-                    <div class="float-right">
-                        <img src="https://gestormix.com/img/vazio.png" class="img_nav" />
-                    </div>
-                    <div class="float-center">
-                        <img src="https://gestormix.com/img/mail.png" class="img_nav_rodape margin_top_10" (click)="go('MALADIRETA')">
-                    </div>
-                    <div class="fc-clear"></div>
-                </div>
-            </div>
         </div>
     </div>
 
 
 
     <!-- LISTAGENS com primeNG dataTable -->
-    <div *ngIf="[
-		'ATENDIMENTOS','ESTOQUE','HISTORICOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RESULTADOS',
-		'BANCOS'].includes(dados.PARAMETRO)">
-        <div class="espacador_vertical">&nbsp;</div>
+    <div *ngIf="['ATENDIMENTOS','CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ESTOQUE','HISTORICOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RESULTADOS','BANCOS','DISPONIBILIDADE'].includes(dados.PARAMETRO)">
+        <div *ngIf="!['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO)" class="{{dados.imprimir_etiquetas ? 'espacador_vertical' : 'espacador_vertical_printable'}}">&nbsp;</div>
 
         <!-- FILTRO -->
-        <div *ngIf="!['HISTORICOS','RESULTADOS','BANCOS'].includes(dados.PARAMETRO)">
+        <div *ngIf="!dados.voltar_para  && !config.DISPLAY.PopupWhatsapp && !dados.imprimir_etiquetas && ['CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ESTOQUE'].includes(dados.PARAMETRO)">
             <div class= "grid_container_busca">
                 <div class="grid_nome">
                     <input class="input_filtro" [(ngModel)]="dados.filtro" (keyup)="dados.filterDatabase(dados.filtro)">
@@ -150,31 +208,88 @@
             </div>
             <div class="espacador_vertical">&nbsp;</div>
         </div>
+        <div *ngIf="dados.imprimir_etiquetas" class="espacador_vertical_duplo">&nbsp;</div>
         <!-- FILTRO -->
+
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] == -1">
+            <div class="espacador_vertical">&nbsp;</div>
+            <div class="container_interno center">
+                <div class="espacador_vertical">&nbsp;</div>
+                <div class="espacador_vertical">&nbsp;</div>
+
+                <p-progressSpinner [style]="{width: '60px', height: '60px'}" strokeWidth="7" animationDuration="3s"></p-progressSpinner>
+
+                <div class="espacador_vertical">&nbsp;</div>
+                <span class="sub_title">Conectando...</span>
+                <div class="espacador_vertical">&nbsp;</div>
+            </div>
+        </div>
 
         <div *ngIf="dados[config[dados.PARAMETRO].total_de] == 0">
             <div class="espacador_vertical">&nbsp;</div>
             <div class="container_interno">
                 <div class="center">
                     <div class="espacador_vertical">&nbsp;</div>
-                    <p class="sub_title">Nenhum registro.</p>
-                    <span *ngIf="dados.PARAMETRO=='HISTORICOS'">Todas as ações serão listadas aqui.</span>
+                    <span class="sub_title">Nenhum registro.</span>
                     <div class="espacador_vertical">&nbsp;</div>
                 </div>
             </div>
         </div>
 
+
+        <!-- MENU -->
+        <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0 && !dados.imprimir_etiquetas">
+
+            <div *ngIf="dados.PARAMETRO == 'CLIENTES' && !config.DISPLAY.PopupWhatsapp">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div *ngIf="dados.is_clientes_todos" class="w50 menu_ficha_ativado" (click)="clientes_todos()">TODOS</div>
+                    <div *ngIf="!dados.is_clientes_todos" class="w50 menu_ficha" (click)="clientes_todos()">TODOS</div>
+
+                    <div *ngIf="dados.is_clientes_aniversarios" class="w50 menu_ficha_ativado" (click)="clientes_aniversarios()">ANIVERSARIANTES</div>
+                    <div *ngIf="!dados.is_clientes_aniversarios" class="w50 menu_ficha" (click)="clientes_aniversarios()">ANIVERSARIANTES</div>
+                </div>
+            </div>
+
+            <div *ngIf="dados.PARAMETRO == 'SOCIOS' && !config.DISPLAY.PopupWhatsapp">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div *ngIf="dados.is_socios_todos" class="w50 menu_ficha_ativado" (click)="socios_todos()">TODOS</div>
+                    <div *ngIf="!dados.is_socios_todos" class="w50 menu_ficha" (click)="socios_todos()">TODOS</div>
+
+                    <div *ngIf="dados.is_socios_aniversarios" class="w50 menu_ficha_ativado" (click)="socios_aniversarios()">ANIVERSARIANTES</div>
+                    <div *ngIf="!dados.is_socios_aniversarios" class="w50 menu_ficha" (click)="socios_aniversarios()">ANIVERSARIANTES</div>
+                </div>
+            </div>
+
+
+            <div *ngIf="dados.PARAMETRO == 'EQUIPE' && !config.DISPLAY.PopupWhatsapp">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div *ngIf="dados.is_equipe_todos" class="w50 menu_ficha_ativado" (click)="equipe_todos()">TODOS</div>
+                    <div *ngIf="!dados.is_equipe_todos" class="w50 menu_ficha" (click)="equipe_todos()">TODOS</div>
+
+                    <div *ngIf="dados.is_equipe_aniversarios" class="w50 menu_ficha_ativado" (click)="equipe_aniversarios()">ANIVERSARIANTES</div>
+                    <div *ngIf="!dados.is_equipe_aniversarios" class="w50 menu_ficha" (click)="equipe_aniversarios()">ANIVERSARIANTES</div>
+                </div>
+            </div>
+
+            <div *ngIf="dados.PARAMETRO == 'FORNECEDORES' && !config.DISPLAY.PopupWhatsapp">
+                <div class="ui-grid ui-grid-responsive ui-fluid">
+                    <div *ngIf="dados.is_fornecedores_todos" class="w50 menu_ficha_ativado" (click)="fornecedores_todos()">TODOS</div>
+                    <div *ngIf="!dados.is_fornecedores_todos" class="w50 menu_ficha" (click)="fornecedores_todos()">TODOS</div>
+
+                    <div *ngIf="dados.is_fornecedores_aniversarios" class="w50 menu_ficha_ativado" (click)="fornecedores_aniversarios()">ANIVERSARIANTES</div>
+                    <div *ngIf="!dados.is_fornecedores_aniversarios" class="w50 menu_ficha" (click)="fornecedores_aniversarios()">ANIVERSARIANTES</div>
+                </div>
+            </div>
+        </div>
+
         <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0">
-            <div class="espacador_vertical">&nbsp;</div>
 
             <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
-                <p-table [value]="[{}]">
-                    <ng-template pTemplate="caption">
-                        RESULTADO
-                     </ng-template>
+                <div class="espacador_vertical">&nbsp;</div>
+                <!-- <ng-template pTemplate="caption">&nbsp;</ng-template> -->
+                <p-table [value]="[{}]" [resizableColumns]="true">
                      <ng-template pTemplate="header">
                           <tr>
-                              <th>Período</th>
                               <th>Receita</th>
                               <th>Despesa</th>
                               <th>Saldo</th>
@@ -182,20 +297,39 @@
                      </ng-template>
                      <ng-template pTemplate="body" let-registro>
                           <tr>
-                              <td>{{util.complementa(dados.lancamentos_por_dia.length, 'dia', 'dias')}}</td>
-                              <td class="right">{{dados.valor_total_receitas ? util.formata_valor(dados.valor_total_receitas) : ''}}</td>
-                              <td class="right">{{dados.valor_total_despesas ? util.formata_valor(dados.valor_total_despesas) : ''}}</td>
-                              <td *ngIf="dados.saldo_lancamentos>=0" class="blue right">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
-                              <td *ngIf="dados.saldo_lancamentos<0" class="red right">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
+                              <td class="center blue">{{dados.valor_total_receitas ? util.formata_valor(dados.valor_total_receitas) : ''}}</td>
+                              <td class="center red">{{dados.valor_total_despesas ? util.formata_valor(dados.valor_total_despesas) : ''}}</td>
+                              <td *ngIf="dados.saldo_lancamentos>=0" class="bold blue center">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
+                              <td *ngIf="dados.saldo_lancamentos<0" class="bold red center">{{util.formata_valor(dados.saldo_lancamentos)}}</td>
                           </tr>
                      </ng-template>
-                      <ng-template pTemplate="summary">
-                          <span *ngIf="dados.lancamentos_por_dia.length>0">
-                              Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
-                          </span>
-                      </ng-template>
                 </p-table>
+                <!-- <ng-template pTemplate="summary"></ng-template> -->
             </div>
+
+            <div *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">
+                <div class="espacador_vertical">&nbsp;</div>
+                <!-- <ng-template pTemplate="caption">&nbsp;</ng-template> -->
+                <p-table [value]="[{}]" [resizableColumns]="true">
+                     <ng-template pTemplate="header">
+                          <tr>
+                              <th>Receita</th>
+                              <th>Despesa</th>
+                              <th>Saldo</th>
+                          </tr>
+                     </ng-template>
+                     <ng-template pTemplate="body" let-registro>
+                          <tr>
+                              <td class="center blue">{{dados.valor_total_receitas_futuras ? util.formata_valor(dados.valor_total_receitas_futuras) : ''}}</td>
+                              <td class="center red">{{dados.valor_total_despesas_futuras ? util.formata_valor(dados.valor_total_despesas_futuras) : ''}}</td>
+                              <td *ngIf="dados.saldo_lancamentos_futuros >=0" class="bold blue center">{{util.formata_valor(dados.saldo_lancamentos_futuros)}}</td>
+                              <td *ngIf="dados.saldo_lancamentos_futuros <0" class="bold red center">{{util.formata_valor(dados.saldo_lancamentos_futuros)}}</td>
+                          </tr>
+                     </ng-template>
+                </p-table>
+                <!-- <ng-template pTemplate="summary"></ng-template> -->
+            </div>
+
 
             <div *ngIf="dados.PARAMETRO == 'ESTOQUE'">
                 <div class="ui-grid ui-grid-responsive ui-fluid">
@@ -226,7 +360,7 @@
                 </div>
             </div>
 
-            <div class="espacador_vertical">&nbsp;</div>
+            <div id="x" class="{{dados.imprimir_especial ? 'screen_only' : 'print'}} espacador_vertical">&nbsp;</div>
 
             <div *ngIf="!dados[config[dados.PARAMETRO].filtered] || dados[config[dados.PARAMETRO].filtered].length==0">
                  <div class="container_interno">
@@ -238,139 +372,378 @@
                 </div>
             </div>
 
-            <div *ngIf="!(!dados[config[dados.PARAMETRO].filtered] || dados[config[dados.PARAMETRO].filtered].length==0)">
-                <p-table
-                [value]="dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered] : dados[config[dados.PARAMETRO].selected]"
-                [paginator]="dados[config[dados.PARAMETRO].filtered].length>0 ? dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO] : dados[config[dados.PARAMETRO].selected].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]"
-                [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]">
+            <div>
+                    <div *ngIf="config[dados.PARAMETRO].filtered && !(!dados[config[dados.PARAMETRO].filtered] || dados[config[dados.PARAMETRO].filtered].length==0)">
 
-                    <ng-template pTemplate="caption">
-                       <span *ngIf="dados.PARAMETRO != 'RESULTADOS'">{{config[dados.PARAMETRO].titulo_lista}}</span>
-                       <span *ngIf="dados.PARAMETRO == 'RESULTADOS'">DETALHAMENTO DIÁRIO</span>
-                    </ng-template>
-                    <ng-template pTemplate="header">
+                        <div>
+                        <!-- <div class="{{dados.imprimir_etiquetas ? 'screen_only' : 'print'}}"> -->
+                            <div *ngIf="(!config.DISPLAY.PopupWhatsapp && !dados.mostrar_lancamentos_do_dia) && (!dados.mostrar_lancamentos_futuros_do_dia)">
 
-                       <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'">
-                           <th class="w20 pleft">Data</th>
-                           <th class="w16">Horário</th>
-                           <th class="w32">Cliente</th>
-                           <th class="w32">Responsável</th>
-                       </tr>
+                                <div *ngIf="!dados.imprimir_etiquetas">
 
-                       <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'">
-                           <th>Nome</th>
-                           <th class="center">Código</th>
-                           <th class="right">Preço</th>
-                           <th class="right">Qtd</th>
-                       </tr>
+                                    <p-table
+                                    [value]="dados[config[dados.PARAMETRO].filtered]"
+                                    [resizableColumns]="true"
+                                    [paginator]="dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]"
+                                    [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]">
 
-    				   <tr *ngIf="dados.PARAMETRO == 'BANCOS'">
-    					   <th>Nome</th>
-                           <th>Tipo</th>
-                           <th>Agência</th>
-    					   <th>Conta</th>
-    				   </tr>
+                                    <ng-template pTemplate="caption">
+                                        <span *ngIf="dados.PARAMETRO != 'RESULTADOS' && dados.PARAMETRO != 'DISPONIBILIDADE'">{{dados.sub_titulo_pagina}}</span>
+                                        <span *ngIf="dados.PARAMETRO == 'RESULTADOS'">LISTA POR DIA</span>
+                                        <span *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">DISPONIBILIDADE FUTURA POR DIA</span>
+                                    </ng-template>
 
-                       <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'">
-                           <th class="pleft">Quando</th>
-                           <th>Seção</th>
-                           <th>Ação</th>
-                           <th>Referência</th>
-                       </tr>
+                                    <ng-template pTemplate="header">
 
-                       <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'">
-                           <th class="pleft">Data</th>
-                           <th>Centro de Custos</th>
-                           <th>Contraparte</th>
-                           <th class="right">Valor</th>
-                       </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'">
+                                            <th class="w20">Data</th>
+                                            <th class="w16">Horário</th>
+                                            <th class="w32">Cliente</th>
+                                            <th class="w32">Responsável</th>
+                                        </tr>
 
-                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'">
-                            <th class="pleft">Data</th>
-                            <th>Centro de Custos</th>
-                            <th>Contraparte</th>
-                            <th class="right">Valor</th>
-                        </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'CLIENTES'">
+                                            <th>Nome</th>
+                                            <th *ngIf="dados.usuario_logado.id_para_clientes">Código</th>
+                                            <th class="w8em">Nascimento</th>
+                                            <th *ngIf="dados.is_clientes_aniversarios" class="w4em center">Idade</th>
+                                            <th *ngIf="dados.is_clientes_aniversarios" class="w8em">Última msg</th>
+                                            <th *ngIf="dados.is_clientes_aniversarios" class="left w37px"></th>
+                                        </tr>
 
-                        <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'">
-                            <th class="pleft">Data</th>
-                            <th class="right">Receita</th>
-                            <th class="right">Despesa</th>
-                            <th class="right">Saldo</th>
-                        </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'SOCIOS'">
+                                            <th>Nome</th>
+                                            <th *ngIf="dados.usuario_logado.id_para_socios">Código</th>
+                                            <th class="w8em">Nascimento</th>
+                                            <th *ngIf="dados.is_socios_aniversarios" class="w4em center">Idade</th>
+                                            <th *ngIf="dados.is_socios_aniversarios" class="w8em">Última msg</th>
+                                            <th *ngIf="dados.is_socios_aniversarios" class="left w37px"></th>
+                                        </tr>
 
-                    </ng-template>
-                    <ng-template name="registro" pTemplate="body" let-registro>
+                                        <tr *ngIf="dados.PARAMETRO == 'EQUIPE'">
+                                            <th>Nome</th>
+                                            <th class="w8em">Nascimento</th>
+                                            <th *ngIf="dados.is_equipe_aniversarios" class="w4em center">Idade</th>
+                                            <th *ngIf="dados.is_equipe_aniversarios" class="w8em">Última msg</th>
+                                            <th *ngIf="dados.is_equipe_aniversarios" class="left w37px"></th>
+                                        </tr>
 
-                        <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'" (click)="verRegistro(registro)" class="{{registro.data == dados.HOJE ? 'bold' : 'small'}}">
-                            <td class="{{registro.atendimento=='finalizado' ? 'blue w20 pleft' : registro.atendimento=='em_curso' ? 'red w20 pleft' : registro.atendimento=='aberto' ? 'orange w20 pleft' : 'w20 pleft'}}">{{util.diminui_data(registro.data)}}</td>
-                            <td class="{{registro.atendimento=='finalizado' ? 'blue w16 center' : registro.atendimento=='em_curso' ? 'red w16 center' : registro.atendimento=='aberto' ? 'orange w16 center' : 'w16 center'}}">{{registro.hora}}</td>
-                            <td class="{{registro.atendimento=='finalizado' ? 'blue w32' : registro.atendimento=='em_curso' ? 'red w32' : registro.atendimento=='aberto' ? 'orange w32' : 'w32'}}">{{registro.cliente}}</td>
-                            <td class="{{registro.atendimento=='finalizado' ? 'blue w32' : registro.atendimento=='em_curso' ? 'red w32' : registro.atendimento=='aberto' ? 'orange w32' : 'w32'}}">{{registro.responsavel_nome}}</td>
-                        </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'FORNECEDORES'">
+                                            <th>Nome</th>
+                                            <th class="w8em">Nascimento</th>
+                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="w4em center">Idade</th>
+                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="w8em">Última msg</th>
+                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="left w37px"></th>
+                                        </tr>
 
-                       <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'" (click)="verRegistro(registro)">
-                           <td>{{registro.nome}}</td>
-                           <td class="center">{{registro.id}}</td>
-                           <td class="right">{{registro.preco_venda}}</td>
-                           <td class="right">{{registro.quantidade}}</td>
-                       </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'">
+                                            <th>Nome</th>
+                                            <th class="center">Código</th>
+                                            <th class="right">Preço</th>
+                                            <th class="right">Qtd</th>
+                                        </tr>
 
-                      <tr *ngIf="dados.PARAMETRO == 'BANCOS'" (click)="verRegistro(registro)">
-                          <td>{{registro.nome}}</td>
-                          <td class="center">{{registro.corrente ? 'Corrente' : 'Poupança'}}</td>
-                          <td class="center">{{registro.agencia}}</td>
-                          <td class="center">{{registro.conta}}</td>
-                      </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'BANCOS'">
+                                            <th>Nome</th>
+                                            <th>Tipo</th>
+                                            <th>Agência</th>
+                                            <th>Conta</th>
+                                        </tr>
 
-                       <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'" (click)="verRegistro(registro)">
-                           <td>{{registro.criado_em}}</td>
-                           <td>{{registro.database}}</td>
-                           <td>{{registro.titulo}}</td>
-                           <td>{{registro.registro_nome}}</td>
-                       </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'">
+                                            <th class="pleft">Quando</th>
+                                            <th>Seção</th>
+                                            <th>Ação</th>
+                                            <th>Referência</th>
+                                        </tr>
 
-                       <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && !registro.excluido" (click)="verRegistro(registro)">
-                           <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
-                           <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
-                           <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
-                           <td class="{{registro.estorno ? 'estorno right' : 'normal right'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
-                       </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'">
+                                            <th class="pleft">Data</th>
+                                            <th>Centro de Custos</th>
+                                            <th>Contraparte</th>
+                                            <th class="right">Valor</th>
+                                        </tr>
 
-                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'" (click)="verRegistro(registro)">
-                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
-                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
-                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
-                            <td class="{{registro.estorno ? 'estorno right' : 'normal right'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
-                        </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'">
+                                            <th class="pleft">Data</th>
+                                            <th>Centro de Custos</th>
+                                            <th>Contraparte</th>
+                                            <th class="right">Valor</th>
+                                        </tr>
 
-                        <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'" (click)="seleciona_data(registro.data)">
-                            <td>{{util.diminui_data(registro.data)}}</td>
-                            <td class="right">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
-                            <td class="right">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
-                            <td *ngIf="registro.saldo>=0" class="blue right">{{util.formata_valor(registro.saldo)}}</td>
-                            <td *ngIf="registro.saldo<0" class="red right">{{util.formata_valor(registro.saldo)}}</td>
-                        </tr>
+                                        <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'">
+                                            <th>Data</th>
+                                            <th>Receita</th>
+                                            <th>Despesa</th>
+                                            <th>Saldo</th>
+                                        </tr>
 
-                    </ng-template>
-                    <ng-template pTemplate="summary">
-                        <span *ngIf="dados.PARAMETRO!='RESULTADOS'" >
-    						<span *ngIf="dados.PARAMETRO!='BANCOS'">
-                                {{ dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? util.complementa(dados[config[dados.PARAMETRO].filtered].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : util.complementa(dados[config[dados.PARAMETRO].selected].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) }}
-    						</span>
-                        </span>
-                        <span *ngIf="dados.PARAMETRO=='RESULTADOS' && dados.lancamentos_por_dia.length>0">
-                            {{ util.complementa(dados.lancamentos_por_dia.length, 'dia', 'dias')}} &nbsp; | &nbsp; Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
-                        </span>
-                    </ng-template>
-                </p-table>
+                                        <tr *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">
+                                            <th>Data</th>
+                                            <th>Receita</th>
+                                            <th>Despesa</th>
+                                            <th>Saldo</th>
+                                        </tr>
+
+                                    </ng-template>
+
+                                    <ng-template name="registro" pTemplate="body" let-registro>
+
+
+                                        <tr *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'" (click)="verRegistro(registro)" class="{{registro.data == dados.HOJE ? 'bold' : 'small'}}">
+                                            <td class="{{registro.atendimento=='finalizado' ? 'blue' : registro.atendimento=='em_curso' ? 'red' : registro.atendimento=='aberto' ? 'orange' : 'pleft'}}">{{util.diminui_data(registro.data)}}</td>
+                                            <td class="{{registro.atendimento=='finalizado' ? 'blue center' : registro.atendimento=='em_curso' ? 'red center' : registro.atendimento=='aberto' ? 'orange center' : 'center'}}">{{registro.hora}}</td>
+                                            <td class="{{registro.atendimento=='finalizado' ? 'blue' : registro.atendimento=='em_curso' ? 'red' : registro.atendimento=='aberto' ? 'orange' : 'pleft'}}">{{registro.cliente}}</td>
+                                            <td class="{{registro.atendimento=='finalizado' ? 'blue' : registro.atendimento=='em_curso' ? 'red' : registro.atendimento=='aberto' ? 'orange' : 'pleft'}}">{{registro.responsavel_nome}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'CLIENTES'">
+                                            <td class="left" (click)="verRegistro(registro)">{{registro.nome}}</td>
+                                            <td *ngIf="dados.usuario_logado.id_para_clientes" class="center" (click)="verRegistro(registro)">{{registro.codigo}}</td>
+                                            <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td>
+                                            <td *ngIf="dados.is_clientes_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
+                                            <td *ngIf="dados.is_clientes_aniversarios" class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.aniv_mail)}}</td>
+                                            <td *ngIf="dados.is_clientes_aniversarios" class="center" (click)="PopupWhatsapp(registro,'ANIVERSÁRIO')">
+                                                <img *ngIf="registro.aniv_mail" class="img_url_22 disabled" src="https://gestormix.com/img/whatsapp.png" />
+                                                <img *ngIf="!registro.aniv_mail" class="img_url_22" src="https://gestormix.com/img/whatsapp.png" />
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'SOCIOS'">
+                                            <td class="left" (click)="verRegistro(registro)">{{registro.nome}}</td>
+                                            <td *ngIf="dados.usuario_logado.id_para_socios" class="center" (click)="verRegistro(registro)">{{registro.codigo}}</td>
+                                            <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td>
+                                            <td *ngIf="dados.is_socios_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
+                                            <td *ngIf="dados.is_socios_aniversarios" class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.aniv_mail)}}</td>
+                                            <td *ngIf="dados.is_socios_aniversarios" class="center" (click)="PopupWhatsapp(registro,'ANIVERSÁRIO')">
+                                                <img *ngIf="registro.aniv_mail" class="img_url_22 disabled" src="https://gestormix.com/img/whatsapp.png" />
+                                                <img *ngIf="!registro.aniv_mail" class="img_url_22" src="https://gestormix.com/img/whatsapp.png" />
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'EQUIPE'">
+                                            <td class="left" (click)="verRegistro(registro)">{{registro.nome}}</td>
+                                            <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td>
+                                            <td *ngIf="dados.is_equipe_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
+                                            <td *ngIf="dados.is_equipe_aniversarios" class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.aniv_mail)}}</td>
+                                            <td *ngIf="dados.is_equipe_aniversarios" class="center" (click)="PopupWhatsapp(registro,'ANIVERSÁRIO')">
+                                                <img *ngIf="registro.aniv_mail" class="img_url_22 disabled" src="https://gestormix.com/img/whatsapp.png" />
+                                                <img *ngIf="!registro.aniv_mail" class="img_url_22" src="https://gestormix.com/img/whatsapp.png" />
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'FORNECEDORES'">
+                                            <td class="left" (click)="verRegistro(registro)">{{registro.nome}}</td>
+                                            <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td>
+                                            <td *ngIf="dados.is_fornecedores_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
+                                            <td *ngIf="dados.is_fornecedores_aniversarios" class="right" (click)="verRegistro(registro)">{{util.diminui_data(registro.aniv_mail)}}</td>
+                                            <td *ngIf="dados.is_fornecedores_aniversarios" class="center" (click)="PopupWhatsapp(registro,'ANIVERSÁRIO')">
+                                                <img *ngIf="registro.aniv_mail" class="img_url_22 disabled" src="https://gestormix.com/img/whatsapp.png" />
+                                                <img *ngIf="!registro.aniv_mail" class="img_url_22" src="https://gestormix.com/img/whatsapp.png" />
+                                            </td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'" (click)="verRegistro(registro)">
+                                            <td>{{registro.nome}}</td>
+                                            <td class="center">{{registro.id}}</td>
+                                            <td class="right">{{registro.preco_venda}}</td>
+                                            <td class="right">{{registro.quantidade}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'BANCOS'" (click)="verRegistro(registro)">
+                                            <td>{{registro.nome}}</td>
+                                            <td class="center">{{registro.corrente ? 'Corrente' : 'Poupança'}}</td>
+                                            <td class="center">{{registro.agencia}}</td>
+                                            <td class="center">{{registro.conta}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'" (click)="verRegistro(registro)">
+                                            <td>{{registro.criado_em}}</td>
+                                            <td>{{util.capitalizar(registro.database)}}</td>
+                                            <td>{{registro.titulo}}</td>
+                                            <td>{{registro.registro_nome}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'" (click)="verRegistro(registro)">
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
+                                            <td class="{{registro.estorno ? 'estorno right blue' : 'bold right blue'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'" (click)="verRegistro(registro)">
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{util.diminui_data(registro.data)}}</td>
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.centro_de_custos}}</td>
+                                            <td class="{{registro.estorno ? 'estorno' : 'normal'}}">{{registro.contraparte}}</td>
+                                            <td class="{{registro.estorno ? 'estorno right red' : 'bold right red'}}">{{registro.estorno ? registro.valor_estornado : registro.valor}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'" (click)="seleciona_data(registro.data)">
+                                            <td>{{util.diminui_data(registro.data)}}</td>
+                                            <td class="blue right">{{util.formata_valor(registro.receita)}}</td>
+                                            <td class="red right">{{util.formata_valor(registro.despesa)}}</td>
+                                            <td *ngIf="registro.saldo>=0" class="bold blue right">{{util.formata_valor(registro.saldo)}}</td>
+                                            <td *ngIf="registro.saldo<0" class="bold red right">{{util.formata_valor(registro.saldo)}}</td>
+                                        </tr>
+
+                                        <tr *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'" (click)="seleciona_data_disponibilidade(registro.data)">
+                                            <td>{{util.diminui_data(registro.data)}}</td>
+                                            <td class="blue right">{{util.formata_valor(registro.receita)}}</td>
+                                            <td class="red right">{{util.formata_valor(registro.despesa)}}</td>
+                                            <td *ngIf="registro.saldo>=0" class="bold blue right">{{util.formata_valor(registro.saldo)}}</td>
+                                            <td *ngIf="registro.saldo<0" class="bold red right">{{util.formata_valor(registro.saldo)}}</td>
+                                        </tr>
+
+                                        </ng-template>
+
+                                        <ng-template pTemplate="summary">
+                                            &nbsp;
+                                            <span *ngIf="['CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ATENDIMENTOS','ESTOQUE'].includes(dados.PARAMETRO)">
+                                                {{ dados[config[dados.PARAMETRO].filtered] && dados[config[dados.PARAMETRO].filtered].length>0 ? util.complementa(dados[config[dados.PARAMETRO].filtered].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) : util.complementa(dados[config[dados.PARAMETRO].selected].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural) }}
+                                            </span>
+                                            <span *ngIf="dados.PARAMETRO=='BANCOS'">
+                                            </span>
+                                            <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_RECEITA'">
+                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_receita)}}
+                                            </span>
+                                            <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_DESPESA'">
+                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_despesa)}}
+                                            </span>
+                                            <span *ngIf="dados.PARAMETRO=='RESULTADOS' && dados.lancamentos_por_dia.length>0">
+                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
+                                            </span>
+                                            <span *ngIf="dados.PARAMETRO=='DISPONIBILIDADE' && dados.lancamentos_futuros_por_dia.length>0">
+                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_futuros)}}
+                                            </span>
+                                            &nbsp;
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+
+                                <div *ngIf="dados.imprimir_etiquetas" class="print_container">
+                                    <div class="espacador_vertical_printable">&nbsp;</div>
+
+                                    <p-table [value]="dados[config[dados.PARAMETRO].filtered]">
+
+                                            <ng-template name="registro" pTemplate="body" let-registro>
+                                                    <div class="column">
+                                                        <span class="left print_label">{{registro.nome}}<br /></span>
+                                                        <span class="left print_label">{{registro.endereco}}<br /></span>
+                                                        <span *ngIf="registro.bairro" class="left print_label">{{registro.bairro}}<br /></span>
+                                                        <span class="left print_label">{{registro.cep ? registro.cep + ' - ' : '        '}}{{registro.cidade}} - {{registro.estado}}</span>
+                                                    </div>
+                                            </ng-template>
+                                    </p-table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    <!-- ETIQUETAS DE IMPRESSÂO -->
+                    <!-- <div *ngIf="!dados.imprimir_etiquetas && ['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES'].includes(dados.PARAMETRO) && dados.imprimir_especial" class="print_only">
+                        <div *ngIf="config[dados.PARAMETRO].filtered && !(!dados[config[dados.PARAMETRO].filtered] || dados[config[dados.PARAMETRO].filtered].length==0)">
+
+                            <div *ngIf="(!config.DISPLAY.PopupWhatsapp && !dados.mostrar_lancamentos_do_dia) && (!dados.mostrar_lancamentos_futuros_do_dia)">
+                                <p-table [value]="dados[config[dados.PARAMETRO].filtered]">
+
+                                    <ng-template name="registro" pTemplate="body" let-registro>
+
+                                        <div class="column">
+                                            <span class="left print_label">{{registro.nome}}<br /></span>
+                                            <span class="left print_label">{{registro.endereco}}<br /></span>
+                                            <span *ngIf="registro.bairro" class="left print_label">{{registro.bairro}}<br /></span>
+                                            <span class="left print_label">{{registro.cep ? registro.cep + ' - ' : '        '}}{{registro.cidade}} - {{registro.estado}}</span>
+                                        </div>
+
+                                    </ng-template>
+
+                                </p-table>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- POPUP DE VISUALIZAÇÃO DE MENSAGEM DE ANIVERSARIO -->
+                    <div *ngIf="config.DISPLAY.PopupWhatsapp">
+                        <div class="mensagem_whatsapp">
+                            <div>
+                                <div class="ui-widget-content back_blue border0 ui-helper-clearfix">
+                                    <div class="head_center bold">{{assunto_da_mensagem}} - MENSAGEM POR WHATSAPP</div>
+                                    <div class="head_clear"></div>
+                                </div>
+                            </div>
+                            <div class="espacador_vertical">&nbsp;</div>
+
+                            <div class="sub_title_menor"></div>
+                                <div class="espacador_vertical_metade">&nbsp;</div>
+                                <p class="sub_title_blue">{{util.formata_maiusculas(dados.selected.nome)}}</p>
+
+                                <div *ngIf="assunto_da_mensagem == 'ANIVERSÁRIO'">
+                                    <p class="dados pad0">{{util.get_idade(dados.selected.nascimento)}} anos ({{dados.selected.nascimento}})</p>
+                                    <p class="dados pad0" *ngIf="dados.selected.telefone">Tel: {{dados.selected.telefone}}</p>
+                                    <p class="dados pad0">Whatsapp: {{dados.selected.whatsapp}}<br />&nbsp;</p>
+
+                                    <div class="espacador_vertical_metade">&nbsp;</div>
+
+                                    <textarea pInputTextarea rows="13" cols="30" wrap="hard" [(ngModel)]="mensagem" disabled="true"></textarea>
+
+                                    <div class="espacador_vertical">&nbsp;</div>
+
+                                    <div *ngIf="enviar_whatsapp && dados.selected.whatsapp">
+                                        <p> <span class="button_brown white" (click)="enviar_msg_whatsapp()"><a href="{{url}}" target="_blank"> ENVIAR WHATSAPP CEL </a></span>
+                                            <br />&nbsp;<br />
+                                            <span class="button_brown white" (click)="enviar_msg_whatsapp()"><a href="{{url_web}}" target="_blank"> ENVIAR WHATSAPP WEB </a></span>
+                                        </p>
+                                    </div>
+
+                                    <div *ngIf="confirmar_envio_mensagem">
+                                        <div class="bold">
+                                            CONFIRMA O ENVIO E REGISTRA NO HISTÓRICO?
+                                        </div>
+                                        <div class="espacador_vertical">&nbsp;</div>
+
+                                        <span class="button_green white" (click)="confirmar_envio_msg(true)"> SIM </span> &nbsp;
+                                        <span class="button_orange white" (click)="confirmar_envio_msg(false)"> NÃO </span>
+                                    </div>
+
+                                    <div *ngIf="confirmou_envio_mensagem">
+                                        <div class="center">
+                                            <p (click)="voltar()" class="button_aviso"> &nbsp; MENSAGEM ENVIADA E REGISTRADA NO HISTÓRICO &nbsp; </p>
+                                        </div>
+                                        <div class="espacador_vertical">&nbsp;</div>
+                                    </div>
+
+                                    <div *ngIf="nao_confirmou_envio_mensagem">
+                                        <div class="center">
+                                            <p (click)="voltar()" class="button_aviso"> &nbsp; MENSAGEM CONSIDERADA COMO NÃO ENVIADA &nbsp; </p>
+                                        </div>
+                                        <div class="espacador_vertical">&nbsp;</div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="assunto_da_mensagem == 'COMUNICADO'">
+                                    <p *ngIf="dados.selected.telefone">Tel: {{dados.selected.telefone}}</p>
+
+                                    <div *ngIf="dados.selected.whatsapp">
+                                        <p>Whatsapp: {{dados.selected.whatsapp}}<br />&nbsp;</p>
+                                        <p> <span class="button_brown white"><a href="{{url}}" target="_blank"> ENVIAR WHATSAPP CEL </a></span>
+                                            <br />&nbsp;<br />
+                                            <span class="button_brown white"><a href="{{url_web}}" target="_blank"> ENVIAR WHATSAPP WEB </a></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            <div class="espacador_vertical">&nbsp;</div>
+                        </div>
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                    </div>
+                </div>
             </div>
 
             <div *ngIf="dados.mostrar_lancamentos_do_dia">
-                <div class="espacador_vertical_duplo">&nbsp;</div>
-
                <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
-                   <p-table [value]="dados.lancamentos_do_dia">
+                   <!-- <div id="x2" class="espacador_vertical">&nbsp;</div> -->
+
+                   <p-table [value]="dados.lancamentos_do_dia" [resizableColumns]="true">
                        <ng-template pTemplate="caption">
                            DETALHAMENTO DO DIA {{util.formata_maiusculas(util.formata_data_por_extenso(dados.data_selecionada))}}
                         </ng-template>
@@ -383,9 +756,9 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-registro>
                              <tr>
-                                 <td (click)="ver_lancamento(registro.registro)">{{registro.contraparte}}</td>
-                                 <td class="right blue" (click)="ver_lancamento(registro.registro)">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
-                                 <td class="right red" (click)="ver_lancamento(registro.registro)">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                                 <td (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.contraparte}}</td>
+                                 <td class="right blue" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                                 <td class="right red" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
                              </tr>
                         </ng-template>
                          <ng-template pTemplate="summary">
@@ -396,173 +769,1113 @@
                    </p-table>
                </div>
             </div>
+
+
+            <div *ngIf="dados.mostrar_lancamentos_futuros_do_dia">
+
+               <div *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">
+                   <!-- <div id="x3" class="espacador_vertical">&nbsp;</div> -->
+                   <p-table [value]="dados.lancamentos_futuros_do_dia" [resizableColumns]="true">
+                       <ng-template pTemplate="caption">
+                           DETALHAMENTO DO DIA {{util.formata_maiusculas(util.formata_data_por_extenso(dados.data_selecionada))}}
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                             <tr>
+                                 <th>Contraparte</th>
+                                 <th>Receita</th>
+                                 <th>Despesa</th>
+                             </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-registro>
+                             <tr>
+                                 <td (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.contraparte}}</td>
+                                 <td class="right blue" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                                 <td class="right red" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                             </tr>
+                        </ng-template>
+                         <ng-template pTemplate="summary">
+                             <span *ngIf="dados.lancamentos_futuros_do_dia.length>0">
+                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_futuras_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_futuras_do_dia)}} &nbsp;|&nbsp; Saldo do dia: {{util.formata_valor(dados.saldo_lancamentos_futuros_do_dia)}}
+                             </span>
+                         </ng-template>
+                   </p-table>
+               </div>
+            </div>
         </div>
+
     </div>
 
 
 	<!-- CENTROS_DE_CUSTOS_LISTA -->
     <div *ngIf="dados.listar_centros_de_custos_lista">
-		<div class="espacador_vertical_duplo">&nbsp;</div>
+		<div id="x11" class="espacador_vertical_duplo">&nbsp;</div>
 
         <div class="center">
             <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span> &nbsp;
             <span class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </span>
 
-            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <div id="x12" class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
-        <div *ngIf="mostrar_opcao_1">
-			<p-table
-				[value]="dados.selected_receitas" [paginator]="dados.selected_receitas && dados.selected_receitas.length>config.QUANTOS_POR_PAGINA['RECEITAS']" [rows]="config.QUANTOS_POR_PAGINA['RECEITAS']">
-				<ng-template pTemplate="caption"> RECEITAS </ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th>Nome</th>
-						<th class="right">Código</th>
-					</tr>
-				</ng-template>
-				<ng-template name="registro" pTemplate="body" let-registro>
-					<tr>
-						<td>{{registro.nome}}</td>
-						<td class="right">{{registro.id}}</td>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="summary">
-					<span *ngIf="dados.selected_receitas.length>0">
-						{{ util.complementa(dados.selected_receitas.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
-					</span>
-				</ng-template>
-			</p-table>
+		<p-table
+			[value]="dados[dados.database]"
+            [resizableColumns]="true"
+            [paginator]="dados[dados.database] && dados[dados.database].length>config.QUANTOS_POR_PAGINA['RECEITAS']"
+            [rows]="config.QUANTOS_POR_PAGINA['RECEITAS']">
+			<ng-template pTemplate="caption">&nbsp;{{dados.database_caption}}&nbsp;</ng-template>
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Nome</th>
+					<th class="right">Código</th>
+				</tr>
+			</ng-template>
+			<ng-template name="registro" pTemplate="body" let-registro>
+				<tr>
+					<td>{{registro.nome}}</td>
+					<td class="right">{{registro.id}}</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="summary">
+                &nbsp;
+				<span *ngIf="dados[dados.database]?.length>0">
+					{{ util.complementa(dados[dados.database].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
+				</span>
+                &nbsp;
+			</ng-template>
+		</p-table>
+    </div>
+
+
+    <!-- REL_CENTROS_DE_CUSTOS_TOTALIZADOS -->
+    <div *ngIf="dados.PARAMETRO=='REL_CENTROS_DE_CUSTOS_TOTALIZADOS'">
+    <!-- <div *ngIf="dados.listar_rel_centros_de_custos_totalizados"> -->
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div class="center">
+            <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span> &nbsp;
+            <span class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </span>
+
+            <div id="x13" class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
-        <div *ngIf="mostrar_opcao_2">
-			<p-table
-				[value]="dados.selected_despesas" [paginator]="dados.selected_despesas && dados.selected_despesas.length>config.QUANTOS_POR_PAGINA['DESPESAS']" [rows]="config.QUANTOS_POR_PAGINA['DESPESAS']">
-				<ng-template pTemplate="caption"> DESPESAS </ng-template>
-				<ng-template pTemplate="header">
-				   <tr>
-					   <th>Nome</th>
-					   <th class="right">Código</th>
-				   </tr>
-				</ng-template>
-				<ng-template name="registro" pTemplate="body" let-registro>
-				   <tr>
-					   <td>{{registro.nome}}</td>
-					   <td class="right">{{registro.id}}</td>
-				   </tr>
-				</ng-template>
-				<ng-template pTemplate="summary">
-					<span *ngIf="dados.selected_despesas.length>0">
-					{{ util.complementa(dados.selected_despesas.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
-					</span>
-				</ng-template>
-			</p-table>
+        <p-table
+            [value]="dados[dados.database]"
+            [resizableColumns]="true"
+            [paginator]="dados[dados.database] && dados[dados.database].length>config.QUANTOS_POR_PAGINA['REL_CENTROS_DE_CUSTOS_TOTALIZADOS']"
+            [rows]="config.QUANTOS_POR_PAGINA['REL_CENTROS_DE_CUSTOS_TOTALIZADOS']">
+
+            <ng-template pTemplate="caption">&nbsp;{{dados.database_caption}}&nbsp;</ng-template>
+            <ng-template pTemplate="header">
+				<tr>
+					<th>Centro de Custos</th>
+					<th>Total</th>
+				</tr>
+			</ng-template>
+
+			<ng-template name="registro" pTemplate="body" let-registro>
+				<tr (click)="ver_lancamentos_do_centro_de_custos(registro)">
+					<td>{{registro.centro_de_custos}} ({{registro.centro_de_custos_codigo}})</td>
+					<td class="{{dados.mostrar_lista_opcao=='1' ? 'bold right blue' : 'bold right red'}}">{{registro.valor}}</td>
+				</tr>
+			</ng-template>
+
+            <ng-template pTemplate="summary">
+                &nbsp;
+                <span *ngIf="dados[dados.database]?.length>0">
+                    {{ util.complementa(dados[dados.database].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}} &nbsp; Total: {{util.formata_valor(dados.valor_total_centros_de_custos)}}
+                </span>
+                &nbsp;
+            </ng-template>
+        </p-table>
+
+    </div>
+
+
+    <!-- REL_DINHEIRO -->
+    <div *ngIf="dados.listar_rel_dinheiro || dados.listar_dinheiro_dia">
+        <div id="x14" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_dinheiro && !dados.listar_dinheiro_dia && dados.datas_com_lancamentos_dinheiro.length < 1">
+
+            <div class="center">
+                <div class="center">
+                    <div id="x15" class="espacador_vertical_duplo">&nbsp;</div>
+                    <div class="container_interno">
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                        <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                    </div>
+                </div>
+                <div id="x16" class="espacador_vertical_duplo">&nbsp;</div>
+            </div>
+        </div>
+
+        <div *ngIf="dados.listar_rel_dinheiro && !dados.listar_dinheiro_dia && dados.datas_com_lancamentos_dinheiro.length > 0">
+            <p-table
+            [value]="dados.datas_com_lancamentos_dinheiro"
+            [resizableColumns]="true"
+            [rows]="10"
+            [paginator]="dados.datas_com_lancamentos_dinheiro>10">
+                <ng-template pTemplate="caption">&nbsp;</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Data</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-registro>
+                    <tr>
+                         <td class="normal">{{registro.data}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_dinheiro(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" (click)="listar_dinheiro(registro.data,'despesa')" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    Entrada: {{util.formata_valor(dados.valor_total_receitas_dinheiro)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_dinheiro)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_dinheiro)}}
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="dados.listar_dinheiro_dia">
+
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table
+                [value]="dados.receitas_dinheiro_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.receitas_dinheiro_dia.length>10">
+                    <ng-template pTemplate="caption">Receitas com dinheiro em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Centro de Custos</th>
+                            <th>Contraparte</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.centro_de_custos}}</td>
+                            <td>{{registro.contraparte}}</td>
+                            <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+
+                <p-table
+                [value]="dados.despesas_dinheiro_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.despesas_dinheiro_dia.length>10">
+
+                    <ng-template pTemplate="caption">Despesas com dinheiro em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Centro de Custos</th>
+                            <th>Contraparte</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.centro_de_custos}}</td>
+                            <td>{{registro.contraparte}}</td>
+                            <td class="right red">{{util.formata_valor(registro.valor)}}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
 
-	<div class="espacador_vertical">&nbsp;</div>
 
+    <!-- REL_CHEQUES_PRE -->
+    <div *ngIf="dados.listar_rel_cheque_pre || dados.listar_cheque_pre_dia || dados.listar_cheque_pre_dia_bom_para">
+        <div id="x17" class="espacador_vertical_duplo">&nbsp;</div>
 
-
-
-
-
-
-
-    <!-- RODAPÉ COM ICONES -->
-    <!-- <div class="ui-grid ui-grid-responsive ui-fluid">
-        <div>
-            <div class="fc-left menu_home">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav" />
+        <div *ngIf="dados.listar_rel_cheque_pre
+        && !dados.listar_cheque_pre_dia
+        && !dados.listar_cheque_pre_dia_bom_para
+        && dados.datas_com_lancamentos_cheque_pre.length < 1
+        && dados.datas_com_lancamentos_cheque_pre_bom_para.length < 1"
+        >
+            <div class="center">
+                <div class="center">
+                    <div id="x18" class="espacador_vertical_duplo">&nbsp;</div>
+                    <div class="container_interno">
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                        <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                    </div>
+                </div>
+                <div id="x19" class="espacador_vertical_duplo">&nbsp;</div>
             </div>
-            <div class="float-right">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav" />
-            </div>
-            <div class="float-center">
-                <img src="https://gestormix.com/img/mail.png" class="img_nav_rodape margin_top_10" (click)="go('MALADIRETA')">
-            </div>
-            <div class="fc-clear"></div>
         </div>
-    </div> -->
+
+        <div *ngIf="dados.listar_rel_cheque_pre
+        && !dados.listar_cheque_pre_dia
+        && !dados.listar_cheque_pre_dia_bom_para
+        && dados.datas_com_lancamentos_cheque_pre.length >= 0">
+
+            <p-table [value]="dados.datas_com_lancamentos_cheque_pre" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre.length>10">
+
+                <ng-template pTemplate="caption">Agrupados por data do lançamento</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Data</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-registro>
+                    <tr>
+                         <td class="normal">{{util.diminui_data(registro.data)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_cheque_pre(registro.data)" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_cheque_pre(registro.data)">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque_pre)}}</ng-template>
+            </p-table>
+        </div>
+
+        <div id="x20" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_cheque_pre
+        && !dados.listar_cheque_pre_dia
+        && !dados.listar_cheque_pre_dia_bom_para
+        && dados.datas_com_lancamentos_cheque_pre_bom_para.length > 0">
+
+            <p-table [value]="dados.datas_com_lancamentos_cheque_pre_bom_para" [resizableColumns]="true"
+            [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre_bom_para.length>10">
+
+                <ng-template pTemplate="caption">Agrupados por data de disponibilidade</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Disponível</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-registro>
+                    <tr (click)="listar_cheque_pre_bom_para(registro.data)">
+                         <td class="normal">{{util.diminui_data(registro.data)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre_bom_para)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque_pre_bom_para)}}</ng-template>
+
+            </p-table>
+        </div>
 
 
+        <div *ngIf="dados.listar_cheque_pre_dia">
+            <p-table [value]="dados.lancamentos_cheque_pre_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia.length>10">
+
+                <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Data</th>
+                         <th>Para</th>
+                         <th>Centro de Custos</th>
+                         <th>Contraparte</th>
+                         <th>Valor</th>
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-registro>
+                    <tr (click)="verRegistro(registro)">
+                        <td class="registro.despesa_ou_receita=='receita' ? 'bold blue' : 'bold red'">{{registro.data}}</td>
+                        <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.data_cheque_pre}}</td>
+                        <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.centro_de_custos}}</td>
+                        <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.contraparte}}</td>
+                        <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                        <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">Saldo = {{util.formata_valor(dados.saldo_total_cheque_pre)}}</ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="dados.listar_cheque_pre_dia_bom_para">
+                <p-table [value]="dados.lancamentos_cheque_pre_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia_bom_para.length>10">
+
+                    <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Para</th>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.data}}</td>
+                            <td class="registro.despesa_ou_receita=='receita' ? 'bold blue' : 'bold red'">{{registro.data_cheque_pre}}</td>
+                            <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.centro_de_custos}}</td>
+                             <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.contraparte}}</td>
+                             <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                             <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">Saldo = {{util.formata_valor(dados.saldo_total_cheque_pre_bom_para)}}</ng-template>
+                </p-table>
+        </div>
+
+    </div>
+
+
+    <!-- REL_CHEQUES_A_VISTA -->
+    <div *ngIf="dados.listar_rel_cheque || dados.listar_cheque_dia">
+        <div id="x21" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_cheque && !dados.listar_cheque_dia">
+
+            <div *ngIf="dados.listar_rel_cheque && !dados.listar_cheque_dia && dados.datas_com_lancamentos_cheque.length < 1">
+                <div class="center">
+                    <div class="center">
+                        <div id="x22" class="espacador_vertical_duplo">&nbsp;</div>
+                        <div class="container_interno">
+                            <div class="espacador_vertical_duplo">&nbsp;</div>
+                            <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                            <div class="espacador_vertical_duplo">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div id="x23" class="espacador_vertical_duplo">&nbsp;</div>
+                </div>
+            </div>
+
+            <div *ngIf="dados.listar_rel_cheque && !dados.listar_cheque_dia && dados.datas_com_lancamentos_cheque.length > 0">
+                <p-table
+                [value]="dados.datas_com_lancamentos_cheque"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.datas_com_lancamentos_cheque.length>10">
+
+                    <ng-template pTemplate="caption">&nbsp;</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Entrada</th>
+                             <th>Saída</th>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr>
+                             <td class="normal">{{util.diminui_data(registro.data)}}</td>
+                             <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                             <td *ngIf="registro.valor_receitas>0" class="right blue" (click)="listar_cheque(registro.data,'receita')">{{util.formata_valor(registro.valor_receitas)}}</td>
+                             <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                             <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_cheque(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque)}}</ng-template>
+                </p-table>
+            </div>
+        </div>
+
+        <div *ngIf="dados.listar_cheque_dia">
+
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table
+                [value]="dados.receitas_cheque_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.receitas_cheque_dia.length>10">
+
+                    <ng-template pTemplate="caption">Receitas com cheques à vista em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+                <p-table
+                [value]="dados.despesas_cheque_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.despesas_cheque_dia.length>10">
+
+                    <ng-template pTemplate="caption">Despesas com cheques à vista em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- MOVIMENTACAO -->
+    <div *ngIf="dados.listar_movimentacao">
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <div *ngIf="dados.PARAMETRO == 'MOVIMENTACAO'">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
+                <div *ngIf="dados.is_em_caixa" class="ui-grid-col-33 menu_ficha_ativado" (click)="em_caixa()">EM CAIXA</div>
+                <div *ngIf="!dados.is_em_caixa" class="ui-grid-col-33 menu_ficha" (click)="em_caixa()">EM CAIXA</div>
+
+                <div *ngIf="dados.is_aguardando" class="ui-grid-col-33 menu_ficha_ativado" (click)="aguardando_em_banco()">AGUARDA BANCO</div>
+                <div *ngIf="!dados.is_aguardando" class="ui-grid-col-33 menu_ficha" (click)="aguardando_em_banco()">AGUARDA BANCO</div>
+
+                <div *ngIf="dados.is_quitado" class="ui-grid-col-33 menu_ficha_ativado" (click)="quitado()">QUITADO</div>
+                <div *ngIf="!dados.is_quitado" class="ui-grid-col-33 menu_ficha" (click)="quitado()">QUITADO</div>
+            </div>
+        </div>
+
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <div *ngIf="dados.listar_movimentacao">
+
+            <div *ngIf="dados.datas_com_lancamentos && dados.datas_com_lancamentos.length < 1">
+                <div class="center">
+                    <div class="center">
+                        <div id="x24" class="espacador_vertical_duplo">&nbsp;</div>
+                        <div class="container_interno">
+                            <div class="espacador_vertical_duplo">&nbsp;</div>
+                            <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                            <div class="espacador_vertical_duplo">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div id="x25" class="espacador_vertical_duplo">&nbsp;</div>
+                </div>
+            </div>
+
+            <div *ngIf="dados.datas_com_lancamentos && dados.datas_com_lancamentos.length > 0">
+                <!-- <div *ngIf="dados.datas_com_lancamentos && !dados.listar_lancamentos_dia && dados.datas_com_lancamentos.length > 0"> -->
+                <p-table
+                [value]="dados.datas_com_lancamentos"
+                [resizableColumns]="true"
+                [rows]="50"
+                [paginator]="dados.datas_com_lancamentos.length>50">
+
+                    <ng-template pTemplate="caption">&nbsp;</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th class="but_data">Data</th>
+                             <th>Meio</th>
+                             <th class="big_screen">Centro de Custos</th>
+                             <th>De/Para</th>
+                             <th class="but_data">Valor</th>
+                             <th *ngIf="dados.is_em_caixa" class="but_data">Depositar</th>
+                             <th *ngIf="dados.is_em_caixa" class="wbut1"></th>
+                             <th *ngIf="dados.is_aguardando" class="but_data">Quitar</th>
+                             <th *ngIf="dados.is_aguardando" class="wbut1"></th>
+                         </tr>
+                    </ng-template>
+
+
+
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr>
+                            <td class="normal" (click)="movimentacao_detalhe($event,registro,op)">{{util.diminui_data(registro.data)}}</td>
+                            <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.meio_de_pagamento}}</td>
+                            <td class="{{registro.tipo=='receita' ? 'big_screen blue' : 'big_screen red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.centro_de_custos}}</td>
+                            <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.contraparte}}</td>
+                             <td *ngIf="registro.valor_receita>0" class="blue right" (click)="movimentacao_detalhe($event,registro,op)">{{util.formata_valor(registro.valor_receita)}}</td>
+                             <td *ngIf="registro.valor_despesa!=0" class="red right" (click)="movimentacao_detalhe($event,registro,op)">- {{util.formata_valor(registro.valor_despesa)}}</td>
+
+                             <td *ngIf="dados.is_em_caixa">
+                                 <!-- <p-calendar
+                                     [(ngModel)]="registro.registro.data_depositar"
+                                     (change)="depositar($event, registro.registro, registro.tipo)"
+                                     (onClose)="depositar($event, registro.registro, registro.tipo)"
+                                     [locale]="pt"
+                                     dateFormat="dd/mm/yy"
+                                     name="registro.registro.key"
+                                     selectionMode="single"
+                                     [touchUI]="true"
+                                     [readonlyInput]="true"
+                                     [showTransitionOptions]="'300ms'"
+                                     [hideTransitionOptions]="'300ms'"
+                                 >
+                                 </p-calendar> -->
+                                 <input name='data_depositar' pInputText [(ngModel)]="dados.data_depositar" (change)="dados.data_depositar=util.diminui_data(util.formata_data(dados.data_depositar))" autocomplete="off" />
+                             </td>
+                             <td *ngIf="dados.is_em_caixa">
+                                 <p-checkbox name="depositar" (click)="registro.depositado = depositar(registro)" [(ngModel)]="registro.depositado" binary="true"></p-checkbox>
+                             </td>
+
+                             <td *ngIf="dados.is_aguardando">
+                                 <input name='data_quitar' pInputText [(ngModel)]="dados.data_quitar" (change)="dados.data_quitar=util.diminui_data(util.formata_data(dados.data_quitar))" autocomplete="off" />
+                             </td>
+                             <td *ngIf="dados.is_aguardando">
+                                 <p-checkbox name="quitar" (click)="registro.quitado = quitar(registro)" [(ngModel)]="registro.quitado" binary="true"></p-checkbox>
+                             </td>
+                         </tr>
+                    </ng-template>
+
+
+                    <ng-template pTemplate="summary">
+                        <span class="bold">
+                            {{dados.datas_com_lancamentos.length}} lançamentos
+                        </span><br />
+                        Entrada: {{util.formata_valor(dados.valor_total_receitas)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas)}}<br />
+                        Saldo:
+                        <span class="{{dados.valor_saldo == 0 ? 'normal' : dados.valor_saldo>0 ? 'bold blue' : 'bold red'}}">
+                            {{util.formata_valor(dados.valor_saldo)}}
+                        </span>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                <p>Centro de Custos: <span class="bold">{{overlayDetail.registro.centro_de_custos}}</span></p>
+                    <span *ngIf="overlayDetail.registro.produto">Produto: <span class="bold">{{overlayDetail.registro.produto}}</span></span>
+                <div>
+                    &nbsp;<br />
+                    Valor: <span class="bold">{{overlayDetail.registro.valor}}</span><br />
+                </div>
+
+                &nbsp;<br />
+
+                <div *ngIf="overlayDetail.meio_de_pagamento=='Cheque Pré' || overlayDetail.meio_de_pagamento=='Cheque'">
+                    <span *ngIf="overlayDetail.registro.banco">Banco: {{overlayDetail.registro.banco}}</span><br />
+                    <span *ngIf="overlayDetail.registro.agencia">Agência: {{overlayDetail.registro.agencia}}</span><br />
+                    <span *ngIf="overlayDetail.registro.conta">Conta: {{overlayDetail.registro.conta}}</span><br />
+                    <span *ngIf="overlayDetail.registro.cheque_numero">Cheque nº: {{overlayDetail.registro.cheque_numero}}</span><br />
+                    &nbsp;<br />
+                </div>
+
+                <div>Data do lançamento: <span class="bold">{{overlayDetail.registro.data}}</span></div>
+                <div *ngIf="overlayDetail.meio_de_pagamento=='Cheque Pré'">
+                    Cheque para: <span class="bold">{{overlayDetail.registro.data_cheque_pre}}</span>
+                </div>
+                <div *ngIf="overlayDetail.meio_de_pagamento=='Crédito'">
+                    Crédito em: <span class="bold">{{overlayDetail.registro.data_credito}}</span>
+                </div>
+                <div *ngIf="overlayDetail.registro.data_depositado || overlayDetail.registro.data_quitado">
+                    &nbsp;<br />
+                    <div *ngIf="overlayDetail.registro.data_depositado">
+                        Depositado em <span class="bold">{{overlayDetail.registro.data_depositado}}</span><br />
+                    </div>
+                    <div *ngIf="overlayDetail.registro.data_quitado">
+                        Quitado em <span class="bold">{{overlayDetail.registro.data_quitado}}</span><br />
+                    </div>
+                </div>
+
+            </ng-template>
+        </p-overlayPanel>
+
+        <!-- <button type="text" pButton label="Basic" (click)="op.toggle($event)"></button>
+        <div class="espacador_vertical_duplo">&nbsp;</div> -->
+
+
+        <div *ngIf="dados.listar_movimentacao_dia">
+
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table
+                [value]="dados.receitas_lancamento_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.receitas_lancamento_dia.length>10">
+
+                    <ng-template pTemplate="caption">Receitas em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+                <p-table
+                [value]="dados.despesas_lancamento_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.despesas_lancamento_dia.length>10">
+
+                    <ng-template pTemplate="caption">Despesas em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- REL_DEBITO -->
+    <div *ngIf="dados.listar_rel_debito || dados.listar_debito_dia">
+        <div id="x26" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_debito && !dados.listar_debito_dia && dados.datas_com_lancamentos_debito.length < 1">
+
+            <div class="center">
+                <div class="center">
+                    <div id="x27" class="espacador_vertical_duplo">&nbsp;</div>
+                    <div class="container_interno">
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                        <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                    </div>
+                </div>
+                <div id="x28" class="espacador_vertical_duplo">&nbsp;</div>
+            </div>
+        </div>
+
+        <div *ngIf="dados.listar_rel_debito && !dados.listar_debito_dia && dados.datas_com_lancamentos_debito.length > 0">
+            <p-table
+            [value]="dados.datas_com_lancamentos_debito"
+            [resizableColumns]="true"
+            [rows]="10"
+            [paginator]="dados.datas_com_lancamentos_debito>10">
+                <ng-template pTemplate="caption">&nbsp;</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Data</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-registro>
+                    <tr>
+                         <td class="normal">{{registro.data}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_debito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" (click)="listar_debito(registro.data,'despesa')" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    Entrada: {{util.formata_valor(dados.valor_total_receitas_debito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_debito)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_debito)}}
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div *ngIf="dados.listar_debito_dia">
+
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table
+                [value]="dados.receitas_debito_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.receitas_debito_dia.length>10">
+                    <ng-template pTemplate="caption">Receitas com debito em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Centro de Custos</th>
+                            <th>Contraparte</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.centro_de_custos}}</td>
+                            <td>{{registro.contraparte}}</td>
+                            <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+
+                <p-table
+                [value]="dados.despesas_debito_dia"
+                [resizableColumns]="true"
+                [rows]="10"
+                [paginator]="dados.despesas_debito_dia.length>10">
+
+                    <ng-template pTemplate="caption">Despesas com debito em {{dados.listar_data}}</ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Centro de Custos</th>
+                            <th>Contraparte</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.centro_de_custos}}</td>
+                            <td>{{registro.contraparte}}</td>
+                            <td class="right red">{{util.formata_valor(registro.valor)}}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- REL_CREDITO -->
+    <div *ngIf="dados.listar_rel_credito || dados.listar_credito_dia">
+        <div id="x4" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_credito
+        && !dados.listar_credito_dia
+        && !dados.listar_credito_dia_bom_para
+        && dados.datas_com_lancamentos_credito.length < 1">
+
+            <div class="center">
+                <div class="center">
+                    <div id="x5" class="espacador_vertical_duplo">&nbsp;</div>
+                    <div class="container_interno">
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                        <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
+                        <div class="espacador_vertical_duplo">&nbsp;</div>
+                    </div>
+                </div>
+                <div id="x6" class="espacador_vertical_duplo">&nbsp;</div>
+            </div>
+        </div>
+
+        <div *ngIf="dados.listar_rel_credito
+        && !dados.listar_credito_dia
+        && !dados.listar_credito_dia_bom_para
+        && dados.datas_com_lancamentos_credito.length > 0">
+
+            <p-table [value]="dados.datas_com_lancamentos_credito" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_credito.length>10">
+
+                <ng-template pTemplate="caption">Agrupados por data do lançamento</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Data</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-registro>
+                    <tr>
+                         <td class="normal">{{util.diminui_data(registro.data)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_credito)}}</ng-template>
+
+            </p-table>
+        </div>
+
+        <div id="x7" class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="dados.listar_rel_credito
+        && !dados.listar_credito_dia
+        && !dados.listar_credito_dia_bom_para
+        && dados.datas_com_lancamentos_credito.length > 0">
+
+            <p-table [value]="dados.datas_com_lancamentos_credito_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_credito_bom_para.length>10">
+
+                <ng-template pTemplate="caption">Agrupados por data de disponibilidade</ng-template>
+
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Disponível</th>
+                         <th>Entrada</th>
+                         <th>Saída</th>
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-registro>
+                    <tr>
+                         <td class="normal">{{util.diminui_data(registro.data)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                     </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito_bom_para)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_credito_bom_para)}}</ng-template>
+
+            </p-table>
+        </div>
+
+
+        <div *ngIf="dados.listar_credito_dia">
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table [value]="dados.receitas_credito_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.receitas_credito_dia.length>10">
+
+                    <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Para</th>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.data}}</td>
+                            <td>{{registro.data_credito}}</td>
+                            <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+                <p-table [value]="dados.despesas_credito_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.despesas_credito_dia.length>10">
+
+                    <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Para</th>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td class="bold">{{registro.data}}</td>
+                            <td>{{registro.data_credito}}</td>
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+        </div>
+
+
+
+        <div *ngIf="dados.listar_credito_dia_bom_para">
+            <div *ngIf="dados.despesa_ou_receita=='receita'">
+                <p-table [value]="dados.receitas_credito_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.receitas_credito_dia_bom_para.length>10">
+
+                    <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Para</th>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.data}}</td>
+                            <td class="bold">{{registro.data_credito}}</td>
+                            <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+
+            <div *ngIf="dados.despesa_ou_receita=='despesa'">
+                <p-table [value]="dados.despesas_credito_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.despesas_credito_dia_bom_para.length>10">
+
+                <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
+                    <ng-template pTemplate="header">
+                         <tr>
+                             <th>Data</th>
+                             <th>Para</th>
+                             <th>Centro de Custos</th>
+                             <th>Contraparte</th>
+                             <th>Valor</th>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-registro>
+                        <tr (click)="verRegistro(registro)">
+                            <td>{{registro.data}}</td>
+                            <td class="bold">{{registro.data_credito}}</td>
+                             <td>{{registro.centro_de_custos}}</td>
+                             <td>{{registro.contraparte}}</td>
+                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                         </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">&nbsp;</ng-template>
+                </p-table>
+            </div>
+        </div>
+
+
+
+    </div>
 
 
     <!-- USUARIOS -->
     <div *ngIf="dados.listar_usuarios">
+        <div id="x8" class="espacador_vertical_duplo">&nbsp;</div>
 
-        <!-- FILTRO -->
-        <!-- <div *ngIf="dados.total_de_usuarios>0">
+         <!-- FILTRO -->
+        <div *ngIf="dados.total_de_usuarios>0">
             <div class= "grid_container_busca">
                 <div class="grid_nome">
-                    <input class="input_filtro" type="text" [(ngModel)]="dados.filtro_digitado" (keyup)="dados.filterContainsUsuarios(dados.filtro_digitado)">
+                    <input class="input_filtro" type="text" [(ngModel)]="dados.filtro_digitado" (keyup)="dados.filterDatabase(dados.filtro_digitado,'USUARIOS')">
                     <div class="espacador_vertical">&nbsp;</div>
                 </div>
             </div>
-        </div> -->
+        </div>
         <!-- FILTRO -->
 
-        <div *ngIf="dados.total_de_usuarios==-1">
-            <div class="center" *ngIf="dados.filtered_usuarios.length == 0">
-                <div style="text-align: -webkit-center">
-                    <p> &nbsp;</p>
-                    <p> &nbsp;</p>
-                    <p> &nbsp;</p>
-                    <p class="fa fa-spinner fa-pulse fa-4x fa-fw blue f40"></p>
-                    <p> &nbsp;</p>
-                    <h2>Carregando...</h2>
-                    <p> &nbsp;</p>
-                    <p>&nbsp;</p>
-                </div>
+        <div *ngIf="dados.total_de_usuarios == -1" class="center">
+            <div style="text-align: -webkit-center">
+                <p> &nbsp;</p>
+                <p> &nbsp;</p>
+                <p> &nbsp;</p>
+                <p class="fa fa-spinner fa-pulse fa-4x fa-fw blue f40"></p>
+                <p> &nbsp;</p>
+                <h2>Carregando...</h2>
+                <p> &nbsp;</p>
+                <p>&nbsp;</p>
             </div>
         </div>
 
-        <div *ngIf="dados.total_de_usuarios==0">
-            <div class="center">
-                <div *ngIf="dados.filtered_usuarios.length == 0" class="center">
-                    <div class="espacador_vertical_duplo">&nbsp;</div>
-                    <span class="sub_title">Nenhum registro</span>
-                    <div class="espacador_vertical_duplo">&nbsp;</div>
-                </div>
+        <div *ngIf="dados.total_de_usuarios == 0" class="center">
+            <div *ngIf="dados.filtered_usuarios.length == 0" class="center">
+                <div id="x9" class="espacador_vertical_duplo">&nbsp;</div>
+                <span class="sub_title">Nenhum registro</span>
                 <div class="espacador_vertical_duplo">&nbsp;</div>
             </div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
 
-        <div *ngIf="dados.filtered_usuarios.length > 0">
-            <p-dataView [value]="dados.filtered_usuarios" [rows]="dados.rows" [paginator]="paginator_status" [pageLinks]="links_de_paginas">
-                    <p-header>Usuários</p-header>
-                    <ng-template let-registro pTemplate="listItem">
-                        <div (click)="verRegistro(registro)">
-                            <div>{{registro.nome}}</div>
-                            <div class="float-right"></div>
-                            <div class="fc-center-l"></div>
-                            <div class="fc-clear"></div>
-                        </div>
-                    </ng-template>
-                    <p-footer>&nbsp;
-                        <span *ngIf="dados.filtered_usuarios.length>0">
-                            {{util.complementa(dados.filtered_usuarios.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
-                        </span>
-                        &nbsp;
-                    </p-footer>
-            </p-dataView>
+        <div *ngIf="dados.selected_usuarios.length > 0">
+            <p-table [value]="dados.selected_usuarios" [resizableColumns]="true" [rows]="10" [paginator]="dados.selected_usuarios.length>10">
+
+                <ng-template pTemplate="caption">USUÁRIOS</ng-template>
+                <ng-template pTemplate="header">
+                     <tr>
+                         <th>Nome</th>
+                         <th>Email</th>
+                         <th>Privilégio</th>
+                         <!-- <th>Atualização</th> -->
+                         <!-- <th>Foto</th> -->
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-registro>
+                    <tr (click)="verRegistro(registro)">
+                        <td>{{registro.nome}}</td>
+                        <td>{{registro.email}}</td>
+                        <td class="bold center">{{registro.is_admin ? 'ADMIN' : ''}}</td>
+                        <!-- <td>{{registro.ultima_atualizacao}}</td> -->
+                        <!-- <td class="center"><img src="{{util.formata_site_com_protocolo(registro.img_url)}}" class="img_url_50"></td> -->
+                     </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    {{util.complementa(dados.filtered_usuarios.length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}
+                </ng-template>
+            </p-table>
+
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -56,7 +56,7 @@ import {MessagesModule} from 'primeng/messages';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // https://github.com/basst314/ngx-webcam
-import {WebcamModule} from 'ngx-webcam';
+// import {WebcamModule} from 'ngx-webcam';
 
 
 
@@ -100,7 +100,7 @@ const firebaseConfig = {
         // AngularFirestoreModule,
         AngularFireAuthModule,
         ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-        WebcamModule
+        // WebcamModule
     ],
     entryComponents: [
     ],

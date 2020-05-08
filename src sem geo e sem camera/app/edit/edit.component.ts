@@ -6,9 +6,10 @@ import 'firebase/database';
 // import 'firebase/storage';
 
 import {Subject, Observable} from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+// import { finalize, map } from 'rxjs/operators';
 
-import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
+// import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
 import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
@@ -118,20 +119,20 @@ export class EditComponent implements OnInit {
     // CAMERA E FIRESTORE
     // ------------------
     // toggle webcam on/off
-    public showWebcam : boolean = false;
-    public allowCameraSwitch = true;
-    public multipleWebcamsAvailable = false;
-    public deviceId: string;
-    public videoOptions: MediaTrackConstraints = {
+    // public showWebcam : boolean = false;
+    // public allowCameraSwitch = true;
+    // public multipleWebcamsAvailable = false;
+    // public deviceId: string;
+    // public videoOptions: MediaTrackConstraints = {
     // width: {ideal: 1024},
     // height: {ideal: 576}
-    };
-    public errors: WebcamInitError[] = [];
+    // };
+    // public errors: WebcamInitError[] = [];
 
     // webcam snapshot trigger
-    private trigger: Subject<void> = new Subject<void>();
+    // private trigger: Subject<void> = new Subject<void>();
     // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-    private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
+    // private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
 
     // firestore
     public tipo_da_imagem1 : string = '';
@@ -170,10 +171,10 @@ export class EditComponent implements OnInit {
         // this.download_imagem_do_firestore(2);
 
 
-        WebcamUtil.getAvailableVideoInputs()
-              .then((mediaDevices: MediaDeviceInfo[]) => {
-                this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-              });
+        // WebcamUtil.getAvailableVideoInputs()
+        //       .then((mediaDevices: MediaDeviceInfo[]) => {
+        //         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+        //       });
 
         this.dados.salvou_registro = false;
 
@@ -309,19 +310,19 @@ export class EditComponent implements OnInit {
             // ULTIMO CADASTRADO
             switch(this.dados.PARAMETRO) {
                 case 'CLIENTES':
-                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos?.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
                 break;
                 case 'SOCIOS':
-                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos?.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
                 break;
                 case 'FORNECEDORES':
-                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
                 break;
                 case 'ESTOQUE':
-                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
                 break;
                 // case 'EQUIPE':
-                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
+                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos?.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
                 // break;
                 default:
                 this.ultimo_cadastrado = '';
@@ -1446,7 +1447,7 @@ export class EditComponent implements OnInit {
                 this.link1_ativado = false;
                 this.camera1_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
 
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
@@ -1457,7 +1458,7 @@ export class EditComponent implements OnInit {
                 this.link1_ativado = false;
                 this.camera1_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
 
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
@@ -1471,7 +1472,7 @@ export class EditComponent implements OnInit {
                 this.link2_ativado = false;
                 this.camera2_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
 
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
@@ -1482,7 +1483,7 @@ export class EditComponent implements OnInit {
                 this.link2_ativado = false;
                 this.camera2_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
 
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
@@ -1499,7 +1500,7 @@ export class EditComponent implements OnInit {
                 this.arquivo1_ativado = false;
                 this.camera1_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
                 // document.getElementById("img_link").focus();
 
                 this.arquivo2_ativado = false;
@@ -1512,7 +1513,7 @@ export class EditComponent implements OnInit {
                 this.arquivo1_ativado = false;
                 this.camera1_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
                 // document.getElementById("img_link").focus();
 
                 this.arquivo2_ativado = false;
@@ -1527,7 +1528,7 @@ export class EditComponent implements OnInit {
                 this.arquivo2_ativado = false;
                 this.camera2_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
                 // document.getElementById("img_link").focus();
 
                 this.arquivo1_ativado = false;
@@ -1539,7 +1540,7 @@ export class EditComponent implements OnInit {
                 this.arquivo2_ativado = false;
                 this.camera2_ativada = false;
 
-                this.showWebcam = false;
+                // this.showWebcam = false;
                 // document.getElementById("img_link").focus();
 
                 this.arquivo1_ativado = false;
@@ -1548,64 +1549,64 @@ export class EditComponent implements OnInit {
             }
         }
     }
-
+    //
     public ativar_camera(qual : number) : void {
-        if(qual==1){
-            if(this.camera1_ativada){
-                this.camera1_ativada = false;
-                this.showWebcam = false;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-            else {
-                this.camera1_ativada = true;
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-        }
-        else if(qual==2){
-            if(this.camera2_ativada){
-                this.camera2_ativada = false;
-                this.showWebcam = false;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-            else {
-                this.camera2_ativada = true;
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-        }
+    //     if(qual==1){
+    //         if(this.camera1_ativada){
+    //             this.camera1_ativada = false;
+    //             // this.showWebcam = false;
+    //
+    //             this.arquivo1_ativado = false;
+    //             this.link1_ativado = false;
+    //
+    //             // this.showWebcam = true;
+    //             this.downloadURL = undefined;
+    //
+    //             this.arquivo2_ativado = false;
+    //             this.link2_ativado = false;
+    //             this.camera2_ativada = false;
+    //         }
+    //         else {
+    //             this.camera1_ativada = true;
+    //             this.arquivo1_ativado = false;
+    //             this.link1_ativado = false;
+    //
+    //             // this.showWebcam = true;
+    //             this.downloadURL = undefined;
+    //
+    //             this.arquivo2_ativado = false;
+    //             this.link2_ativado = false;
+    //             this.camera2_ativada = false;
+    //         }
+    //     }
+    //     else if(qual==2){
+    //         if(this.camera2_ativada){
+    //             this.camera2_ativada = false;
+    //             // this.showWebcam = false;
+    //
+    //             this.arquivo2_ativado = false;
+    //             this.link2_ativado = false;
+    //
+    //             // this.showWebcam = true;
+    //             this.downloadURL = undefined;
+    //
+    //             this.arquivo1_ativado = false;
+    //             this.link1_ativado = false;
+    //             this.camera1_ativada = false;
+    //         }
+    //         else {
+    //             this.camera2_ativada = true;
+    //             this.arquivo2_ativado = false;
+    //             this.link2_ativado = false;
+    //
+    //             // this.showWebcam = true;
+    //             this.downloadURL = undefined;
+    //
+    //             this.arquivo1_ativado = false;
+    //             this.link1_ativado = false;
+    //             this.camera1_ativada = false;
+    //         }
+    //     }
     }
 
 
@@ -1775,22 +1776,22 @@ export class EditComponent implements OnInit {
     // }
     //
 
-    public uploadCamera_as_base64(webcamImage: WebcamImage, qual : number): void {
-      console.log("uploadCamera_as_base64()");
-
-      if(qual==1){
-          this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
-          this.dados.selected_edit.tipo_da_imagem1 = "base64";
-          this.dados.selected_edit.origem_da_imagem1 = 'imagem de câmera';
-      }
-      else  if(qual==2){
-          this.dados.selected_edit.img_url2 = webcamImage.imageAsDataUrl; // opção em data file base64
-          this.dados.selected_edit.tipo_da_imagem2 = "base64";
-          this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
-      }
-
-      this.desligar_botoes_de_upload();
-    }
+    // public uploadCamera_as_base64(webcamImage: WebcamImage, qual : number): void {
+    //   console.log("uploadCamera_as_base64()");
+    //
+    //   if(qual==1){
+    //       this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
+    //       this.dados.selected_edit.tipo_da_imagem1 = "base64";
+    //       this.dados.selected_edit.origem_da_imagem1 = 'imagem de câmera';
+    //   }
+    //   else  if(qual==2){
+    //       this.dados.selected_edit.img_url2 = webcamImage.imageAsDataUrl; // opção em data file base64
+    //       this.dados.selected_edit.tipo_da_imagem2 = "base64";
+    //       this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
+    //   }
+    //
+    //   this.desligar_botoes_de_upload();
+    // }
 
     // ========= CAMERA UPLOAD =========================
 
@@ -1831,31 +1832,31 @@ export class EditComponent implements OnInit {
 
 
     // ========= CAMERA ================================
-    public triggerSnapshot(): void {
-       this.trigger.next();
-       this.camera1_ativada = false;
-       this.camera2_ativada = false;
-       this.showWebcam = false;
-     }
-     public handleInitError(error: WebcamInitError): void {
-       this.errors.push(error);
-     }
-     public showNextWebcam(directionOrDeviceId: boolean|string): void {
-       // true => move forward through devices
-       // false => move backwards through devices
-       // string => move to device with given deviceId
-       this.nextWebcam.next(directionOrDeviceId);
-     }
-     public cameraWasSwitched(deviceId: string): void {
-       console.log('active device: ' + deviceId);
-       this.deviceId = deviceId;
-     }
-     public get triggerObservable(): Observable<void> {
-       return this.trigger.asObservable();
-     }
-     public get nextWebcamObservable(): Observable<boolean|string> {
-       return this.nextWebcam.asObservable();
-     }
+    // public triggerSnapshot(): void {
+    //    this.trigger.next();
+    //    this.camera1_ativada = false;
+    //    this.camera2_ativada = false;
+    //    // this.showWebcam = false;
+    //  }
+    //  public handleInitError(error: WebcamInitError): void {
+    //    this.errors.push(error);
+    //  }
+    //  public showNextWebcam(directionOrDeviceId: boolean|string): void {
+    //    // true => move forward through devices
+    //    // false => move backwards through devices
+    //    // string => move to device with given deviceId
+    //    this.nextWebcam.next(directionOrDeviceId);
+    //  }
+    //  public cameraWasSwitched(deviceId: string): void {
+    //    console.log('active device: ' + deviceId);
+    //    this.deviceId = deviceId;
+    //  }
+    //  public get triggerObservable(): Observable<void> {
+    //    return this.trigger.asObservable();
+    //  }
+    //  public get nextWebcamObservable(): Observable<boolean|string> {
+    //    return this.nextWebcam.asObservable();
+    //  }
      // ========= CAMERA ================================
 
 

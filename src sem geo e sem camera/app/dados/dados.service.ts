@@ -17,7 +17,7 @@ import { ConfigService } from '../config/config.service';
 
 import * as _ from 'lodash';
 
-import {GeolocationService} from '@ng-web-apis/geolocation';
+// import {GeolocationService} from '@ng-web-apis/geolocation';
 
 
 @Injectable({
@@ -29,7 +29,7 @@ export class DadosService {
         public config: ConfigService,
         public util: UtilService,
         public db: AngularFireDatabase,
-        private readonly geolocation$: GeolocationService
+        // private readonly geolocation$: GeolocationService
     ) { }
 
     public PRIMEIRO_ACESSO : boolean = true;
@@ -665,6 +665,7 @@ export class DadosService {
 
     public listar_producao : boolean = false;
     public listar_resultados : boolean = false;
+    public listar_disponibilidade : boolean = false;
 
     public valor_saldo : number = 0;
     public valor_saldo_dinheiro : number = 0;
@@ -810,7 +811,7 @@ export class DadosService {
         // uma vez só, sem subscribing
         // this.geolocation$.pipe(take(1)).subscribe(position => doSomethingWithPosition(position));
         // subscribe
-        this.geolocation$.subscribe(position => this.position = position );
+        // this.geolocation$.subscribe(position => this.position = position );
     }
 
     public show_position(){
@@ -830,22 +831,22 @@ export class DadosService {
     }
 
     public salva_geolocalizacao_do_usuario(position){
-        // console.log("salva_geolocalizacao_do_usuario()")
-
-        if (this.usuario_logado.gps_timestamp != position.timestamp){
-            console.log("Atualizando geolocation")
-
-            this.usuario_logado.latitude = position.coords.latitude;
-            this.usuario_logado.longitude = position.coords.longitude;
-            this.usuario_logado.gps_accuracy = position.coords.accuracy;
-            this.usuario_logado.gps_timestamp = position.timestamp;
-
-            console.log(this.usuario_logado)
-            this.salvar_usuario_logado(true);
-        }
-        else {
-            console.log("Não precisou atualizar geolocation")
-        }
+        // // console.log("salva_geolocalizacao_do_usuario()")
+        //
+        // if (this.usuario_logado.gps_timestamp != position.timestamp){
+        //     console.log("Atualizando geolocation")
+        //
+        //     this.usuario_logado.latitude = position.coords.latitude;
+        //     this.usuario_logado.longitude = position.coords.longitude;
+        //     this.usuario_logado.gps_accuracy = position.coords.accuracy;
+        //     this.usuario_logado.gps_timestamp = position.timestamp;
+        //
+        //     console.log(this.usuario_logado)
+        //     this.salvar_usuario_logado(true);
+        // }
+        // else {
+        //     console.log("Não precisou atualizar geolocation")
+        // }
     }
 
 
@@ -1070,6 +1071,7 @@ export class DadosService {
         // this.listar_rel_cheque_pre_dados = false;
         // this.listar_rel_cheque_pre_recebidos = false;
 
+        this.listar_disponibilidade = false;
         this.listar_equipe = false;
         this.listar_impressos = false;
         this.listar_estoque= false;
@@ -1875,7 +1877,7 @@ export class DadosService {
                 // if(this.filtered_lancamentos_despesa[i].produto_id == this.selected.key){
                     // console.log("filtered_lancamentos_despesa");
                     // console.log(this.filtered_lancamentos_despesa);
-                    if(!fornecedores[this.filtered_lancamentos_despesa[i].contraparte_key]){
+                    if(!fornecedores[this.filtered_lancamentos_despesa[i]?.contraparte_key]){
                         for(let x in this.selected_fornecedores){
                             if(this.selected_fornecedores[x].key == this.filtered_lancamentos_despesa[i].contraparte_key){
                                 xtemp.push(this.selected_fornecedores[x]);
@@ -1898,7 +1900,7 @@ export class DadosService {
                 // if(this.filtered_lancamentos_receita[i].produto_id == this.selected.key){
                     // console.log("filtered_lancamentos_receita");
                     // console.log(this.filtered_lancamentos_receita);
-                    if(!clientes[this.filtered_lancamentos_receita[i].contraparte_key]){
+                    if(!clientes[this.filtered_lancamentos_receita[i]?.contraparte_key]){
                         for(let x in this.selected_clientes){
                             if(this.selected_clientes[x].key == this.filtered_lancamentos_receita[i].contraparte_key){
                                 xtemp.push(this.selected_clientes[x]);
@@ -1967,7 +1969,7 @@ export class DadosService {
         else {
             val = val && this.util.isString(val) ?  this.util.remover_acentos(val).toLowerCase() : val;
             rule = rule && this.util.isString(rule) ? this.util.remover_acentos(rule).toLowerCase() : rule;
-            rules = rule.split(" ");
+            rules = rule?.split(" ");
         }
 
         if(rules == []) {

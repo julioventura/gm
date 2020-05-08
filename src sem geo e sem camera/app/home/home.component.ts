@@ -5,8 +5,7 @@ import { UtilService } from '../util/util.service';
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.styl']
+    templateUrl: './home.component.html'
 })
 
 export class HomeComponent implements OnInit {
@@ -69,7 +68,7 @@ export class HomeComponent implements OnInit {
         if(this.dados.primeira_vez){
             // console.log("PRIMEIRA VEZ - SUBSCRIBE geolocation")
             this.dados.primeira_vez = false;
-            this.dados.get_geolocation();
+            // this.dados.get_geolocation();
             this.dados.show_position();
         }
         else {
