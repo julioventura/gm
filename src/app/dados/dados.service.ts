@@ -665,7 +665,6 @@ export class DadosService {
 
     public listar_producao : boolean = false;
     public listar_resultados : boolean = false;
-    public listar_disponibilidade : boolean = false;
 
     public valor_saldo : number = 0;
     public valor_saldo_dinheiro : number = 0;
@@ -1071,7 +1070,6 @@ export class DadosService {
         // this.listar_rel_cheque_pre_dados = false;
         // this.listar_rel_cheque_pre_recebidos = false;
 
-        this.listar_disponibilidade = false;
         this.listar_equipe = false;
         this.listar_impressos = false;
         this.listar_estoque= false;
@@ -1877,7 +1875,7 @@ export class DadosService {
                 // if(this.filtered_lancamentos_despesa[i].produto_id == this.selected.key){
                     // console.log("filtered_lancamentos_despesa");
                     // console.log(this.filtered_lancamentos_despesa);
-                    if(!fornecedores[this.filtered_lancamentos_despesa[i]?.contraparte_key]){
+                    if(!fornecedores[this.filtered_lancamentos_despesa[i].contraparte_key]){
                         for(let x in this.selected_fornecedores){
                             if(this.selected_fornecedores[x].key == this.filtered_lancamentos_despesa[i].contraparte_key){
                                 xtemp.push(this.selected_fornecedores[x]);
@@ -1900,7 +1898,7 @@ export class DadosService {
                 // if(this.filtered_lancamentos_receita[i].produto_id == this.selected.key){
                     // console.log("filtered_lancamentos_receita");
                     // console.log(this.filtered_lancamentos_receita);
-                    if(!clientes[this.filtered_lancamentos_receita[i]?.contraparte_key]){
+                    if(!clientes[this.filtered_lancamentos_receita[i].contraparte_key]){
                         for(let x in this.selected_clientes){
                             if(this.selected_clientes[x].key == this.filtered_lancamentos_receita[i].contraparte_key){
                                 xtemp.push(this.selected_clientes[x]);
@@ -1969,7 +1967,7 @@ export class DadosService {
         else {
             val = val && this.util.isString(val) ?  this.util.remover_acentos(val).toLowerCase() : val;
             rule = rule && this.util.isString(rule) ? this.util.remover_acentos(rule).toLowerCase() : rule;
-            rules = rule?.split(" ");
+            rules = rule.split(" ");
         }
 
         if(rules == []) {

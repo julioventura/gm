@@ -309,19 +309,19 @@ export class EditComponent implements OnInit {
             // ULTIMO CADASTRADO
             switch(this.dados.PARAMETRO) {
                 case 'CLIENTES':
-                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos?.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
                 break;
                 case 'SOCIOS':
-                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos?.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
                 break;
                 case 'FORNECEDORES':
-                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
                 break;
                 case 'ESTOQUE':
-                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
                 break;
                 // case 'EQUIPE':
-                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos?.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
+                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
                 // break;
                 default:
                 this.ultimo_cadastrado = '';
