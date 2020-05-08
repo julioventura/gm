@@ -1,0 +1,72 @@
+<!-- LOGADO -->
+<div *ngIf="auth.user | async as user; else showLogin">
+
+    <!-- VER HOME -->
+    <div *ngIf="config.DISPLAY.Home">
+        <app-home></app-home>
+    </div>
+
+    <!-- VER LISTA -->
+    <div *ngIf="config.DISPLAY.Lista">
+        <app-list></app-list>
+    </div>
+
+    <!-- VER REGISTRO -->
+    <div *ngIf="config.DISPLAY.Registro">
+        <app-detail></app-detail>
+    </div>
+
+    <!-- EDITAR REGISTRO -->
+    <div *ngIf="config.DISPLAY.Editar">
+        <app-edit></app-edit>
+    </div>
+
+
+
+
+    <!-- RODAPE DE AUTENTICAÇÃO -->
+    <div class="screen_only">
+        <div class="espacador_vertical">&nbsp;</div>
+        <div class="small"> {{ user.displayName }} </div>
+        <div class="small"> {{ user.email }} </div>
+        <div class="espacador_vertical_metade">&nbsp;</div>
+        <div class="center">
+            <button (click)="logout()"> SAIR </button>
+        </div>
+        <div class="espacador_vertical">&nbsp;</div>
+    </div>
+
+</div>
+
+<!-- NÃO LOGADO -->
+<ng-template #showLogin>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+        <div class="container_logo">
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <div align="center">
+                <img src="https://gestormix.com/img/logo.gif" class="container_logo_img" alt="GestorMIX.com">
+            </div>
+
+            <!-- RODAPE DE AUTENTICAÇÃO -->
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <div class="sub_title">
+                <p>
+                    Gestão Financeira Profissional
+                </p>
+
+                <p class="center">
+
+            </div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+            <button (click)="login()">  ENTRAR com sua conta GOOGLE  </button>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
+        </div>
+        <div class="espacador_vertical">&nbsp;</div>
+        <div class="espacador_vertical">&nbsp;</div>
+
+</ng-template>
+
+
+
+<router-outlet></router-outlet>
