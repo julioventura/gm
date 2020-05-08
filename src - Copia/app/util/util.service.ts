@@ -1432,9 +1432,6 @@ export class UtilService {
         return result;
     }
 
-    public formata_site(url : string) : string {
-        return this.formata_url(url);
-    }
 
     public formata_url(url : string) : string {
         if (url == undefined ) {
@@ -1444,10 +1441,6 @@ export class UtilService {
         url = url.replace(/https?\:\/\//, "");
         url = url.replace(/\/$/, "");
         return url;
-    }
-
-    public formata_site(url : string) : string {
-        return this.formata_url_com_protocolo(url);
     }
 
     public formata_url_com_protocolo(url : string) : string {

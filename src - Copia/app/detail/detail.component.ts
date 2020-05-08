@@ -1,8 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+// import { AngularFireStorage } from '@angular/fire/storage';
+// import { AngularFireStorageModule } from '@angular/fire/storage';
+
+// import 'firebase/database';
+// import 'firebase/storage';
+
+import {Subject, Observable} from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
 import { UtilService } from '../util/util.service';
 import { DadosService } from '../dados/dados.service';
+
 
 @Component({
     selector: 'app-detail',
@@ -15,6 +24,7 @@ export class DetailComponent implements OnInit {
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
+        // private afStorage: AngularFireStorage
     ) { }
 
 
@@ -69,10 +79,51 @@ export class DetailComponent implements OnInit {
     public links_de_paginas : number = 5;
     public centro_de_custos_fixo : string = 'Centro de custos fixo. Não pode ser editado.';
 
+    public map : any;
+    public mapa_url : string = '';
+
+    // firestore
+    // public mostrar_preview : boolean = false;
+    public tipo_da_imagem1 : string = '';
+    public tipo_da_imagem2 : string = '';
+    //
+    // public link_ativado : boolean = false;
+    // public camera_ativada : boolean = false;
+    // public arquivo_ativado : boolean = false;
+    //
+    // // public uploadedBytes : Observable<number>;
+    // downloadURL: Observable<string>;
+    // downloadURLfirestore1: Observable<string>;
+    // downloadURLfirestore2: Observable<string>;
+    // uploadPercent: Observable<number>;
+    // // totalBytes: number;
+    // // totalBytes_str: string;
+    // task: any;
+    // public arquivo_escolhido: string = '';
+    filePath : string = '';
+    // public uploadSrc : any = '';
+    //
+
+
 
     ngOnInit(){
         console.log("\n\nINIT detail");
         console.log(this.dados.PARAMETRO);
+        console.log("===========================");
+        console.log("this.dados.voltar_pilha");
+        console.log(this.dados.voltar_pilha);
+        console.log("===========================");
+
+        // Download de imagens do Firestore
+        // this.download_imagem_do_firestore(1);
+        // this.download_imagem_do_firestore(2);
+
+
+
+        if( ['EQUIPE','USUARIOS','PERFIL'].includes(this.dados.PARAMETRO) ){
+            this.mapa_url = "https://www.google.com/maps/search/" + this.dados.selected.latitude + "," + this.dados.selected.longitude;
+        }
+
 
         this.dados.HOJE = this.util.hoje();
         this.dados.HOJE_QUANDO = this.util.converte_data_para_milisegundos(this.dados.HOJE);
@@ -171,6 +222,19 @@ export class DetailComponent implements OnInit {
             console.log(this.dados.filtered_atendimentos)
         }
 
+        if(this.dados.PARAMETRO == 'SOCIOS'){
+            this.dados.origem = 'SOCIOS';
+            this.dados.socio = this.dados.selected;
+
+            this.dados.filterDatabase(this.dados.selected.key,'LANCAMENTOS_RECEITA');
+            console.log("this.dados.filtered_lancamentos_receita")
+            console.log(this.dados.filtered_lancamentos_receita)
+
+            this.dados.filterDatabase(this.dados.selected.key,'ATENDIMENTOS');
+            console.log("this.dados.filtered_atendimentos")
+            console.log(this.dados.filtered_atendimentos)
+        }
+
         if(this.dados.PARAMETRO == "ORCAMENTOS"){
             console.log(this.dados.PARAMETRO);
 
@@ -219,6 +283,58 @@ export class DetailComponent implements OnInit {
             // this.dados.orcamentos$.update(orcamento.key, orcamento);
             this.dados.selected = this.util.deepClone(orcamento);
         }
+
+
+        var marcalocal = this.dados.selected.latitude + "," + this.dados.selected.longitude;
+        var bbox1 = (this.dados.selected.longitude + 0.1) + "," + (this.dados.selected.latitude + 0.1);
+        var bbox2 = (this.dados.selected.longitude - 0.1) + "," + (this.dados.selected.latitude  - 0.1);
+
+                // =======================================================
+                //function that gets the location and returns it
+                function getLocation() {
+                  if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                  } else {
+                    console.log("Geo Location not supported by browser");
+                  }
+                }
+                //function that retrieves the position
+                function showPosition(position) {
+                  var location = {
+                    longitude: position.coords.longitude,
+                    latitude: position.coords.latitude
+                  }
+                  console.log(location)
+
+                  var html = "<iframe frameborder='0' height='350' marginheight='0' ";
+                  html += "marginwidth='0' scrolling='no' width='425' ";
+
+                  html += "src='//www.openstreetmap.org/export/embed.html?";
+
+                  html += "bbox=";
+                  html += bbox1;
+                  // html += latlon;
+                  html += ",";
+                  html += bbox2;
+                  // html += latlon;
+
+                  html += "&amp;marker=";
+                  // html += "marker=";
+                  // html += "-23.009133199999997,-43.3443513";
+                  html += marcalocal;
+
+                  // html += latlon;
+                  html += "&amp;layer=mapnik'>";
+                  html += "</iframe>";
+
+                  // var map = document.querySelector("mapholder");
+                  // map.innerHTML = html;
+                }
+
+                //request for location
+                getLocation();
+                // =======================================================
+
         this.mostrar_tela();
     }
 
@@ -235,6 +351,7 @@ export class DetailComponent implements OnInit {
         || this.dados.PARAMETRO == "REL_CHEQUES_PRE"
         || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"
         || this.dados.PARAMETRO == "RESULTADOS"
+        || this.dados.PARAMETRO == "DISPONIBILIDADE"
         || this.dados.PARAMETRO == "REL_RECEITAS_E_DESPESAS"){
             this.button1 = 'button_off';
             this.button2 = 'button_off';
@@ -252,12 +369,11 @@ export class DetailComponent implements OnInit {
             if(this.dados.selected.meio_de_pagamento == 'credito'){ this.button5 = 'button_brown'; }
 
             if(this.dados.selected.estorno) {
-				this.dados.pode_editar = false;
+				// this.dados.pode_editar = false;
                 // Popup de aviso
                 this.aviso_titulo = "REGISTRO ESTORNADO";
                 // this.aviso_mensagem = "Não é permitido editar registros estornados.";
                 this.popup_de_aviso = true;
-
                 return;
             }
         }
@@ -268,16 +384,22 @@ export class DetailComponent implements OnInit {
         || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"){
             this.dados.set_titulo_barra();
         }
+        else if(this.dados.PARAMETRO == 'RESULTADOS'){
+            this.dados.set_titulo_pagina('LANÇAMENTO');
+        }
+        else if(this.dados.PARAMETRO == 'HISTORICOS'){
+            this.dados.set_titulo_barra(this.dados.selected.criado_em);
+        }
         else if (this.dados.selected.nome){
             this.dados.set_titulo_barra(this.dados.selected.nome);
         }
         else if(this.dados.selected.cliente_nome){
             this.dados.set_titulo_barra(this.dados.selected.cliente_nome);
         }
-
-        if(this.dados.PARAMETRO == 'RESULTADOS'){
-            this.dados.set_titulo_pagina('LANÇAMENTO');
+        else if(this.dados.selected.socio_nome){
+            this.dados.set_titulo_barra(this.dados.selected.socio_nome);
         }
+
 
         // MENSAGEM
         this.mensagem = "Olá " + this.dados.selected.nome + "\n\n\n\n\n";
@@ -299,6 +421,11 @@ export class DetailComponent implements OnInit {
         else {
             this.ativo = true;
         }
+
+        this.dados.selected.img_url = this.util.formata_url_com_protocolo(this.dados.selected.img_url);
+        this.dados.selected.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected.img_url2);
+
+        this.util.goTop();  // sobe a tela pro topo
     }
 
     public verRegistro(registro : any, parametro : string = '') : void {
@@ -321,6 +448,10 @@ export class DetailComponent implements OnInit {
         }
         else {
             if(this.dados.PARAMETRO == 'CLIENTES'){
+                this.dados.PARAMETRO = 'LANCAMENTOS_RECEITA';
+                this.config.DISPLAY.Registro = true;
+            }
+            if(this.dados.PARAMETRO == 'SOCIOS'){
                 this.dados.PARAMETRO = 'LANCAMENTOS_RECEITA';
                 this.config.DISPLAY.Registro = true;
             }
@@ -360,6 +491,44 @@ export class DetailComponent implements OnInit {
         this.mostrar_tela();
     }
 
+
+    //
+    // public clientes_ficha() {
+    //     this.dados.is_clientes_ficha = !this.dados.is_clientes_ficha;
+    //
+    //     if(this.dados.is_clientes_ficha){
+    //         this.dados.is_clientes_ficha = true;
+    //         this.dados.is_clientes_atendimentos = false;
+    //         this.dados.is_clientes_receitas = false;
+    //     }
+	// 	this.dados.filtro = '';
+    //     this.dados.filterDatabase(' ','CLIENTES');
+    // }
+    //
+    // public clientes_atendimentos() {
+    //     this.dados.is_clientes_atendimentos = !this.dados.is_clientes_atendimentos;
+    //
+    //     if(this.dados.is_clientes_atendimentos){
+    //         this.dados.is_clientes_ficha = false;
+    //         this.dados.is_clientes_atendimentos = true;
+    //         this.dados.is_clientes_receitas = false;
+    //     }
+	// 	this.dados.filtro = '';
+    //     this.dados.filterDatabase(' ','CLIENTES');
+    // }
+    //
+    // public clientes_receitas() {
+    //         this.dados.is_clientes_receitas = !this.dados.is_clientes_receitas;
+    //
+    //         if(this.dados.is_clientes_receitas){
+    //             this.dados.is_clientes_ficha = false;
+    //             this.dados.is_clientes_atendimentos = false;
+    //             this.dados.is_clientes_receitas = true;
+    //         }
+    // 		this.dados.filtro = '';
+    //         this.dados.filterDatabase(' ','CLIENTES');
+    //     }
+    //
 
 
     public avalia_atendimentos(){
@@ -455,7 +624,6 @@ export class DetailComponent implements OnInit {
         if (confirmado){
             // registra no historico
 
-            this.dados.historicos.local = this.dados.PARAMETRO;
             this.dados.historicos.database = this.dados.PARAMETRO;
             this.dados.historicos.titulo = "Mensagem";
             this.dados.historicos.mensagem = true;
@@ -469,6 +637,12 @@ export class DetailComponent implements OnInit {
                 this.dados.historicos.destinatario_key = this.dados.cliente && this.dados.cliente.key ? this.dados.cliente.key : '';
                 this.dados.historicos.registro_nome = this.dados.cliente && this.dados.cliente.nome ? this.dados.cliente.nome : '';
                 this.dados.historicos.registro_key = this.dados.cliente && this.dados.cliente.key ? this.dados.cliente.key : '';
+            }
+            if(this.dados.whatsapp_destino=='SOCIOS'){
+                this.dados.historicos.destinatario_nome = this.dados.socio && this.dados.socio.nome ? this.dados.socio.nome : '';
+                this.dados.historicos.destinatario_key = this.dados.socio && this.dados.socio.key ? this.dados.socio.key : '';
+                this.dados.historicos.registro_nome = this.dados.socio && this.dados.socio.nome ? this.dados.socio.nome : '';
+                this.dados.historicos.registro_key = this.dados.socio && this.dados.socio.key ? this.dados.socio.key : '';
             }
             else if(this.dados.whatsapp_destino=='EQUIPE'){
                 this.dados.historicos.destinatario_nome = this.dados.responsavel && this.dados.responsavel.nome ? this.dados.responsavel.nome : '';
@@ -489,7 +663,6 @@ export class DetailComponent implements OnInit {
 
 
 
-
     public producao_profissional(registro){
         // if(['DENTISTAS', 'MEDICOS', 'REL_DINHEIRO'].includes(this.dados.PARAMETRO)){
         //     this.config.DISPLAY.Registro = false;
@@ -499,20 +672,36 @@ export class DetailComponent implements OnInit {
     }
 
     public zoom_da_imagem(qual : number = 0){
+        console.log("zoom_da_imagem(" + qual + ")")
+
         if(qual==1){
-            this.imagem_normal = false;
-            this.imagem_maior1 = true;
-            this.imagem_maior2 = false;
+            if(this.imagem_maior1) {
+                this.imagem_normal = true;
+                this.imagem_maior1 = false;
+                this.imagem_maior2 = false;
+            }
+            else {
+                this.imagem_maior1 = true;
+                this.imagem_normal = false;
+                this.imagem_maior2 = false;
+            }
         }
         else if(qual==2){
-            this.imagem_normal = false;
-            this.imagem_maior1 = false;
-            this.imagem_maior2 = true;
+            if(this.imagem_maior2) {
+                this.imagem_normal = true;
+                this.imagem_maior1 = false;
+                this.imagem_maior2 = false;
+            }
+            else {
+                this.imagem_maior2 = true;
+                this.imagem_maior1 = false;
+                this.imagem_normal = false;
+            }
         }
-        else {
-            this.imagem_normal = true;
+        else{
+            this.imagem_maior2 = true;
             this.imagem_maior1 = false;
-            this.imagem_maior2 = false;
+            this.imagem_normal = false;
         }
     }
 
@@ -520,8 +709,34 @@ export class DetailComponent implements OnInit {
         this.dados.go(destino);
     }
 
-
     public voltar() {
+        console.log("voltar()");
+
+        if(this.dados.voltar_pilha && this.dados.voltar_pilha.length > 0) {
+
+            console.log("this.dados.voltar_pilha");
+            console.log(this.dados.voltar_pilha);
+
+            let voltar = this.dados.voltar_pilha.pop();
+            console.log("voltar = this.dados.voltar_pilha.pop();");
+            console.log(voltar);
+        }
+
+
+        if(this.dados.esconder_lista == true){
+            this.config.DISPLAY.Registro = false;
+            this.dados.esconder_lista = false;
+        }
+        else {
+            this.voltar2();
+            // this.config.DISPLAY.Registro = false;
+            // this.config.DISPLAY.Lista = true;
+        }
+    }
+
+
+    public voltar2() {
+        console.log("voltar2()");
 
         if(this.dados.voltar_para){
 
@@ -639,7 +854,7 @@ export class DetailComponent implements OnInit {
             console.log("Registro estornado =");
             console.log(this.dados.selected);
             console.log("====================");
-            this.voltar();
+            // this.voltar();
         }
     }
 
@@ -663,11 +878,11 @@ export class DetailComponent implements OnInit {
         this.popupAlerta = false;
     }
 
-    public tentou_editar(){
-        if(!this.dados.voltar_para && this.config[this.dados.PARAMETRO].pode_editar && this.dados.pode_editar) {
-            this.popup_pedir_confirmacao('EDITAR ?', 'EDITAR ESTE REGISTRO?');
-        }
-    }
+    // public tentou_editar(){
+    //     if(!this.dados.voltar_para && this.config[this.dados.PARAMETRO].pode_editar && this.dados.pode_editar) {
+    //         this.popup_pedir_confirmacao('EDITAR ?', 'EDITAR ESTE REGISTRO?');
+    //     }
+    // }
 
     public popup_pedir_confirmacao(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
         console.log("popup_pedir_confirmacao");
@@ -694,7 +909,22 @@ export class DetailComponent implements OnInit {
         else {}
     }
 
-
-
+    //
+    // public download_imagem_do_firestore(qual){
+    //     if(qual==1){
+    //         if(this.dados.selected.img_url && this.dados.selected.tipo_da_imagem1 == 'firestore'){
+    //             this.filePath = this.dados.selected.img_url;
+    //             this.tipo_da_imagem1 = this.dados.selected.tipo_da_imagem1;
+    //             this.downloadURLfirestore1 = this.afStorage.ref(this.filePath).getDownloadURL();
+    //         }
+    //     }
+    //     else if(qual==2){
+    //         if(this.dados.selected.img_url2 && this.dados.selected.tipo_da_imagem2 == 'firestore'){
+    //             this.filePath = this.dados.selected.img_url2;
+    //             this.tipo_da_imagem2 = this.dados.selected.tipo_da_imagem2;
+    //             this.downloadURLfirestore2 = this.afStorage.ref(this.filePath).getDownloadURL();
+    //         }
+    //     }
+    // }
 
 }

@@ -1,0 +1,30 @@
+.actionBtn {
+    font-family: Geneva, Arial, Helvetica, SunSans-Regular, sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+    color: white;
+    padding: 4pt;
+    border-radius: 4pt;
+    cursor: pointer;
+    text-align: center;
+    border: 1pt solid white;
+    background-color: dodgerblue;
+}
+
+.snapshot {
+  text-align: center;
+  img {
+    max-width: 800px;
+    max-height: 800px;
+  }
+}
+
+ul.links {
+  padding-bottom: 20px;
+}
+
+.result {
+    color: blue;
+    font-size: 8pt;
+    font-weight: bold;
+}

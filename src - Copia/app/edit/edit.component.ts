@@ -1,42 +1,52 @@
 import { Component, OnInit } from '@angular/core';
+// import { AngularFireStorage } from '@angular/fire/storage';
+// import { AngularFireStorageModule } from '@angular/fire/storage';
 
-import { ConfigService } from '../config/config.service';
-import { UtilService } from '../util/util.service';
+import 'firebase/database';
+// import 'firebase/storage';
+
+import {Subject, Observable} from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+
+import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
+
 import { DadosService } from '../dados/dados.service';
+import { UtilService } from '../util/util.service';
+import { ConfigService } from '../config/config.service';
 
-// import {ConfirmationService} from 'primeng/api';
-// import {MessageService} from 'primeng/api';
+import {ConfirmationService} from 'primeng/api';
+import {Message} from 'primeng/api';
 
-// import {MessagesModule} from 'primeng/messages';
-// import {MessageModule} from 'primeng/message';
+import * as _ from 'lodash';
+
 
 @Component({
     selector: 'app-edit',
     templateUrl: './edit.component.html',
-    styleUrls: ['./edit.component.styl']
+    providers: [ConfirmationService]
 })
+
 export class EditComponent implements OnInit {
 
     constructor(
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
-        // private confirmationService: ConfirmationService,
-        // private messageService: MessageService
+        private confirmationService: ConfirmationService,
+        // private afStorage: AngularFireStorage
     ) { }
 
-    // msgs: Message[] = [];
-    position: string;
 
     public pode_fazer_upload : boolean = false;
     public label_nome : string = '';
     public label_obs : string = '';
 
     // popup de alerta
-    public popupAlerta : boolean = false;
+    // public popupAlerta : boolean = false;
     public alerta_titulo : string = '';
-    public alerta_linha1 : string = '';
-    public alerta_linha2 : string = '';
+    public alerta_mensagem : string = '';
+    // public alerta_linha1 : string = '';
+    // public alerta_linha2 : string = '';
 
     public popupSairSemSalvar : boolean = false;
 
@@ -53,6 +63,7 @@ export class EditComponent implements OnInit {
     public button8 : string = '';
 
     public listar_clientes : boolean = false;
+    public listar_socios : boolean = false;
     public listar_fornecedores : boolean = false;
     public listar_equipe : boolean = false;
 
@@ -91,11 +102,78 @@ export class EditComponent implements OnInit {
 
     public ultimo_cadastrado : string = '';
 
+    public TEMP : any = {
+        idade : ''
+    }
+
+    public img_link1 : string = '';
+    public img_link2 : string = '';
+
+    // public mostrar_upload_firestore_progress : boolean = false;
+
+
+    msgs: Message[] = [];
+    position: string;
+
+    // CAMERA E FIRESTORE
+    // ------------------
+    // toggle webcam on/off
+    public showWebcam : boolean = false;
+    public allowCameraSwitch = true;
+    public multipleWebcamsAvailable = false;
+    public deviceId: string;
+    public videoOptions: MediaTrackConstraints = {
+    // width: {ideal: 1024},
+    // height: {ideal: 576}
+    };
+    public errors: WebcamInitError[] = [];
+
+    // webcam snapshot trigger
+    private trigger: Subject<void> = new Subject<void>();
+    // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
+    private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
+
+    // firestore
+    public tipo_da_imagem1 : string = '';
+    public tipo_da_imagem2 : string = '';
+
+    public link1_ativado : boolean = false;
+    public camera1_ativada : boolean = false;
+    public arquivo1_ativado : boolean = false;
+
+    public link2_ativado : boolean = false;
+    public camera2_ativada : boolean = false;
+    public arquivo2_ativado : boolean = false;
+
+    public imageError: string;
+
+    // public uploadedBytes : Observable<number>;
+    downloadURL: Observable<string>;
+    // downloadURLfirestore1: Observable<string>;
+    // downloadURLfirestore2: Observable<string>;
+    uploadPercent: Observable<number>;
+    task: any;
+    public arquivo_escolhido: string = '';
+    filePath : string = '';
+
     ngOnInit(): void {
         console.log("\n\nINIT edit");
         console.log(this.dados.PARAMETRO);
         console.log(this.dados.selected_edit);
+        console.log("===========================");
+        console.log("this.dados.voltar_pilha");
+        console.log(this.dados.voltar_pilha);
+        console.log("===========================");
 
+        // Download de imagens do Firestore
+        // this.download_imagem_do_firestore(1);
+        // this.download_imagem_do_firestore(2);
+
+
+        WebcamUtil.getAvailableVideoInputs()
+              .then((mediaDevices: MediaDeviceInfo[]) => {
+                this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+              });
 
         this.dados.salvou_registro = false;
 
@@ -190,82 +268,60 @@ export class EditComponent implements OnInit {
         if(this.dados.selected_edit.nome){
             console.log("nome = " + this.dados.selected_edit.nome);
         }
-        console.log("key = " + this.dados.selected_edit.key);
 
         if(this.dados.retorno){
             console.log("RETORNO + " + this.dados.retorno);
         }
 
-        console.log("ORIGEM = " + this.dados.origem);
-        if(this.dados.origem == 'CLIENTES'){
-            console.log(this.dados.cliente);
-            this.dados.selected_edit.contraparte = this.dados.cliente.nome ? this.dados.cliente.nome : '';
-            this.dados.selected_edit.contraparte_key = this.dados.cliente.key ? this.dados.cliente.key : '';
-            this.dados.selected_edit.contraparte_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
+        // console.log("*********  ORIGEM = " + this.dados.origem);
+        // if(this.dados.origem == 'CLIENTES' && this.dados.PARAMETRO ){
+        //     console.log("if(this.dados.origem == 'CLIENTES')");
+        //     console.log(this.dados.cliente);
+            // this.dados.selected_edit.contraparte = this.dados.cliente.nome ? this.dados.cliente.nome : '';
+            // this.dados.selected_edit.contraparte_key = this.dados.cliente.key ? this.dados.cliente.key : '';
+            // this.dados.selected_edit.contraparte_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
 
-            this.mostrar_lista_de_orcamentos();
-        }
+            // this.mostrar_lista_de_orcamentos();
+        // }
 
 
         // Registro de procedimentos na ficha do cliente e historicos para o usuario
         this.dados.historicos = {};
         this.dados.historicos.titulo = '';
 
-        // if (this.dados.PARAMETRO == "REL_DINHEIRO"
-        //     || this.dados.PARAMETRO == "REL_CHEQUES_PRE"
-        //     || this.dados.PARAMETRO == "REL_CHEQUES_A_VISTA"){
-        //
-        //     this.dados.set_titulo_barra();
-        //     console.log("this.dados.set_titulo_barra() em REL_DINHEIRO, REL_CHEQUES_PRE ou REL_CHEQUES_A_VISTA")
-        // }
-        // else if (this.dados.selected.nome){
-        //     this.dados.set_titulo_barra(this.dados.selected.nome);
-        //     console.log("this.dados.set_titulo_barra(this.dados.selected.nome)")
-        // }
-        // else if(this.dados.selected.cliente_nome){
-        //     this.dados.set_titulo_barra(this.dados.selected.cliente_nome);
-        //     console.log("this.dados.set_titulo_barra(this.dados.selected.cliente_nome)")
-        // }
-        // else {
-        //     this.dados.set_titulo_barra(' ');
-        //     console.log("limpou titulo_barra");
-        // }
 
 
-
-
-        // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
-
-        this.util.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
+        this.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
         this.pode_fazer_upload = this.config[this.dados.PARAMETRO].pode_fazer_upload;
 
         this.label_nome = this.config[this.dados.PARAMETRO].label_nome ? this.config[this.dados.PARAMETRO].label_nome : "Nome";
         this.label_obs = this.config[this.dados.PARAMETRO].label_obs ? this.config[this.dados.PARAMETRO].label_obs : "Obs";
 
         this.dados.incluiu = false;
-
         this.dados.alta_anterior = this.dados.selected_edit.alta;
 
         if(!this.dados.selected_edit.key) {
             // REGISTRO NOVO
             console.log("incluindo registro em PARAMETRO " + this.dados.PARAMETRO);
 
-            console.log("this.dados.selected_clientes_ultimos_incluidos")
-            console.log(this.dados.selected_clientes_ultimos_incluidos)
+            // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
 
             // ULTIMO CADASTRADO
             switch(this.dados.PARAMETRO) {
                 case 'CLIENTES':
-                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos?.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
+                break;
+                case 'SOCIOS':
+                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
                 break;
                 case 'FORNECEDORES':
-                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
                 break;
                 case 'ESTOQUE':
-                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
+                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
                 break;
                 // case 'EQUIPE':
-                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos?.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
+                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
                 // break;
                 default:
                 this.ultimo_cadastrado = '';
@@ -281,13 +337,15 @@ export class EditComponent implements OnInit {
         }
 
         if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-            console.log("Avaliar atendimentos com this.avalia_atendimentos()");
-            console.log(this.dados.selected_edit)
             this.avalia_atendimentos();
         }
 
+        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
+        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
+
         this.util.goTop();  // sobe a tela pro topo
     }
+
 
     public mostrar_contrapartes(){
         if (this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA'){
@@ -297,6 +355,13 @@ export class EditComponent implements OnInit {
             this.dados.filterDatabase(this.dados.selected_edit.contraparte,'CLIENTES');
             this.listar_clientes = true;
             console.log("listar_clientes");
+
+            if(this.config.ATIVAR_SOCIOS){
+                this.dados.filterDatabase(this.dados.selected_edit.contraparte,'SOCIOS');
+                this.listar_socios = true;
+                console.log("listar_socios");
+            }
+
         }
         else if (this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA'){
             this.dados.filterDatabase(this.dados.selected_edit.contraparte,'FORNECEDORES');
@@ -432,6 +497,7 @@ export class EditComponent implements OnInit {
                 this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario;
                 this.dados.selected_edit.quantidade = 1;
             }
+
             if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
                 this.dados.selected_edit.valor = this.dados.selected_edit.valor - this.dados.selected_edit.desconto;
             }
@@ -445,6 +511,62 @@ export class EditComponent implements OnInit {
         this.dados.selected_edit.valor_total = this.util.formata_valor(this.dados.selected_edit.valor_total);
         this.dados.selected_edit.comissao = this.util.formata_valor(this.dados.selected_edit.comissao);
     }
+
+
+
+    public ajusta_valor_receita(){
+        if(this.dados.selected_edit.desconto && this.dados.util.isString(this.dados.selected_edit.desconto)){
+            this.dados.selected_edit.desconto = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.desconto);
+        }
+        if(this.dados.selected_edit.valor_unitario && this.dados.util.isString(this.dados.selected_edit.valor_unitario)){
+            this.dados.selected_edit.valor_unitario = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor_unitario);
+        }
+        if(this.dados.selected_edit.valor && this.dados.util.isString(this.dados.selected_edit.valor)){
+            this.dados.selected_edit.valor = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor);
+        }
+        if(this.dados.selected_edit.comissao && this.dados.util.isString(this.dados.selected_edit.comissao)){
+            this.dados.selected_edit.comissao = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.comissao);
+        }
+        if(this.dados.selected_edit.valor_total && this.dados.util.isString(this.dados.selected_edit.valor_total)){
+            this.dados.selected_edit.valor_total = this.util.converte_valores_formatados_para_numero(this.dados.selected_edit.valor_total);
+        }
+
+        if(['R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo)){
+            // Venda Direta
+            if(this.dados.selected_edit.valor_unitario && this.dados.selected_edit.quantidade && this.dados.selected_edit.quantidade > 0){
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_unitario * this.dados.selected_edit.quantidade;
+            }
+            else {
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_unitario;
+                this.dados.selected_edit.quantidade = 1;
+            }
+            if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
+                this.dados.selected_edit.valor_total = this.dados.selected_edit.valor_total - this.dados.selected_edit.desconto;
+            }
+        }
+        if(!['R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo)){
+            // Não é Venda Direta
+            if(this.dados.selected_edit.valor_unitario && this.dados.selected_edit.quantidade && this.dados.selected_edit.quantidade > 0){
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario * this.dados.selected_edit.quantidade;
+            }
+            else {
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor_unitario;
+                this.dados.selected_edit.quantidade = 1;
+            }
+            if(this.dados.selected_edit.desconto && this.dados.selected_edit.desconto > 0){
+                this.dados.selected_edit.valor = this.dados.selected_edit.valor - this.dados.selected_edit.desconto;
+            }
+        }
+
+
+        // Formata os valores para exibir na tela
+        this.dados.selected_edit.desconto = this.util.formata_valor(this.dados.selected_edit.desconto);
+        this.dados.selected_edit.valor_unitario = this.util.formata_valor(this.dados.selected_edit.valor_unitario);
+        this.dados.selected_edit.valor = this.util.formata_valor(this.dados.selected_edit.valor);
+        this.dados.selected_edit.valor_total = this.util.formata_valor(this.dados.selected_edit.valor_total);
+        this.dados.selected_edit.comissao = this.util.formata_valor(this.dados.selected_edit.comissao);
+    }
+
 
 
     public ajusta_valor_despesa(){
@@ -481,6 +603,12 @@ export class EditComponent implements OnInit {
     }
 
 
+    public mostrar_socios(){
+        this.dados.filterDatabase(this.dados.selected_edit.socio,'SOCIOS');
+        this.listar_socios = true;
+    }
+
+
     public escolherCliente(registro){
         console.log(registro);
         this.dados.selected_edit.cliente = registro.nome;
@@ -491,6 +619,19 @@ export class EditComponent implements OnInit {
         this.dados.registro = registro;
 
         this.listar_clientes = false;
+    }
+
+
+    public escolherSocio(registro){
+        console.log(registro);
+        this.dados.selected_edit.socio = registro.nome;
+        this.dados.selected_edit.socio_key = registro.key;
+
+        // reproduz o registro do socio identificando-o em dados.socio e abre a observação de orçamentos desse socio
+        this.dados.socio = registro;
+        this.dados.registro = registro;
+
+        this.listar_socios = false;
     }
 
 
@@ -505,6 +646,15 @@ export class EditComponent implements OnInit {
         this.dados.cliente = registro;
         console.log(registro);
         this.dados.registro = registro;
+
+        if(this.dados.PARAMETRO=='SOCIOS'){
+            this.listar_socios = false;
+
+            // reproduz o registro do socio identificando-o em dados.socio
+            this.dados.socio = registro;
+            console.log(registro);
+            this.dados.registro = registro;
+        }
 
         // Abre lista de orcamentos
         if(this.dados.PARAMETRO!='PAGAMENTOS'){
@@ -551,7 +701,11 @@ export class EditComponent implements OnInit {
     public escolherBanco(registro, campo, local_na_pagina){
         console.log("escolherBanco(registro," + campo + ")\n");
         console.log(registro);
-        this.dados.selected_edit[campo] = registro.codigo + ' - ' + registro.nome;
+        this.dados.selected_edit[campo] = registro.nome;
+
+        this.dados.selected_edit.agencia = registro.agencia;
+        this.dados.selected_edit.conta = registro.conta;
+
         this[local_na_pagina] = false;
     }
 
@@ -688,25 +842,39 @@ export class EditComponent implements OnInit {
         }
     }
 
-
     public zoom_da_imagem(qual : number = 0){
+        console.log("zoom_da_imagem(" + qual + ")")
+
         if(qual==1){
-            this.imagem_normal = false;
-            this.imagem_maior1 = true;
-            this.imagem_maior2 = false;
+            if(this.imagem_maior1) {
+                this.imagem_normal = true;
+                this.imagem_maior1 = false;
+                this.imagem_maior2 = false;
+            }
+            else {
+                this.imagem_maior1 = true;
+                this.imagem_normal = false;
+                this.imagem_maior2 = false;
+            }
         }
         else if(qual==2){
-            this.imagem_normal = false;
-            this.imagem_maior1 = false;
-            this.imagem_maior2 = true;
+            if(this.imagem_maior2) {
+                this.imagem_normal = true;
+                this.imagem_maior1 = false;
+                this.imagem_maior2 = false;
+            }
+            else {
+                this.imagem_maior2 = true;
+                this.imagem_maior1 = false;
+                this.imagem_normal = false;
+            }
         }
-        else {
+        else{
             this.imagem_normal = true;
-            this.imagem_maior1 = false;
             this.imagem_maior2 = false;
+            this.imagem_maior1 = false;
         }
     }
-
 
     public mostrar_imagens(){
         if(this.dados.mostrar_imagens_na_lista_estoque){
@@ -725,6 +893,13 @@ export class EditComponent implements OnInit {
         console.log("==================");
 
         this.config.DISPLAY.ExcluirDialog = false;
+
+        // if(this.task){
+        //     // Cancelando task de image upload to firestore
+        //     console.log("Cancelando TASK")
+        //     console.log(this.task)
+        //     this.task.cancel();
+        // }
 
         if(!this.dados.salvou_registro){
             // saindo da página sem salvar o registro
@@ -745,6 +920,11 @@ export class EditComponent implements OnInit {
         console.log("destino = " + destino);
 
         if(destino == 'lista'){
+
+            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE','BANCOS'].includes(this.dados.PARAMETRO)){
+                this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
+            }
+
             this.config.DISPLAY.Lista = true;
             this.config.DISPLAY.Registro = false;
             this.config.DISPLAY.Editar = false;
@@ -796,13 +976,22 @@ export class EditComponent implements OnInit {
         if(opcao=='7'){ this.button7 = 'button_brown'; this.dados.selected_edit.meio_de_pagamento = ''; }
         if(opcao=='8'){ this.button8 = 'button_brown'; this.dados.selected_edit.meio_de_pagamento = ''; }
 
-        if ( ['dinheiro','debito','credito'].includes(this.dados.selected_edit.meio_de_pagamento) ){
+        if ( this.dados.PARAMETRO=='LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento=='credito') {
+            this.seta_data();  // vai configurar automaticamente a data de credito do cartão de credito
+        }
+
+        if ( ['dinheiro','debito'].includes(this.dados.selected_edit.meio_de_pagamento) ){
             // dinheiro, debito ou credito: já assinala como QUITADO também
             this.dados.selected_edit.quitado = true;
+        }
+        if ( this.dados.selected_edit.meio_de_pagamento != 'credito') {
+            this.dados.selected_edit.data_credito = '';
+            this.dados.selected_edit.aguardando = false;
         }
 
         // Limpa campo de data do cheque pré, pois se mudou a opção deixa de valer a data anterio
         this.dados.selected_edit.data_cheque_pre = '';
+
         this.ajusta_valor_despesa();
     }
 
@@ -823,7 +1012,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'data_inicio'){
             if(editou=='editou'){
@@ -838,7 +1029,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data_inicio = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'data_termino'){
             if(editou=='editou'){
@@ -853,10 +1046,62 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data_termino = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         return hoje;
     }
+
+
+    public data_lancamento(param : string = '', editou : string = ''){
+        console.log("data_lancamento()");
+
+        let hoje = this.dados.HOJE;
+
+        if(param == 'data'){
+            if(editou=='editou'){
+                this.dados.selected_edit.data = this.util.formata_data(this.dados.selected_edit.data,'recente');
+            }
+            else {
+                if(this.dados.selected_edit.data != hoje){
+                    this.dados.selected_edit.data = hoje;
+                }
+                else {
+                    // alterna limpando o campo caso já fosse o mesmo valor
+                    this.dados.selected_edit.data = '';
+                }
+            }
+        }
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+            this.dados.selected_edit.data_credito = this.util.somar_dias_a_uma_data(this.dados.selected_edit.data, this.config.dias_pra_credito_do_cartao);
+            this.dados.selected_edit.aguardando = true;
+            this.dados.selected_edit.aguardando_data = this.dados.selected_edit.data_credito;
+        }
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+        }
+    }
+
+    public seta_data(is_hoje : boolean = false){
+        console.log("seta_data()");
+
+        if(is_hoje) {
+            this.dados.selected_edit.data = this.dados.HOJE;
+        }
+
+        this.dados.selected_edit.data = this.util.formata_data(this.dados.selected_edit.data,'recente');
+
+        if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA' && this.dados.selected_edit.meio_de_pagamento == 'credito'){
+            // seta data de credito do pagamento em cartão de crédito
+            this.dados.selected_edit.data_credito = this.util.somar_dias_a_uma_data(this.dados.selected_edit.data, this.config.dias_pra_credito_do_cartao);
+            this.dados.selected_edit.aguardando = true;
+        }
+    }
+
 
 
     public agora(param : string = '', editou : string = ''){
@@ -876,7 +1121,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'hora_inicio'){
             if(editou=='editou'){
@@ -891,7 +1138,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora_inicio = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         else if(param == 'hora_termino'){
             if(editou=='editou'){
@@ -906,7 +1155,9 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora_termino = '';
                 }
             }
-            this.avalia_atendimentos();
+            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+                this.avalia_atendimentos();
+            }
         }
         return hora;
     }
@@ -915,9 +1166,8 @@ export class EditComponent implements OnInit {
     public avalia_atendimentos(){
         console.log("avalia_atendimentos()");
 
-        if(this.dados.PARAMETRO=='ATENDIMENTOS'){
+        if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
             let status = 'inativo';
-
 
             if(this.dados.selected_edit.data && this.dados.selected_edit.data.length>0){
                 status = 'aberto';
@@ -999,7 +1249,7 @@ export class EditComponent implements OnInit {
     public calcula_retorno ()  {
         if (this.dados.selected_edit.alta && this.dados.selected_edit.revisao){
             // converte alta para quando_em_milisegundos
-            let altaObj = this.util.getDateObjFromDataHora(this.dados.selected_edit.alta);
+            let altaObj = this.util.myDateObjFromDataHora(this.dados.selected_edit.alta);
             let altaMilisegundos = altaObj.quando;
             let revisao_ms = Number(this.dados.selected_edit.revisao) * this.util.milisegundos_de_um_mes;
             let retorno = this.util.formata_data_de_quando_em_milisegundos(altaMilisegundos + revisao_ms);
@@ -1051,11 +1301,6 @@ export class EditComponent implements OnInit {
 
 
         if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-
-            // if( (this.dados.selected.atendimento_termino && this.dados.selected.atendimento_termino.length == 5) && (!this.dados.selected_edit.obs || this.dados.selected_edit.obs.length==0) ){
-            //     this.popup_atendimento();
-            //     return;
-            // }
             let data_hora, data_hora_quando;
 
             this.avalia_atendimentos();
@@ -1089,12 +1334,18 @@ export class EditComponent implements OnInit {
             }
         }
 
+        // TESTANDO CAMPOS
         if(this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA'){
+            console.log("TESTANDO CAMPOS")
+            console.log(this.dados.selected_edit);
+
             if(!this.dados.selected_edit.data){
+                console.log("if(!this.dados.selected_edit.data){");
+
                 this.popup_alerta('ATENÇÃO','Preencha a DATA');
                 return;
             }
-            if(!this.dados.selected_edit.produto && !this.dados.selected_edit.nome){
+            if(['R-001','R-002'].includes(this.dados.selected_edit.centro_de_custos_codigo) && (!this.dados.selected_edit.produto && !this.dados.selected_edit.nome)){
                 this.popup_alerta('ATENÇÃO','Indique o PRODUTO');
                 return;
             }
@@ -1113,6 +1364,7 @@ export class EditComponent implements OnInit {
             else if(!this.dados.selected_edit.contraparte){
                 this.dados.selected_edit.contraparte_key = '';
                 this.dados.selected_edit.contraparte_cpf = '';
+                this.dados.selected_edit.contraparte_cnpj = '';
 
                 this.popup_alerta('ATENÇÃO','Indique o PAGADOR');
                 return;
@@ -1140,7 +1392,7 @@ export class EditComponent implements OnInit {
                 this.popup_alerta('ATENÇÃO','Preencha a DATA');
                 return;
             }
-            if(!this.dados.selected_edit.valor){
+            else if(!this.dados.selected_edit.valor){
                 this.popup_alerta('ATENÇÃO','Preencha o VALOR');
                 return;
             }
@@ -1157,10 +1409,7 @@ export class EditComponent implements OnInit {
             }
         }
 
-        //
-        // console.log("this.dados.selected_edit.centros_de_custos = " + this.dados.selected_edit.centros_de_custos);
-        // console.log("this.dados.filtered_lancamentos_receita.length = " + this.dados.filtered_lancamentos_receita.length)
-        //
+
         // if(this.dados.selected_edit.centros_de_custos_codigo=='R-001' && this.dados.filtered_lancamentos_receita.length<1){
         //     this.vendaDiretaDialog = true;
         //     return;
@@ -1171,7 +1420,7 @@ export class EditComponent implements OnInit {
 
         if (this.dados.salvou_registro) {
             console.log("salvou registro")
-            this.dados.selected = this.util.deepClone(this.dados.selected_edit);
+            // this.dados.selected = this.util.deepClone(this.dados.selected_edit);
         }
 
         if(this.dados.incluindo){
@@ -1182,26 +1431,464 @@ export class EditComponent implements OnInit {
             // continua na pagina
         }
         else {
-            console.log("voltar após salvar registro em edit.component")
+            console.log("voltar após salvar registro em edit.component");
             this.voltar();
         }
     }
 
 
-    public popup_alerta(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
-        if(!this.dados.selected_edit.key || this.dados.selected_edit.key==''){
-            this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
-            this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
-            this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
-            this.popupAlerta = true;
+    // CAPTURA E UPLOAD DE IMAGENS
+    public ativar_arquivo(qual : number) : void {
+        if(qual==1) {
+            if(this.arquivo1_ativado){
+                this.arquivo1_ativado = false;
+
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+
+                this.showWebcam = false;
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+            else {
+                this.arquivo1_ativado = true;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+
+                this.showWebcam = false;
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+        }
+        else if(qual==2) {
+            if(this.arquivo2_ativado){
+                this.arquivo2_ativado = false;
+
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+
+                this.showWebcam = false;
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
+            else {
+                this.arquivo2_ativado = true;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+
+                this.showWebcam = false;
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
         }
     }
 
-    public popup_alerta_fechar(){
-        this.alerta_titulo = '';
-        this.alerta_linha1 = '';
-        this.alerta_linha2 = '';
-        this.popupAlerta = false;
+    public ativar_link(qual : number) : void {
+        if(qual==1){
+            if(this.link1_ativado){
+                this.link1_ativado = false;
+
+                this.arquivo1_ativado = false;
+                this.camera1_ativada = false;
+
+                this.showWebcam = false;
+                // document.getElementById("img_link").focus();
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+            else {
+                this.link1_ativado = true;
+
+                this.arquivo1_ativado = false;
+                this.camera1_ativada = false;
+
+                this.showWebcam = false;
+                // document.getElementById("img_link").focus();
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+        }
+        else if(qual==2){
+            if(this.link2_ativado){
+                this.link2_ativado = false;
+
+                this.arquivo2_ativado = false;
+                this.camera2_ativada = false;
+
+                this.showWebcam = false;
+                // document.getElementById("img_link").focus();
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
+            else {
+                this.link2_ativado = true;
+                this.arquivo2_ativado = false;
+                this.camera2_ativada = false;
+
+                this.showWebcam = false;
+                // document.getElementById("img_link").focus();
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
+        }
+    }
+
+    public ativar_camera(qual : number) : void {
+        if(qual==1){
+            if(this.camera1_ativada){
+                this.camera1_ativada = false;
+                this.showWebcam = false;
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+
+                this.showWebcam = true;
+                this.downloadURL = undefined;
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+            else {
+                this.camera1_ativada = true;
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+
+                this.showWebcam = true;
+                this.downloadURL = undefined;
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+                this.camera2_ativada = false;
+            }
+        }
+        else if(qual==2){
+            if(this.camera2_ativada){
+                this.camera2_ativada = false;
+                this.showWebcam = false;
+
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+
+                this.showWebcam = true;
+                this.downloadURL = undefined;
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
+            else {
+                this.camera2_ativada = true;
+                this.arquivo2_ativado = false;
+                this.link2_ativado = false;
+
+                this.showWebcam = true;
+                this.downloadURL = undefined;
+
+                this.arquivo1_ativado = false;
+                this.link1_ativado = false;
+                this.camera1_ativada = false;
+            }
+        }
+    }
+
+
+
+    // ========== FILE UPLOAD ==========================
+    //
+    // uploadFile_to_Firestore(event, qual : number) {
+    //     console.log("uploadFile_to_Firestore(" + qual + ")");
+    //
+    //     // UPLOAD TO FIRESTORE
+    //     this.mostrar_upload_firestore_progress = true;
+    //
+    //     // id = Math.random().toString(36).substring(2);  // option of using a random id for id
+    //     let id = 'img' + String(qual);
+    //     id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
+    //
+    //     this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + id;
+    //     console.log("filePath = " + this.filePath)
+    //
+    //     if(qual==1){
+    //         this.dados.selected_edit.img_url = this.filePath;
+    //     }
+    //     else if(qual==2){
+    //         this.dados.selected_edit.img_url2 = this.filePath;
+    //     }
+    //
+    //     const fileRef = this.afStorage.ref(this.filePath);
+    //     const file = event.target.files[0];
+    //     this.task = this.afStorage.upload(this.filePath, file);
+    //
+    //     // observe upload progress
+    //     this.uploadPercent = this.task.percentageChanges();
+    //
+    //     // get notified when the download URL is available
+    //     this.task.snapshotChanges().pipe(
+    //         finalize(() => {
+    //             this.downloadURL = fileRef.getDownloadURL();
+    //             console.log("downloadURL = ");
+    //             console.log( this.downloadURL );
+    //
+    //             this.mostrar_upload_firestore_progress = false;
+    //
+    //             this.download_imagem_do_firestore(qual);
+    //
+    //             if(qual==1){
+    //                 this.dados.selected_edit.tipo_da_imagem1 = "firestore";
+    //                 this.dados.selected_edit.origem_da_imagem1 = "upload de arquivo";
+    //             }
+    //             else if(qual==2){
+    //                 this.dados.selected_edit.tipo_da_imagem2 = "firestore";
+    //                 this.dados.selected_edit.origem_da_imagem2 = "upload de arquivo";
+    //             }
+    //
+    //             this.desligar_botoes_de_upload();
+    //         })
+    //      )
+    //     .subscribe();
+    //     console.log("\n=================\ndownloadURL = ");
+    //     console.log( this.downloadURL );
+    // }
+    //
+
+    saveFile_as_base64(fileInput: any, qual : number) {
+        console.log("saveFile_as_base64(fileInput,qual)");
+
+        // UPLOAD TO BASE64 dentro do campo img_url do Firebase
+        if(qual==1){
+            this.dados.selected_edit.img_url = this.filePath;
+        }
+        else if(qual==2){
+            this.dados.selected_edit.img_url2 = this.filePath;
+        }
+
+        this.imageError = null;
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            // Size Filter Bytes
+            const max_size = 12048000;
+            const allowed_types = ['image/png', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+            const max_height = 2048;
+            const max_width = 2048;
+
+            if (fileInput.target.files[0].size > max_size) {
+                this.imageError =
+                'Excedeu tamanho máximo de ' + max_size / 1000 + 'Mb';
+                return false;
+            }
+            if (!_.includes(allowed_types, fileInput.target.files[0].type)) {
+                this.imageError = 'O formato deve ser JPG, PNG ou GIF)';
+                return false;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                const image = new Image();
+                image.src = e.target.result;
+                image.onload = rs => {
+                    const img_height = rs.currentTarget['height'];
+                    const img_width = rs.currentTarget['width'];
+                    console.log("Imagem: altura = " + img_height + " largura = " + img_width);
+
+                    if (img_height > max_height && img_width > max_width) {
+                        this.imageError = 'Tamanho excedeu os limites de h:' + max_height + ' x w:' + max_width + ' px';
+                        return false;
+                    } else {
+                        if(qual==1){
+                            this.dados.selected_edit.img_url = image.src;
+                            this.dados.selected_edit.tipo_da_imagem1 = 'base64';
+                            this.dados.selected_edit.origem_da_imagem1 = 'upload de arquivo';
+                        }
+                        else if(qual==2){
+                            this.dados.selected_edit.img_url2 = image.src;
+                            this.dados.selected_edit.tipo_da_imagem2 = 'base64';
+                            this.dados.selected_edit.origem_da_imagem2 = 'upload de arquivo';
+                        }
+                    }
+                    this.desligar_botoes_de_upload();
+                };
+            };
+
+            reader.readAsDataURL(fileInput.target.files[0]);
+        }
+    }
+    // ========== FILE UPLOAD ==========================
+
+
+    // ========= CAMERA UPLOAD =========================
+    //
+    // public uploadCamera_to_Firestore(webcamImage: WebcamImage, qual : number): void {
+    //   console.log('uploadCamera_to_Firestore()');
+    //
+    //   // id = Math.random().toString(36).substring(2);  // option of using a random id for id
+    //   let id = 'img' + String(qual);
+    //   // abaixo usei getAgoraEmMilisegundos para nao sobrescrever a referencia, mas o ideal é usar a key do registro (é preciso gewrar uma para arquivos novos, pois atualmente ela é gerada apenas no momento de salvar)
+    //   id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
+    //
+    //   let img_webcam = webcamImage.imageAsDataUrl
+    //   let img_blob = this.util.dataURItoBlob(img_webcam);
+    //
+    //
+    //   this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + id ;
+    //
+    //   if (qual==1){
+    //       this.dados.selected_edit.img_url = this.filePath; // opção em upload to Firestore
+    //       this.dados.selected_edit.tipo_da_imagem1 = "firestore";
+    //   }
+    //   else if(qual==2){
+    //       this.dados.selected_edit.img_url2 = this.filePath; // opção em upload to Firestore
+    //       this.dados.selected_edit.tipo_da_imagem2 = "firestore";
+    //   }
+    //
+    //   const fileRef = this.afStorage.ref(this.filePath);
+    //
+    //   this.task = this.afStorage.upload(this.filePath, img_blob);
+    //   this.task.snapshotChanges().pipe(
+    //       finalize(() => {
+    //           this.downloadURL = fileRef.getDownloadURL();
+    //           console.log("downloadURL = ");
+    //           console.log( this.downloadURL );
+    //
+    //           // Atualiza imagem na paginas
+    //           this.download_imagem_do_firestore(qual);
+    //
+    //           this.desligar_botoes_de_upload();
+    //       })
+    //    )
+    //   .subscribe()
+    // }
+    //
+
+    public uploadCamera_as_base64(webcamImage: WebcamImage, qual : number): void {
+      console.log("uploadCamera_as_base64()");
+
+      if(qual==1){
+          this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
+          this.dados.selected_edit.tipo_da_imagem1 = "base64";
+          this.dados.selected_edit.origem_da_imagem1 = 'imagem de câmera';
+      }
+      else  if(qual==2){
+          this.dados.selected_edit.img_url2 = webcamImage.imageAsDataUrl; // opção em data file base64
+          this.dados.selected_edit.tipo_da_imagem2 = "base64";
+          this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
+      }
+
+      this.desligar_botoes_de_upload();
+    }
+
+    // ========= CAMERA UPLOAD =========================
+
+
+    // ================ IMG LINK =====================
+    public saveFile_as_link(qual : number){
+
+        if(qual == 1){
+            this.dados.selected_edit.img_url = this.img_link1;
+            if(this.img_link1.substr(0,10)=='data:image'){
+                // em vez de link a imagem era um arquio base64
+                this.dados.selected_edit.tipo_da_imagem1 = 'base64';
+                this.dados.selected_edit.origem_da_imagem1 = 'link da web';
+            }
+            else {
+                // link normal
+                this.dados.selected_edit.tipo_da_imagem1 = 'link';
+                this.dados.selected_edit.origem_da_imagem1 = 'link da web';
+            }
+        }
+        else if(qual == 2){
+            this.dados.selected_edit.img_url2 = this.img_link2;
+            if(this.img_link2.substr(0,10)=='data:image'){
+                // em vez de link a imagem era um arquio base64
+                this.dados.selected_edit.tipo_da_imagem2 = 'base64';
+                this.dados.selected_edit.origem_da_imagem2 = 'link';
+            }
+            else {
+                // link normal
+                this.dados.selected_edit.tipo_da_imagem2 = 'link';
+                this.dados.selected_edit.origem_da_imagem2 = 'link';
+            }
+        }
+
+        this.desligar_botoes_de_upload();
+    }
+    // ================ IMG LINK =====================
+
+
+    // ========= CAMERA ================================
+    public triggerSnapshot(): void {
+       this.trigger.next();
+       this.camera1_ativada = false;
+       this.camera2_ativada = false;
+       this.showWebcam = false;
+     }
+     public handleInitError(error: WebcamInitError): void {
+       this.errors.push(error);
+     }
+     public showNextWebcam(directionOrDeviceId: boolean|string): void {
+       // true => move forward through devices
+       // false => move backwards through devices
+       // string => move to device with given deviceId
+       this.nextWebcam.next(directionOrDeviceId);
+     }
+     public cameraWasSwitched(deviceId: string): void {
+       console.log('active device: ' + deviceId);
+       this.deviceId = deviceId;
+     }
+     public get triggerObservable(): Observable<void> {
+       return this.trigger.asObservable();
+     }
+     public get nextWebcamObservable(): Observable<boolean|string> {
+       return this.nextWebcam.asObservable();
+     }
+     // ========= CAMERA ================================
+
+
+    public desligar_botoes_de_upload(){
+        this.camera1_ativada = false;
+        this.camera2_ativada = false;
+        this.link1_ativado = false;
+        this.link2_ativado = false;
+        this.arquivo1_ativado = false;
+        this.arquivo2_ativado = false;
+    }
+
+
+    public popup_alerta(cabecalho:string='', mensagem:string='') {
+        console.log("popup_alerta()")
+
+        this.confirmationService.confirm({
+            message: mensagem,
+            header: cabecalho,
+            acceptLabel: 'OK',
+            rejectLabel: 'Não',
+            rejectVisible: false,
+            accept: () => {
+                // this.msgs = [{severity:'info', summary:'Confirmado', detail:''}];
+                console.log("popup_alerta() => accept")
+                return true;
+            },
+            reject: () => {
+                // this.msgs = [{severity:'info', summary:'Cancelado', detail:''}];
+                console.log("popup_alerta() => reject")
+                return false;
+            }
+        });
     }
 
     public popup_sair_sem_salvar() {
@@ -1254,6 +1941,26 @@ export class EditComponent implements OnInit {
         this.voltar('lista');
     }
 
-
+    public mudou_nascimento(){
+        this.dados.selected_edit.nascimento = this.util.formata_data(this.dados.selected_edit.nascimento);
+        this.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
+    }
+    //
+    // public download_imagem_do_firestore(qual){
+    //     if(qual==1){
+    //         if(this.dados.selected_edit.img_url && this.dados.selected_edit.tipo_da_imagem1 == 'firestore'){
+    //             this.filePath = this.dados.selected_edit.img_url;
+    //             this.tipo_da_imagem1 = this.dados.selected_edit.tipo_da_imagem1;
+    //             this.downloadURLfirestore1 = this.afStorage.ref(this.filePath).getDownloadURL();
+    //         }
+    //     }
+    //     else if(qual==2){
+    //         if(this.dados.selected_edit.img_url2 && this.dados.selected_edit.tipo_da_imagem2 == 'firestore'){
+    //             this.filePath = this.dados.selected_edit.img_url2;
+    //             this.tipo_da_imagem2 = this.dados.selected_edit.tipo_da_imagem2;
+    //             this.downloadURLfirestore2 = this.afStorage.ref(this.filePath).getDownloadURL();
+    //         }
+    //     }
+    // }
 
 }
