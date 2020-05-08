@@ -9,12 +9,15 @@
 
 .pi {
     font-family: 'primeicons';
+    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
     text-transform: none;
     line-height: 1;
     display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .pi-fw {
@@ -23,11 +26,11 @@
 }
 
 .pi-spin {
-    /* -webkit-animation: fa-spin 2s infinite linear; */
+    -webkit-animation: fa-spin 2s infinite linear;
     animation: fa-spin 2s infinite linear;
 }
 
-/* @-webkit-keyframes fa-spin {
+@-webkit-keyframes fa-spin {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
@@ -47,7 +50,7 @@
         -webkit-transform: rotate(359deg);
         transform: rotate(359deg);
     }
-} */
+}
 
 .pi-step-backward-alt:before {
     content: "\e9ac";

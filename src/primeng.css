@@ -6,7 +6,7 @@
 }
 .ui-helper-hidden-accessible {
     border: 0;
-    clip: rect(0, 0, 0, 0);
+    clip: rect(0 0 0 0);
     height: 1px;
     margin: -1px;
     overflow: hidden;
@@ -37,7 +37,7 @@
     clear: both;
 }
 .ui-helper-clearfix {
-    /* zoom: 1; */
+    zoom: 1;
 }
 .ui-helper-zfix {
     width: 100%;
@@ -46,7 +46,7 @@
     left: 0;
     position: absolute;
     opacity: 0;
-    /* filter: Alpha(Opacity=0); */
+    filter: Alpha(Opacity=0);
 }
 .ui-state-disabled {
     cursor: default !important;
@@ -136,15 +136,15 @@
     top: -5px;
 }
 .ui-shadow {
-    /* -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3); */
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 }
 .ui-unselectable-text {
-    /* -webkit-user-select: none;
+    -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
-    -o-user-select: none; */
+    -o-user-select: none;
     user-select: none;
 }
 .ui-scrollbar-measure {
@@ -161,7 +161,10 @@
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
+input[type="file"]::-webkit-file-upload-button,
 button {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
 }
 .ui-accordion {
@@ -172,7 +175,7 @@ button {
     cursor: pointer;
     position: relative;
     margin-top: 1px;
-    /* zoom: 1; */
+    zoom: 1;
 }
 
 .ui-accordion .ui-accordion-header a {
@@ -189,7 +192,7 @@ button {
     padding: 1em;
     border-top: 0;
     overflow: visible;
-    /* zoom: 1; */
+    zoom: 1;
 }
 
 .ui-accordion .ui-accordion-header.ui-state-disabled,
@@ -232,7 +235,7 @@ button {
 }
 .ui-helper-hidden-accessible {
     border: 0;
-    clip: rect(0, 0, 0, 0);
+    clip: rect(0 0 0 0);
     height: 1px;
     margin: -1px;
     overflow: hidden;
@@ -263,7 +266,7 @@ button {
     clear: both;
 }
 .ui-helper-clearfix {
-    /* zoom: 1; */
+    zoom: 1;
 }
 .ui-helper-zfix {
     width: 100%;
@@ -272,7 +275,7 @@ button {
     left: 0;
     position: absolute;
     opacity: 0;
-    /* filter: Alpha(Opacity=0); */
+    filter: Alpha(Opacity=0);
 }
 .ui-state-disabled {
     cursor: default !important;
@@ -362,15 +365,15 @@ button {
     top: -5px;
 }
 .ui-shadow {
-    /* -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3); */
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 }
 .ui-unselectable-text {
-    /* -webkit-user-select: none;
+    -webkit-user-select: none;
     -khtml-user-select: none;
-    -moz-user-select: none; */
-    /* -o-user-select: none; */
+    -moz-user-select: none;
+    -o-user-select: none;
     user-select: none;
 }
 .ui-scrollbar-measure {
@@ -384,7 +387,23 @@ button {
     overflow: hidden;
 }
 
-
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #898989;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: #898989;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: #898989;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #898989;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   color: #898989;
+}
 .ui-placeholder {
    color: #898989;
 }
@@ -392,9 +411,10 @@ button {
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
+input[type="file"]::-webkit-file-upload-button,
 button {
-    /* -moz-border-radius: 0;
-    -webkit-border-radius: 0; */
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
 }
 /** Breadcrumb **/
@@ -438,7 +458,7 @@ button {
     text-decoration: none !important;
     cursor: pointer;
     text-align: center;
-    /* zoom: 1; */
+    zoom: 1;
     overflow: visible; /* the overflow property removes extra width in IE */
 }
 
@@ -503,6 +523,10 @@ p-button {
     margin-right: 0;
 }
 
+/* workarounds */
+button.ui-button::-moz-focus-inner {
+    border: 0; padding: 0; /* reset extra padding in Firefox */
+}
 
 /** Fluid **/
 .ui-fluid .ui-button {
@@ -539,10 +563,10 @@ p-button {
 }
 .ui-autocomplete {
     width: auto;
-    /* zoom: 1; */
+    zoom: 1;
     cursor: pointer;
-    /* -moz-box-shadow: none;
-    -webkit-box-shadow: none; */
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
     box-shadow: none;
     position: relative;
     display: inline-block;
@@ -657,8 +681,8 @@ p-button {
     margin: 0;
     padding: 0;
     box-shadow: none;
-    /* -moz-border-radius: 0;
-    -webkit-border-radius: 0; */
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
 }
 
@@ -668,20 +692,20 @@ p-button {
 
 .ui-autocomplete-dd input.ui-corner-all ,
 .ui-autocomplete-dd .ui-autocomplete-multiple-container.ui-corner-all {
-     /* -moz-border-radius-topright: 0px;
-     -webkit-border-top-right-radius: 0px; */
+     -moz-border-radius-topright: 0px;
+     -webkit-border-top-right-radius: 0px;
      border-top-right-radius: 0px;
-     /* -moz-border-radius-bottomright: 0px;
-     -webkit-border-bottom-right-radius: 0px; */
+     -moz-border-radius-bottomright: 0px;
+     -webkit-border-bottom-right-radius: 0px;
      border-bottom-right-radius: 0px;
  }
 
 .ui-autocomplete-dd .ui-autocomplete-dropdown.ui-corner-all {
-     /* -moz-border-radius-topleft: 0px;
-     -webkit-border-top-left-radius: 0px; */
+     -moz-border-radius-topleft: 0px;
+     -webkit-border-top-left-radius: 0px;
      border-top-left-radius: 0px;
-     /* -moz-border-radius-bottomleft: 0px;
-     -webkit-border-bottom-left-radius: 0px; */
+     -moz-border-radius-bottomleft: 0px;
+     -webkit-border-bottom-left-radius: 0px;
      border-bottom-left-radius: 0px;
 }
 
@@ -855,13 +879,13 @@ p-button {
 }
 
 .ui-calendar.ui-calendar-w-btn input {
-    /* -moz-border-radius-topright: 0px;
+    -moz-border-radius-topright: 0px;
     -webkit-border-top-right-radius: 0px;
-    -khtml-border-top-right-radius: 0px; */
+    -khtml-border-top-right-radius: 0px;
     border-top-right-radius: 0px;
-    /* -moz-border-radius-bottomright: 0px;
+    -moz-border-radius-bottomright: 0px;
     -webkit-border-bottom-right-radius: 0px;
-    -khtml-border-bottom-right-radius: 0px; */
+    -khtml-border-bottom-right-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 
@@ -915,7 +939,7 @@ p-button {
 .ui-timepicker > div a {
     display: block;
     opacity: 0.7;
-    /* filter:Alpha(Opacity=70); */
+    filter:Alpha(Opacity=70);
     cursor: pointer;
 }
 
@@ -926,11 +950,11 @@ p-button {
 .ui-timepicker > div a:hover {
     display: block;
     opacity: 1;
-    /* filter:Alpha(Opacity=100); */
+    filter:Alpha(Opacity=100);
 }
-/* input[type=text]::-ms-clear {
+input[type=text]::-ms-clear {
     display: none;
-} */
+}
 
 /* Touch UI */
 .ui-datepicker-touch-ui,
@@ -1096,16 +1120,16 @@ p-button {
     vertical-align: middle;
     margin-right: .25em;
     user-select: none;
-    /* -moz-user-select: none;
-    -webkit-user-select: none; */
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .ui-chkbox .ui-chkbox-box {
     width: 1.125em;
     height: 1.125em;
     line-height: 1.125em;
-    /* -moz-border-radius: 2px;
-    -webkit-border-radius: 2px; */
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
     border-radius: 2px;
     text-align: center;
 }
@@ -1182,8 +1206,8 @@ p-button {
     margin: 0;
     padding: 0;
     box-shadow: none;
-    /* -moz-border-radius: 0;
-    -webkit-border-radius: 0; */
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
 }
 
@@ -1381,7 +1405,7 @@ p-button {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
     opacity: 0.1;
     z-index: 1;
 }
@@ -1414,7 +1438,7 @@ p-button {
 .ui-dialog {
     position: fixed;
     padding: 0;
-    /* pointer-events: auto; */
+    pointer-events: auto;
     display: flex;
     flex-direction: column;
     max-height: 90%;
@@ -1437,11 +1461,11 @@ p-button {
     border: 0;
     padding: .5em .75em;
     background: none;
-    /* zoom: 1; */
+    zoom: 1;
 }
 
 .ui-dialog-maximized {
-    /* -webkit-transition: none; */
+    -webkit-transition: none;
     transition: none;
     transform: none;
     width: 100vw !important;
@@ -1515,9 +1539,9 @@ p-button {
     height: 100%;
 }
 
-/* .ui-dialog-wrapper.ui-dialog-mask {
+.ui-dialog-wrapper.ui-dialog-mask {
     pointer-events: auto;
-} */
+}
 
 /* Position */
 .ui-dialog-top .ui-dialog,
@@ -1613,7 +1637,7 @@ p-button {
 }
 
 .ui-dropdown .ui-dropdown-hidden-select select {
-    /* -webkit-transform: none; */
+    -webkit-transform: none;
     transform: none;
     height: 1px;
     position: absolute;
@@ -1798,8 +1822,8 @@ p-button {
 }
 
 .ui-fileupload-content .ui-progressbar-value {
-    /* -moz-border-radius: 0;
-    -webkit-border-radius: 0; */
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
     border-radius: 0;
     border: 0 none;
 }
@@ -1819,7 +1843,7 @@ p-button {
     min-height: 100%;
     font-size: 100px;
     text-align: right;
-    /* filter: alpha(opacity=0); */
+    filter: alpha(opacity=0);
     direction: ltr;
     cursor: pointer;
     z-index: 1;
@@ -1989,10 +2013,10 @@ p-button {
 }
 
 .ui-grid .ui-grid-row {
-    /* display: -webkit-box; */
-    /* display: -moz-box;
+    display: -webkit-box;
+    display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex; */
+    display: -webkit-flex;
     display: flex;
     clear:both;
 }
@@ -2143,10 +2167,10 @@ p-button {
 
 /* New Grid CSS */
 .ui-g {
-    /* display: -webkit-box;
+    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex; */
+    display: -webkit-flex;
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
@@ -2760,9 +2784,9 @@ p-button {
     display: inline;
 }
 .ui-fluid .ui-inputgroup p-inputmask {
-    /* -webkit-box-flex: 1; */
-    /* -webkit-flex: 1 1 auto;
-    -ms-flex: 1 1 auto; */
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
     flex: 1 1 auto;
 }
 
@@ -2792,7 +2816,7 @@ p-button {
     left: 0;
     right: 0;
     bottom: 0;
-    /* -webkit-transition: .3s; */
+    -webkit-transition: .3s;
     transition: .3s;
     border-radius: 30px;
 }
@@ -2805,13 +2829,13 @@ p-button {
     left: .25em;
     bottom: .25em;
     border-radius: 50%;
-    /* -webkit-transition: .3s; */
+    -webkit-transition: .3s;
     transition: .3s;
 }
 
 .ui-inputswitch-checked .ui-inputswitch-slider:before {
-    /* -webkit-transform: translateX(1.250em);
-    -ms-transform: translateX(1.250em); */
+    -webkit-transform: translateX(1.250em);
+    -ms-transform: translateX(1.250em);
     transform: translateX(1.250em);
 }
 
@@ -2834,13 +2858,13 @@ p-button {
 .ui-fluid .ui-inputtext {
     width: 100%;
     box-sizing: border-box;
-    /* -webkit-box-sizing:border-box; */
-    /* -moz-box-sizing: border-box; */
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
 }
 
 .ui-inputgroup {
-    /* display: -webkit-box;
-    display: -webkit-flex; */
+    display: -webkit-box;
+    display: -webkit-flex;
     display: flex;
 }
 
@@ -2883,9 +2907,9 @@ p-button {
 }
 
 .ui-fluid .ui-inputgroup .ui-inputtext {
-    /* -webkit-box-flex: 1;
+    -webkit-box-flex: 1;
     -webkit-flex: 1 1 auto;
-    -ms-flex: 1 1 auto; */
+    -ms-flex: 1 1 auto;
     flex: 1 1 auto;
 }
 
@@ -2909,8 +2933,8 @@ p-button {
   top: 50%;
   margin-top: -.5em;
   transition: 0.3s ease all;
-  /* -moz-transition: 0.3s ease all; */
-  /* -webkit-transition: 0.3s ease all; */
+  -moz-transition: 0.3s ease all;
+  -webkit-transition: 0.3s ease all;
   color: #898989;
   line-height: 1;
 }
@@ -2935,10 +2959,10 @@ p-button {
 }
 
 /* breaks firefox so defined separately */
-/* .ui-float-label > input:-webkit-autofill ~ label {
+.ui-float-label > input:-webkit-autofill ~ label {
     top:-.75em;
     font-size:12px;
-} */
+}
 
 .ui-float-label > input:focus ~ label,
 .ui-float-label > input.ui-state-filled ~ label,
@@ -2965,10 +2989,10 @@ p-button {
 }
 
 /* breaks firefox so defined separately */
-/* .ui-float-label textarea:-webkit-autofill ~ label {
+.ui-float-label textarea:-webkit-autofill ~ label {
     top:-.75em;
     font-size:12px;
-} */
+}
 
 .ui-float-label textarea:focus ~ label,
 .ui-float-label textarea.ui-state-filled ~ label {
@@ -3198,7 +3222,7 @@ p-button {
 }
 
 .ui-megamenu .ui-g {
-    /* -ms-flex-wrap: nowrap; */
+    -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
 }
 .ui-menu {
@@ -3555,10 +3579,10 @@ p-button {
 
 
 .ui-orderlist {
-    /* display: -webkit-box;
-    display: -ms-flexbox; */
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    /* -ms-flex-wrap: wrap; */
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
 }
 
@@ -3572,8 +3596,8 @@ p-button {
 
 .ui-orderlist-controls,
 .ui-orderlist-list-container {
-    /* -webkit-box-flex: 0; */
-    /* -ms-flex: 0 0 auto; */
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
     flex: 0 0 auto;
 }
 .ui-orderlist-controls {
@@ -3735,8 +3759,8 @@ p-button {
     height: 2em;
     line-height: 2em;
     text-align: center;
-    /* -moz-border-radius: 100%;
-    -webkit-border-radius: 100%; */
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
     border-radius: 100%;
     cursor: pointer;
 }
@@ -3862,7 +3886,7 @@ p-button {
     min-width: 1.5em;
     height: 1.5em;
     line-height: 1.5em;
-	/* zoom: 1; */
+	zoom: 1;
 	margin-left: .063em;
 	margin-right: .063em;
 	text-decoration: none;
@@ -3907,8 +3931,8 @@ p-button {
     background-image: none;
     border: 0 none;
     box-shadow: none;
-    /* -moz-box-shadow: none;
-    -webkit-box-shadow: none; */
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 .ui-paginator a.ui-state-disabled {
@@ -3941,27 +3965,27 @@ p-button {
 
 /* Overlay Animations */
 .ui-password-panel {
-    /* -webkit-transform: translateY(5%);
-    -ms-transform: translateY(5%); */
+    -webkit-transform: translateY(5%);
+    -ms-transform: translateY(5%);
     transform: translateY(5%);
     opacity: 0;
-    /* -webkit-transition: transform .3s, opacity .3s; */
+    -webkit-transition: transform .3s, opacity .3s;
     transition: transform .3s, opacity .3s;
 }
 
 .ui-password-panel-visible {
-    /* -webkit-transform: translateY(0);
-    -ms-transform: translateY(0); */
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
     transform: translateY(0);
     opacity: 1;
 }
 
 .ui-password-panel-hidden {
     opacity: 0;
-    /* -webkit-transform: translateY(5%);
-    -ms-transform: translateY(5%); */
+    -webkit-transform: translateY(5%);
+    -ms-transform: translateY(5%);
     transform: translateY(5%);
-    /* -webkit-transition: transform .3s, opacity .15s; */
+    -webkit-transition: transform .3s, opacity .15s;
     transition: transform .3s, opacity .15s;
 }
 .ui-panelmenu {
@@ -3978,7 +4002,7 @@ p-button {
 
 .ui-panelmenu .ui-panelmenu-header {
     margin: -1px 0 0 0;
-    /* zoom: 1; */
+    zoom: 1;
 }
 
 .ui-panelmenu .ui-panelmenu-header-link {
@@ -4319,9 +4343,9 @@ p-button {
 }
 
 .ui-progressbar-determinate .ui-progressbar-value-animate {
-    /* -webkit-transition: width 1s ease-in-out;
+    -webkit-transition: width 1s ease-in-out;
     -moz-transition: width 1s ease-in-out;
-    -o-transition: width 1s ease-in-out; */
+    -o-transition: width 1s ease-in-out;
     transition: width 1s ease-in-out;
 }
 
@@ -4350,8 +4374,8 @@ p-button {
       left: 0;
       bottom: 0;
       will-change: left, right;
-      /* -webkit-animation: ui-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; */
-      animation: ui-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+      -webkit-animation: ui-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+              animation: ui-progressbar-indeterminate-anim 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
 
 .ui-progressbar-indeterminate .ui-progressbar-value::after {
@@ -4362,12 +4386,12 @@ p-button {
     left: 0;
     bottom: 0;
     will-change: left, right;
-    /* -webkit-animation: ui-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite; */
-        animation: ui-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
-    /* -webkit-animation-delay: 1.15s; */
-        animation-delay: 1.15s;
+    -webkit-animation: ui-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+            animation: ui-progressbar-indeterminate-anim-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    -webkit-animation-delay: 1.15s;
+            animation-delay: 1.15s;
 }
-/*
+
 @-webkit-keyframes ui-progressbar-indeterminate-anim {
   0% {
     left: -35%;
@@ -4412,23 +4436,23 @@ p-button {
   100% {
     left: 107%;
     right: -8%; }
-} */
+}
 .ui-radiobutton {
     display:inline-block;
     cursor: pointer;
     vertical-align: middle;
     margin-right: .25em;
     user-select: none;
-    /* -moz-user-select: none;
-    -webkit-user-select: none; */
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 .ui-radiobutton-box {
     width: 1.125em;
     height: 1.125em;
     line-height: 1.125em;
-    /* -moz-border-radius: 100%;
-    -webkit-border-radius: 100%; */
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
     border-radius: 100%;
     text-align: center;
     position: relative;
@@ -4499,10 +4523,10 @@ p-button {
 }
 
 .ui-scrollpanel-grabbed {
-    /* -o-user-select: none;
+    -o-user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;
-    -webkit-user-select: none; */
+    -webkit-user-select: none;
     user-select: none;
 }
 .ui-selectbutton {
@@ -4519,7 +4543,7 @@ p-button {
 .ui-sidebar {
     position: fixed;
     padding: .5em 1em;
-    /* -webkit-transition: transform .3s; */
+    -webkit-transition: transform .3s;
     transition: transform .3s;
 }
 
@@ -4528,8 +4552,8 @@ p-button {
     left: 0;
     width: 20em;
     height: 100%;
-    /* -webkit-transform: translateX(-100%); */
-    /* -ms-transform: translateX(-100%); */
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
     transform: translateX(-100%);
 }
 
@@ -4538,8 +4562,8 @@ p-button {
     right: 0;
     width: 20em;
     height: 100%;
-    /* -webkit-transform: translateX(100%);
-    -ms-transform: translateX(100%); */
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
     transform: translateX(100%);
 }
 
@@ -4548,8 +4572,8 @@ p-button {
     left: 0;
     width: 100%;
     height: 10em;
-    /* -webkit-transform: translateY(-100%);
-    -ms-transform: translateY(-100%); */
+    -webkit-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
     transform: translateY(-100%);
 }
 
@@ -4558,8 +4582,8 @@ p-button {
     left: 0;
     width: 100%;
     height: 10em;
-    /* -webkit-transform: translateY(100%);
-    -ms-transform: translateY(100%); */
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
     transform: translateY(100%);
 }
 
@@ -4567,14 +4591,14 @@ p-button {
     width: 100%;
     height: 100%;
     left: 0;
-    /* -webkit-transition: transform 0s; */
+    -webkit-transition: transform 0s;
     transition: transform 0s;
 }
 
 .ui-sidebar-left.ui-sidebar-active,
 .ui-sidebar-right.ui-sidebar-active {
-    /* -webkit-transform: translateX(0);
-    -ms-transform: translateX(0); */
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
     transform: translateX(0)
 }
 
@@ -4595,8 +4619,8 @@ p-button {
 
 .ui-sidebar-top.ui-sidebar-active,
 .ui-sidebar-bottom.ui-sidebar-active {
-    /* -webkit-transform: translateY(0);
-    -ms-transform: translateY(0); */
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
     transform: translateY(0)
 }
 
@@ -4647,7 +4671,7 @@ p-button {
 	width: 1.2em;
 	height: 1.2em;
 	cursor: default;
-	/* -ms-touch-action: none; */
+	-ms-touch-action: none;
 	touch-action: none;
     z-index: 1;
 }
@@ -4871,7 +4895,7 @@ p-button {
 .ui-splitbutton {
     position: relative;
     display: inline-block;
-    /* zoom: 1; */
+    zoom: 1;
 }
 
 .ui-splitbutton .ui-button.ui-splitbutton-menubutton {
@@ -5118,8 +5142,8 @@ p-button {
         display: block;
         border: 0 none;
         width: 100% !important;
-		/* -webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box; */
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 		float: left;
 		clear: left;
@@ -5139,7 +5163,7 @@ p-button {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
     opacity: 0.1;
     z-index: 1;
 }
@@ -5357,12 +5381,12 @@ p-button {
 
 .ui-terminal-command {
     margin-left: .125em;
-    /* -moz-margin-start: .125em; */
+    -moz-margin-start: .125em;
 }
 
-/* .ui-terminal-input::-ms-clear {
+.ui-terminal-input::-ms-clear {
     display: none;
-} */
+}
 .ui-toast {
 	position: fixed;
     width: 20em;
@@ -5776,7 +5800,7 @@ p-button {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
     opacity: 0.1;
     z-index: 1;
 }
@@ -5966,8 +5990,8 @@ p-button {
         display: block;
         border: 0 none;
         width: 100% !important;
-		/* -webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box; */
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
 		box-sizing: border-box;
 		float: left;
 		clear: left;
@@ -5987,7 +6011,7 @@ p-button {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)"; */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
     opacity: 0.1;
     z-index: 1;
 }

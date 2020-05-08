@@ -11,7 +11,7 @@
             <div class="float-clear"></div>
         </div>
 
-        <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div>
             <div class="float_left_33 menu_home"><img src="https://gestormix.com/img/lista.png" class="img_nav_home" (click)="go('ATENDIMENTOS')"><br />ATENDIMENTOS</div>
@@ -20,12 +20,12 @@
             <div class="float-clear"></div>
         </div>
 
-        <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div>
             <div class="float_left_33 menu_home"> <img src="https://gestormix.com/img/perfil.png" class="img_nav_home" (click)="go('PERFIL')"><br />MEU PERFIL</div>
             <div class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICOS')"><br />HISTÓRICO</div>
-            <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURAÇÃO</div>
+            <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURACAO</div>
             <div class="float-clear"></div>
         </div>
 
@@ -47,7 +47,7 @@
                 <div class="float-clear"></div>
             </div>
 
-            <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
             <div>
 
                 <div class="float_left_33 menu_home">
@@ -63,7 +63,7 @@
                 <div class="float-clear"></div>
             </div>
 
-            <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
 
             <div>
 
@@ -72,7 +72,7 @@
 
                 <div *ngIf="dados.total_de_historicos>-1" class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICOS')"><br />HISTÓRICO</div>
 
-                <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURAÇÃO</div>
+                <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURACAO</div>
 
 
                 <div class="float-clear"></div>
@@ -88,12 +88,7 @@
     <div *ngIf="MENU_HOME_EXTRA" class="container_home">
 
 
-        <div *ngIf="config.is_admin" class="espacador_vertical_duplo_printable">&nbsp;</div>
-
-        <div  *ngIf="config.is_admin" class="float_left_33 menu_home">
-            <img src="https://gestormix.com/img/equipe.png" class="img_nav_home" (click)="go('SOCIOS')"><br />SÓCIOS
-        </div>
-
+        <div *ngIf="config.is_admin" class="espacador_vertical_duplo">&nbsp;</div>
         <div  *ngIf="config.is_admin" class="float_center_33 menu_home">
             <img src="https://gestormix.com/img/equipe.png" class="img_nav_home" (click)="go('USUARIOS')"><br />USUÁRIOS
         </div>
@@ -103,7 +98,7 @@
     </div>
 
     <div class="container_home_logo">
-        <img src="{{config.footer_img}}" class="img_banner" alt="{{config.footer_img_alt}}" (click)="alternar_menu_extra_admin()">
+        <div align="center"><img src="{{config.footer_img}}" class="img_banner" alt="{{config.footer_img_alt}}" (click)="alternar_menu_extra_admin()"></div>
     </div>
 
 </div>
