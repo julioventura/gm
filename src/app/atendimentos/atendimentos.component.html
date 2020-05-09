@@ -1,0 +1,216 @@
+<div class="container_principal">
+
+    <!-- CABEÇALHO  -->
+    <div class="header-toolbar">
+        <div class="fc-left">
+            <img src="https://gestormix.com/img/sair.png" (click)="voltar()" class="img_nav">
+        </div>
+
+        <div class="fc-right title">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+
+        <div class="fc-center title">
+            <div class="espacador_vertical">&nbsp;</div>
+            <span *ngIf="config[dados.PARAMETRO].titulo_lista">{{ config[dados.PARAMETRO].titulo_unidade }} </span>
+        </div>
+        <div class="fc-clear"></div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+    </div>
+
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+    <!-- BARRA DE TITULO - titulo_barra -->
+    <div class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_top back_blue">
+        <div>
+            <span class="titulo_barra">{{dados.selected_edit.key ? 'Editar' : 'Incluir'}}</span>
+        </div>
+    </div>
+
+
+    <div *ngIf="dados.PARAMETRO == 'ATENDIMENTOS'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+            <div class="{{dados.selected_edit.data==dados.HOJE ? 'menu_atendimento_hoje' : 'menu_atendimento_apagado'}}">HOJE</div>
+            <div class="{{dados.selected_edit.atendimento=='inativo' ? 'menu_atendimento_inativo' : 'menu_atendimento_apagado'}}">INATIVO</div>
+            <div class="{{dados.selected_edit.atendimento=='aberto' ? 'menu_atendimento_aberto' : 'menu_atendimento_apagado'}}">ABERTO</div>
+            <div class="{{dados.selected_edit.atendimento=='em_curso' ? 'menu_atendimento_em_curso' : 'menu_atendimento_apagado'}}">EM CURSO</div>
+            <div class="{{dados.selected_edit.atendimento=='finalizado' ? 'menu_atendimento_finalizado' : 'menu_atendimento_apagado'}}">FINALIZADO</div>
+        </div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="config[dados.PARAMETRO].data" class="ui-grid-row">
+            <div class="form_label_ext2">Data</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.data" (change)="hoje('data','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="hoje('data')">HOJE</span>
+            </div>
+        </div>
+
+        <div class="ui-grid-row">
+            <div class="form_label_ext2">Hora marcada</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.hora" (change)="agora('hora','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="agora('hora')">AGORA</span>
+            </div>
+        </div>
+
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <!-- CLIENTE (CONTRAPARTE) -->
+        <div *ngIf="config[dados.PARAMETRO].cliente" class="ui-grid-row">
+            <div class="form_label_ext2">Cliente</div>
+            <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cliente" (keyup)="mostrar_clientes()" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="listar_clientes">
+            <div class="ui-grid-row">
+                <div class="form_label_ext2"> &nbsp; </div>
+                <div class="fw83">
+                    <div *ngIf="dados.selected_edit.cliente && dados.filtered_clientes.length > 0">
+                        <p-dataView [value]="dados.filtered_clientes" [rows]="5" [paginator]="dados.filtered_clientes.length>5">
+                            <ng-template let-registro pTemplate="listItem">
+                                <div (click)="escolherCliente(registro)">
+                                    {{registro.nome}}
+                                </div>
+                            </ng-template>
+                        </p-dataView>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <!-- Objetivo -->
+        <div *ngIf="config[dados.PARAMETRO].objetivo" class="ui-grid-row">
+            <div class="form_label_ext2">Objetivo</div>
+            <div class="fw83">
+                <textarea pInputTextarea rows="3" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.objetivo"></textarea>
+            </div>
+        </div>
+
+        <!-- URGENCIA -->
+        <div *ngIf="config[dados.PARAMETRO].urgencia" class="ui-grid-row">
+            <div class="form_label_ext2">Urgência</div>
+            <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.urgencia" autocomplete="off" /></div>
+        </div>
+
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <!-- // RESPONSAVEL QUE REALIZOU O PROCEDIMENTO -->
+        <div *ngIf="config[dados.PARAMETRO].responsavel" class="ui-grid-row">
+            <div class="form_label_ext2">Responsável</div>
+            <div class="fw83">
+                <input pInputText type="text" [(ngModel)]="dados.selected_edit.responsavel_nome" (keyup)="mostrar_lista_de_equipe()" />
+            </div>
+        </div>
+
+        <div *ngIf="listar_equipe">
+            <div *ngIf="dados.filtered_equipe.length >= 0" class="ui-grid-row">
+                <div class="form_label_ext2"> &nbsp; </div>
+                <div class="fw83">
+                    <p-dataView [value]="dados.filtered_equipe" [rows]="5" [paginator]="dados.filtered_equipe.length>5">
+                        <ng-template let-registro pTemplate="listItem">
+                            <div (click)="escolherResponsavel(registro)">
+                                {{registro.nome}}
+                            </div>
+                        </ng-template>
+                    </p-dataView>
+                </div>
+            </div>
+        </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+
+        <div class="ui-grid-row">
+            <div class="form_label_ext2">Data início</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.data_inicio" (change)="hoje('data_inicio','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="hoje('data_inicio')">HOJE</span>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="form_label_ext2">Hora início</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.hora_inicio" (change)="agora('hora_inicio','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="agora('hora_inicio')">AGORA</span>
+            </div>
+        </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div class="ui-grid-row">
+            <div class="form_label_ext2">Data término</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.data_termino" (change)="hoje('data_termino','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="hoje('data_termino')">HOJE</span>
+            </div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="form_label_ext2">Hora término</div>
+            <div class="fw43">
+                <input pInputText [(ngModel)]="dados.selected_edit.hora_termino" (change)="agora('hora_termino','editou')" autocomplete="off" />
+            </div>
+            <div class="fw40">
+                <span class="botao_hoje" (click)="agora('hora_termino')">AGORA</span>
+            </div>
+        </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+
+        <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+            <div class="form_label_ext">{{label_obs}}</div>
+            <div class="fw83">
+                <textarea pInputTextarea rows="3" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- RODAPÉ COM ICONES -->
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="fc-left menu_home">
+            <img *ngIf="pode_excluir && dados.selected_edit.key" src="https://gestormix.com/img/lixo.png" (click)="dialogExcluir()" class="img_nav">
+            <img *ngIf="!pode_excluir || !dados.selected_edit.key" src="https://gestormix.com/img/vazio.png" class="img_nav" />
+        </div>
+        <div class="float-right">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+        <div class="float-center">
+
+            <!-- POPUPS DE ALERTA  -->
+
+            <!-- Excluir  -->
+            <div *ngIf="excluir_dialog">
+                <div class="center">
+                    &nbsp; <br />
+                    <span class="button_red" (click)="confirmar_exclusao()"> Excluir </span> &nbsp;
+                    <span class="button_green" (click)="excluir_dialog=false"> Cancelar </span>
+                </div>
+            </div>
+
+
+            <!-- Confirmar Exclusão -->
+            <div *ngIf="confirmar_exclusao_dialog">
+                <div class="center">
+                    &nbsp; <br />
+                    <span class="button_red" (click)="excluir()"> Confirmar a Exclusão </span> &nbsp;
+                    <span class="button_green" (click)="confirmar_exclusao_dialog=false"> Cancelar a Exclusão </span>
+                </div>
+            </div>
+        </div>
+        <div class="fc-clear"></div>
+    </div>
+
+</div>

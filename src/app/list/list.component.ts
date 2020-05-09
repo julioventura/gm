@@ -1,36 +1,27 @@
 import { NgModule, Component, OnInit } from '@angular/core';
 // import { NgModule, Component, OnInit, OnChanges } from '@angular/core';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 
 // Services
 import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
-import {OverlayPanelModule} from 'primeng/overlaypanel';
+// import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 // ConfirmDialog
 import {ConfirmationService} from 'primeng/api';
-import {Message} from 'primeng/api';
+// import {Message} from 'primeng/api';
 
 
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
-    styleUrls: ['./list.component.styl'],
-    styles: [`
-        :host ::ng-deep button {
-            margin-right: .25em;
-        }
-    `],
     providers: [ConfirmationService]
 })
 
 // export class ListComponent implements OnInit, OnChanges {
 export class ListComponent implements OnInit {
-
-    msgs: Message[] = [];
-    position: string;
 
     constructor(
         public dados: DadosService,
@@ -817,21 +808,6 @@ export class ListComponent implements OnInit {
         }
     }
 
-    public confirmPosition(position: string) {
-        this.position = position;
-        this.confirmationService.confirm({
-            message: 'confirmPosition - message',
-            header: 'confirmPosition - header',
-            // icon: 'pi pi-info-circle',
-            accept: () => {
-                this.msgs = [{severity:'info', summary:'Confirmed', detail:'Confirmed message'}];
-            },
-            reject: () => {
-                this.msgs = [{severity:'info', summary:'Rejected', detail:'Rejected message'}];
-            },
-            key: "positionDialog"
-        });
-    }
 
     public refresh_calendar() {
         this.dados.refresh_calendar();
@@ -2663,33 +2639,7 @@ export class ListComponent implements OnInit {
     }
 
 
-    confirm1() {
-            this.confirmationService.confirm({
-                message: 'Are you sure that you want to proceed?',
-                header: 'Confirmation',
-                // icon: 'pi pi-exclamation-triangle',
-                accept: () => {
-                    this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
-                },
-                reject: () => {
-                    this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-                }
-            });
-        }
 
-    confirm2() {
-        this.confirmationService.confirm({
-            message: 'Do you want to delete this record?',
-            header: 'Delete Confirmation',
-            // icon: 'pi pi-info-circle',
-            accept: () => {
-                this.msgs = [{severity:'info', summary:'Confirmed', detail:'Record deleted'}];
-            },
-            reject: () => {
-                this.msgs = [{severity:'info', summary:'Rejected', detail:'You have rejected'}];
-            }
-        });
-    }
 
 
     public depositar(registro){
@@ -2725,19 +2675,14 @@ export class ListComponent implements OnInit {
         this.confirmationService.confirm({
             message: mensagem,
             header: cabecalho,
-            // styleClass: "confirmComponent",
             acceptLabel: 'Sim',
             rejectLabel: 'Não',
-            // icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                // this.msgs = [{severity:'info', summary:'Confirmado', detail:''}];
 
                 this.dados.depositar(registro.registro, data);
                 this.calcula_movimentacao();
-                // return true;
             },
             reject: () => {
-                // this.msgs = [{severity:'info', summary:'Cancelado', detail:''}];
                 return false;
             }
         });
@@ -2781,14 +2726,12 @@ export class ListComponent implements OnInit {
             rejectLabel: 'Não',
             // icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                // this.msgs = [{severity:'info', summary:'Confirmado', detail:''}];
 
                 this.dados.quitar(registro.registro, data);
                 this.calcula_movimentacao();
                 // return true;
             },
             reject: () => {
-                // this.msgs = [{severity:'info', summary:'Cancelado', detail:''}];
                 return false;
             }
         });

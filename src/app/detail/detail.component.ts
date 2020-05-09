@@ -1,22 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-// import { AngularFireStorage } from '@angular/fire/storage';
-// import { AngularFireStorageModule } from '@angular/fire/storage';
-
-// import 'firebase/database';
-// import 'firebase/storage';
-
-import {Subject, Observable} from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
 import { UtilService } from '../util/util.service';
 import { DadosService } from '../dados/dados.service';
 
-
 @Component({
     selector: 'app-detail',
     templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.styl']
 })
 export class DetailComponent implements OnInit {
 
@@ -24,12 +14,9 @@ export class DetailComponent implements OnInit {
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
-        // private afStorage: AngularFireStorage
     ) { }
 
 
-    public is_marcado;
-    public pode_escolher;
 	public PARAMETRO : string;
 	public parametro : string;
 
@@ -37,8 +24,6 @@ export class DetailComponent implements OnInit {
     public imagem_maior1 : boolean = false;
     public imagem_maior2 : boolean = false;
 
-    public tem_alteracoes : boolean = false;
-    public tem_cadeiaslinfaticas : boolean = false;
     public ativo : boolean = true;
     public label_nome : string = '';
     public label_obs : string = '';
@@ -68,7 +53,6 @@ export class DetailComponent implements OnInit {
 
 
     // popup de alerta
-    public popupAlerta : boolean = false;
     public popupConfirmar : boolean = false;
     public alerta_titulo : string = '';
     public alerta_linha1 : string = '';
@@ -76,34 +60,12 @@ export class DetailComponent implements OnInit {
 
     public orcamentos : any = {};
     public lancamentos_receita_do_orcamento : any = [];
-    public links_de_paginas : number = 5;
-    public centro_de_custos_fixo : string = 'Centro de custos fixo. Não pode ser editado.';
 
-    public map : any;
+    // public map : any;
     public mapa_url : string = '';
 
-    // firestore
-    // public mostrar_preview : boolean = false;
     public tipo_da_imagem1 : string = '';
     public tipo_da_imagem2 : string = '';
-    //
-    // public link_ativado : boolean = false;
-    // public camera_ativada : boolean = false;
-    // public arquivo_ativado : boolean = false;
-    //
-    // // public uploadedBytes : Observable<number>;
-    // downloadURL: Observable<string>;
-    // downloadURLfirestore1: Observable<string>;
-    // downloadURLfirestore2: Observable<string>;
-    // uploadPercent: Observable<number>;
-    // // totalBytes: number;
-    // // totalBytes_str: string;
-    // task: any;
-    // public arquivo_escolhido: string = '';
-    filePath : string = '';
-    // public uploadSrc : any = '';
-    //
-
 
 
     ngOnInit(){
@@ -113,10 +75,6 @@ export class DetailComponent implements OnInit {
         console.log("this.dados.voltar_pilha");
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
-
-        // Download de imagens do Firestore
-        // this.download_imagem_do_firestore(1);
-        // this.download_imagem_do_firestore(2);
 
 
 
@@ -843,9 +801,34 @@ export class DetailComponent implements OnInit {
         if(!this.dados.selected.fixo){
             this.dados.selected_edit = this.util.deepClone(this.dados.selected);
             this.config.DISPLAY.Registro = false;
-            this.config.DISPLAY.Editar = true;
+
+            if (this.dados.PARAMETRO == 'ATENDIMENTOS') {
+                this.config.DISPLAY.EditAtendimentos = true;
+            }
+            else if (this.dados.PARAMETRO == 'CONFIGURACAO') {
+                this.config.DISPLAY.Config = true;
+            }
+            else if (this.dados.PARAMETRO == 'PERFIL') {
+                this.config.DISPLAY.EditPerfil = true;
+            }
+            else if (this.dados.PARAMETRO == 'ESTOQUE') {
+                this.config.DISPLAY.EditEstoque = true;
+            }
+            else if (this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA') {
+                this.config.DISPLAY.EditLancamentos = true;
+            }
+            else if (this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA') {
+                this.config.DISPLAY.EditLancamentos = true;
+            }
+            else if (this.dados.PARAMETRO == 'BANCOS') {
+                this.config.DISPLAY.EditLancamentos = true;
+            }
+            else {
+                this.config.DISPLAY.Editar = true;
+            }
         }
     }
+
 
     public sair_popup_aviso(){
         this.popup_de_aviso = false;
@@ -858,25 +841,26 @@ export class DetailComponent implements OnInit {
         }
     }
 
-    public navigateTo(url:string) {
-    }
 
+    // public navigateTo(url:string) {
+    // }
+    //
 
-    public popup_alerta(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
-        console.log("popup_alerta");
-
-        this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
-        this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
-        this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
-        this.popupAlerta = true;
-    }
-
-    public popup_alerta_fechar(){
-        this.alerta_titulo = '';
-        this.alerta_linha1 = '';
-        this.alerta_linha2 = '';
-        this.popupAlerta = false;
-    }
+    // public popup_alerta(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
+    //     console.log("popup_alerta");
+    //
+    //     this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
+    //     this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
+    //     this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
+    //     this.popupAlerta = true;
+    // }
+    //
+    // public popup_alerta_fechar(){
+    //     this.alerta_titulo = '';
+    //     this.alerta_linha1 = '';
+    //     this.alerta_linha2 = '';
+    //     this.popupAlerta = false;
+    // }
 
     // public tentou_editar(){
     //     if(!this.dados.voltar_para && this.config[this.dados.PARAMETRO].pode_editar && this.dados.pode_editar) {
@@ -884,47 +868,31 @@ export class DetailComponent implements OnInit {
     //     }
     // }
 
-    public popup_pedir_confirmacao(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
-        console.log("popup_pedir_confirmacao");
-
-        this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
-        this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
-        this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
-        this.popupConfirmar = true;
-    }
-
-    public popup_confirmar(confirmacao : boolean){
-        console.log("popup_confirmar");
-
-        this.alerta_titulo = '';
-        this.alerta_linha1 = '';
-        this.alerta_linha2 = '';
-        this.popupConfirmar = false;
-
-        if(confirmacao){
-            if(this.dados.pode_editar) {
-                this.editar();
-            }
-        }
-        else {}
-    }
-
+    // public popup_pedir_confirmacao(alerta_titulo:string='', alerta_linha1:string='', alerta_linha2:string='') {
+    //     console.log("popup_pedir_confirmacao");
     //
-    // public download_imagem_do_firestore(qual){
-    //     if(qual==1){
-    //         if(this.dados.selected.img_url && this.dados.selected.tipo_da_imagem1 == 'firestore'){
-    //             this.filePath = this.dados.selected.img_url;
-    //             this.tipo_da_imagem1 = this.dados.selected.tipo_da_imagem1;
-    //             this.downloadURLfirestore1 = this.afStorage.ref(this.filePath).getDownloadURL();
-    //         }
-    //     }
-    //     else if(qual==2){
-    //         if(this.dados.selected.img_url2 && this.dados.selected.tipo_da_imagem2 == 'firestore'){
-    //             this.filePath = this.dados.selected.img_url2;
-    //             this.tipo_da_imagem2 = this.dados.selected.tipo_da_imagem2;
-    //             this.downloadURLfirestore2 = this.afStorage.ref(this.filePath).getDownloadURL();
-    //         }
-    //     }
+    //     this.alerta_titulo = this.alerta_titulo ? this.alerta_titulo : alerta_titulo ? alerta_titulo : "ATENÇÃO";
+    //     this.alerta_linha1 = this.alerta_linha1 ? this.alerta_linha1 : alerta_linha1 ? alerta_linha1 : "Há campos não preenchidos.";
+    //     this.alerta_linha2 = this.alerta_linha2 ? this.alerta_linha2 : alerta_linha2 ? alerta_linha2 : "";
+    //     this.popupConfirmar = true;
     // }
+
+    // public popup_confirmar(confirmacao : boolean){
+    //     console.log("popup_confirmar");
+    //
+    //     this.alerta_titulo = '';
+    //     this.alerta_linha1 = '';
+    //     this.alerta_linha2 = '';
+    //     this.popupConfirmar = false;
+    //
+    //     if(confirmacao){
+    //         if(this.dados.pode_editar) {
+    //             this.editar();
+    //         }
+    //     }
+    //     else {}
+    // }
+
+
 
 }

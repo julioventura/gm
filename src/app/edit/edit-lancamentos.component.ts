@@ -1,40 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-// import { AngularFireStorage } from '@angular/fire/storage';
-// import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import 'firebase/database';
-// import 'firebase/storage';
 
 import {Subject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
-// import { finalize, map } from 'rxjs/operators';
 
-import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
 import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
 import {ConfirmationService} from 'primeng/api';
-// import {Message} from 'primeng/api';
 
 import * as _ from 'lodash';
 
 
 @Component({
-    selector: 'app-edit',
-    templateUrl: './edit.component.html',
+    selector: 'app-edit_lancamentos',
+    templateUrl: './edit-lancamentos.component.html',
     providers: [ConfirmationService]
 })
 
-export class EditComponent implements OnInit {
+export class EditLancamentosComponent implements OnInit {
 
     constructor(
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
         private confirmationService: ConfirmationService,
-        // private afStorage: AngularFireStorage
     ) { }
 
 
@@ -105,56 +98,6 @@ export class EditComponent implements OnInit {
         idade : ''
     }
 
-    public img_link1 : string = '';
-    public img_link2 : string = '';
-
-    // public mostrar_upload_firestore_progress : boolean = false;
-
-
-    // msgs: Message[] = [];
-    // position: string;
-
-    // CAMERA E FIRESTORE
-    // ------------------
-    // toggle webcam on/off
-    public showWebcam : boolean = false;
-    public allowCameraSwitch = true;
-    public multipleWebcamsAvailable = false;
-    public deviceId: string;
-    public videoOptions: MediaTrackConstraints = {
-    // width: {ideal: 1024},
-    // height: {ideal: 576}
-    };
-    public errors: WebcamInitError[] = [];
-
-    // webcam snapshot trigger
-    private trigger: Subject<void> = new Subject<void>();
-    // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-    private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
-
-    // firestore
-    public tipo_da_imagem1 : string = '';
-    public tipo_da_imagem2 : string = '';
-
-    public link1_ativado : boolean = false;
-    public camera1_ativada : boolean = false;
-    public arquivo1_ativado : boolean = false;
-
-    public link2_ativado : boolean = false;
-    public camera2_ativada : boolean = false;
-    public arquivo2_ativado : boolean = false;
-
-    public imageError: string;
-
-    // public uploadedBytes : Observable<number>;
-    downloadURL: Observable<string>;
-    // downloadURLfirestore1: Observable<string>;
-    // downloadURLfirestore2: Observable<string>;
-    uploadPercent: Observable<number>;
-    task: any;
-    public arquivo_escolhido: string = '';
-    filePath : string = '';
-
     ngOnInit(): void {
         console.log("\n\nINIT edit");
         console.log(this.dados.PARAMETRO);
@@ -164,15 +107,6 @@ export class EditComponent implements OnInit {
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
 
-        // Download de imagens do Firestore
-        // this.download_imagem_do_firestore(1);
-        // this.download_imagem_do_firestore(2);
-
-
-        WebcamUtil.getAvailableVideoInputs()
-              .then((mediaDevices: MediaDeviceInfo[]) => {
-                this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
-              });
 
         this.dados.salvou_registro = false;
 
@@ -186,16 +120,6 @@ export class EditComponent implements OnInit {
         this.pode_estornar = ['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(this.dados.PARAMETRO);
 
 
-        if(this.dados.PARAMETRO == 'ORCAMENTOS'){
-            console.log("this.dados.cliente");
-            console.log(this.dados.cliente);
-            this.dados.selected_edit.cliente_nome = this.dados.cliente.nome;
-            this.dados.selected_edit.cliente_key = this.dados.cliente.key;
-            this.dados.selected_edit.cliente_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
-            console.log("this.dados.selected_edit");
-            console.log(this.dados.selected_edit);
-        }
-
         if(this.dados.PARAMETRO == 'BANCOS'){
             this.dados.selected_edit.corrente = true;
         }
@@ -203,16 +127,6 @@ export class EditComponent implements OnInit {
         if (this.dados.PARAMETRO == "LANCAMENTOS_RECEITA" || this.dados.PARAMETRO == "LANCAMENTOS_DESPESA" || this.dados.PARAMETRO == "REL_RECEITAS_E_DESPESAS"){
 
             this.dados.filtro_digitado = '';
-
-            // MEIOS DE PAGAMENTO
-            // this.meios_de_pagamento = [
-            //     {nome: 'Cheque à vista', codigo: 'CHEQUE'},
-            //     {nome: 'Cheque Pré-datado', codigo: 'CHEQUE_PRE'},
-            //     {nome: 'Dinheiro', codigo: 'DINHEIRO'},
-            //     {nome: 'Débito', codigo: 'DEBITO'},
-            //     {nome: 'Crédito', codigo: 'CREDITO'}
-            // ];
-
 
             this.button1 = 'button_off';
             this.button2 = 'button_off';
@@ -239,10 +153,6 @@ export class EditComponent implements OnInit {
 
             console.log("=============================");
 
-            // console.log("dados.selected.centro_de_custos = " + this.dados.selected.centro_de_custos ? this.dados.selected.centro_de_custos : '');
-            // console.log("dados.centro_de_custos_escolhido : ");
-            // console.log(this.dados.centro_de_custos_escolhido);
-
             let centro_de_custos = this.dados.selected.centro_de_custos ? this.dados.selected.centro_de_custos : this.dados.centro_de_custos_escolhido.nome;
             // console.log("centro_de_custos = " + centro_de_custos);
 
@@ -253,15 +163,6 @@ export class EditComponent implements OnInit {
                 this.dados.observar_registros('MEDICOS');
             }
 
-            // this.dados.selected_edit.centro_de_custos = this.dados.centro_de_custos_escolhido.nome;
-            // this.dados.selected_edit.centro_de_custos_codigo = this.dados.centro_de_custos_escolhido.id;
-            // console.log("*********** this.dados.selected_edit.centro_de_custos_codigo = " + this.dados.selected_edit.centro_de_custos_codigo);
-
-
-            console.log(" ************** filtered_estoque")
-            console.log(this.dados.filtered_estoque);
-
-            // this.dados.filtro_centro_de_custos = this.dados.selected_edit.centro_de_custos;
         }
 
         if(this.dados.selected_edit.nome){
@@ -271,17 +172,6 @@ export class EditComponent implements OnInit {
         if(this.dados.retorno){
             console.log("RETORNO + " + this.dados.retorno);
         }
-
-        // console.log("*********  ORIGEM = " + this.dados.origem);
-        // if(this.dados.origem == 'CLIENTES' && this.dados.PARAMETRO ){
-        //     console.log("if(this.dados.origem == 'CLIENTES')");
-        //     console.log(this.dados.cliente);
-            // this.dados.selected_edit.contraparte = this.dados.cliente.nome ? this.dados.cliente.nome : '';
-            // this.dados.selected_edit.contraparte_key = this.dados.cliente.key ? this.dados.cliente.key : '';
-            // this.dados.selected_edit.contraparte_cpf = this.dados.cliente.cpf ? this.dados.cliente.cpf : '';
-
-            // this.mostrar_lista_de_orcamentos();
-        // }
 
 
         // Registro de procedimentos na ficha do cliente e historicos para o usuario
@@ -303,28 +193,6 @@ export class EditComponent implements OnInit {
             // REGISTRO NOVO
             console.log("incluindo registro em PARAMETRO " + this.dados.PARAMETRO);
 
-            // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
-
-            // ULTIMO CADASTRADO
-            switch(this.dados.PARAMETRO) {
-                case 'CLIENTES':
-                this.ultimo_cadastrado = this.dados.selected_clientes_ultimos_incluidos?.length ? this.dados.selected_clientes_ultimos_incluidos[0].nome : '';
-                break;
-                case 'SOCIOS':
-                this.ultimo_cadastrado = this.dados.selected_socios_ultimos_incluidos?.length ? this.dados.selected_socios_ultimos_incluidos[0].nome : '';
-                break;
-                case 'FORNECEDORES':
-                this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
-                break;
-                case 'ESTOQUE':
-                this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
-                break;
-                // case 'EQUIPE':
-                // this.ultimo_cadastrado = this.dados.selected_equipe_ultimos_incluidos?.length ? this.dados.selected_equipe_ultimos_incluidos[0].nome : '';
-                // break;
-                default:
-                this.ultimo_cadastrado = '';
-            }
 
             // cidade e estado iniciais
             if(this.config[this.dados.PARAMETRO].cidade && this.dados.usuario_logado.cidade_default){
@@ -335,14 +203,18 @@ export class EditComponent implements OnInit {
             }
         }
 
-        if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-            this.avalia_atendimentos();
-        }
-
-        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
-        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
 
         this.util.goTop();  // sobe a tela pro topo
+    }
+
+
+    public mostrar_imagens(){
+        if(this.dados.mostrar_imagens_na_lista_estoque){
+            this.dados.mostrar_imagens_na_lista_estoque = false;
+        }
+        else {
+            this.dados.mostrar_imagens_na_lista_estoque = true;
+        }
     }
 
 
@@ -390,13 +262,6 @@ export class EditComponent implements OnInit {
     public mostrar_produtos_estoque(){
         if(this.dados.selected_edit.centro_de_custos_codigo=='R-001'){
             this.dados.filterDatabase(this.dados.selected_edit.produto,'ESTOQUE')
-
-            // console.log("*******  mostrar_produtos_estoque()")
-            // console.log("filtered_estoque")
-            // console.log(this.dados.filteredestoque)
-            // console.log("this.dados.selected_edit.produto = " + this.dados.selected_edit.produto)
-            // console.log("this.selected_estoque")
-            // console.log(this.dados.selected_estoque);
 
             this.dados.selected_edit.produto_id = '';
             this.dados.selected_edit.produto_codigo = '';
@@ -645,20 +510,6 @@ export class EditComponent implements OnInit {
         this.dados.cliente = registro;
         console.log(registro);
         this.dados.registro = registro;
-
-        if(this.dados.PARAMETRO=='SOCIOS'){
-            this.listar_socios = false;
-
-            // reproduz o registro do socio identificando-o em dados.socio
-            this.dados.socio = registro;
-            console.log(registro);
-            this.dados.registro = registro;
-        }
-
-        // Abre lista de orcamentos
-        if(this.dados.PARAMETRO!='PAGAMENTOS'){
-            this.mostrar_lista_de_orcamentos();
-        }
     }
 
 
@@ -707,106 +558,6 @@ export class EditComponent implements OnInit {
 
         this[local_na_pagina] = false;
     }
-    //
-    // public escolherResponsavel(registro){
-    //     console.log(registro);
-    //     this.dados.selected_edit.responsavel_key = registro.key;
-    //     this.dados.selected_edit.responsavel_nome = registro.nome;
-    //     this.listar_equipe = false;
-    //     this.dados.responsavel = registro;
-    // }
-
-    // public mostrar_lista_de_equipe(){
-    //     console.log(this.dados.selected_equipe);
-    //     this.dados.filterDatabase(this.dados.selected_edit.responsavel_nome,'EQUIPE');
-    //     this.listar_equipe = true;
-    // }
-
-
-    public mostrar_lista_de_profissionais(){
-        // console.log(this.dados.selected_registros);
-        // this.dados.filterDatabase(this.dados.selected_edit.profissional_nome,'EQUIPE');
-        // this.rows_profissionais = 5;
-        //
-        // if(this.dados.filtered_equipe.length>0){
-        //     if (this.dados.filtered_equipe.length > this.rows_profissionais) {
-        //         this.paginator_status_profissionais = true;
-        //     }
-        //     else {
-        //         this.paginator_status_profissionais = false;
-        //     }
-        // }
-        // else {
-        //     // dados.selected_registros é usado quando dados.filtered_registros.length = 0
-        //     if (this.dados.selected_equipe.length > this.rows_profissionais) {
-        //         this.paginator_status_profissionais = true;
-        //     }
-        //     else {
-        //         this.paginator_status_profissionais = false;
-        //     }
-        // }
-        // this.listar_equipe = true;
-    }
-
-    public escolherProfissional(registro){
-        console.log(registro);
-        this.dados.selected_edit.profissional_key = registro.key;
-        this.dados.selected_edit.profissional_nome = registro.nome;
-        this.dados.selected_edit.profissional_cpf = registro.cpf ? registro.cpf : '';
-        this.dados.selected_edit.profissional_profissao = registro.profissao ? registro.profissao : '';
-        this.dados.selected_edit.profissional_categoria = registro.categoria ? registro.categoria : '';
-        this.listar_profissionais = false;
-    }
-
-
-
-    public mostrar_lista_de_orcamentos(){
-
-        // if(this.dados.centro_de_custos_escolhido.nome == "Consulta Odontológica" || this.dados.centro_de_custos_escolhido.nome == "Consulta Médica"){
-        let orcamentos_do_cliente = {};
-        this.orcamentos = [];
-
-        for (let i in this.dados.selected_todos_orcamentos) {
-            // console.log(i);
-            // console.log(this.dados.selected_todos_orcamentos[i]);
-
-            if (this.dados.selected_todos_orcamentos[i].$key == this.dados.selected_edit.contraparte_key) {
-                orcamentos_do_cliente = this.dados.selected_todos_orcamentos[i];
-                console.log("orcamentos_do_cliente");
-                console.log(orcamentos_do_cliente);
-
-                for (let key of Object.keys(orcamentos_do_cliente)) {
-                    if (key=='undefined'){} // ignorar
-                    else {
-                        console.log("orcamentos_do_cliente[key].data = " + orcamentos_do_cliente[key].data);
-                        orcamentos_do_cliente[key].data_quando = this.util.converte_data_para_milisegundos(orcamentos_do_cliente[key].data);
-                        if(orcamentos_do_cliente[key].centro_de_custos_codigo == this.dados.selected_edit.centro_de_custos_codigo) {
-                            this.orcamentos.push(orcamentos_do_cliente[key]);
-                        }
-                    }
-                }
-
-                // Sort
-                this.orcamentos = this.orcamentos.sort((a, b) => (a.data_quando > b.data_quando) ? -1 : 1) //// sort a list of objects by a property, descending
-
-            }
-            // console.log(this.orcamentos);
-        }
-        this.listar_orcamentos = true;
-        // }
-    }
-
-    public escolherOrcamento(registro){
-        console.log(registro);
-        this.dados.selected_edit.orcamento_key = registro.key;
-        this.dados.selected_edit.orcamento_data = registro.data;
-        this.dados.selected_edit.orcamento_data_quando = registro.data_quando;
-        this.dados.selected_edit.orcamento_nome = registro.nome ? registro.nome : '';
-        this.dados.selected_edit.orcamento = "Orçamento de " + registro.data + ", no valor de " + registro.valor_do_tratamento + " feito por " + registro.criado_por_nome;
-        this.dados.selected_edit.obs =  registro.obs ? registro.obs : '';
-
-        this.listar_orcamentos = false;
-    }
 
 
 
@@ -841,48 +592,6 @@ export class EditComponent implements OnInit {
         }
     }
 
-    public zoom_da_imagem(qual : number = 0){
-        console.log("zoom_da_imagem(" + qual + ")")
-
-        if(qual==1){
-            if(this.imagem_maior1) {
-                this.imagem_normal = true;
-                this.imagem_maior1 = false;
-                this.imagem_maior2 = false;
-            }
-            else {
-                this.imagem_maior1 = true;
-                this.imagem_normal = false;
-                this.imagem_maior2 = false;
-            }
-        }
-        else if(qual==2){
-            if(this.imagem_maior2) {
-                this.imagem_normal = true;
-                this.imagem_maior1 = false;
-                this.imagem_maior2 = false;
-            }
-            else {
-                this.imagem_maior2 = true;
-                this.imagem_maior1 = false;
-                this.imagem_normal = false;
-            }
-        }
-        else{
-            this.imagem_normal = true;
-            this.imagem_maior2 = false;
-            this.imagem_maior1 = false;
-        }
-    }
-
-    public mostrar_imagens(){
-        if(this.dados.mostrar_imagens_na_lista_estoque){
-            this.dados.mostrar_imagens_na_lista_estoque = false;
-        }
-        else {
-            this.dados.mostrar_imagens_na_lista_estoque = true;
-        }
-    }
 
 
     public voltar(destino : string = '') {
@@ -893,12 +602,6 @@ export class EditComponent implements OnInit {
 
         this.config.DISPLAY.ExcluirDialog = false;
 
-        // if(this.task){
-        //     // Cancelando task de image upload to firestore
-        //     console.log("Cancelando TASK")
-        //     console.log(this.task)
-        //     this.task.cancel();
-        // }
 
         if(!this.dados.salvou_registro){
             // saindo da página sem salvar o registro
@@ -920,37 +623,24 @@ export class EditComponent implements OnInit {
 
         if(destino == 'lista'){
 
-            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE','BANCOS'].includes(this.dados.PARAMETRO)){
-                this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
-            }
-
             this.config.DISPLAY.Lista = true;
             this.config.DISPLAY.Registro = false;
-            this.config.DISPLAY.Editar = false;
+            this.config.DISPLAY.EditLancamentos = false;
         }
 
         else {
             console.log("Destino vazio => volta para detail");
 
             this.config.DISPLAY.Lista = false;
-            this.config.DISPLAY.Editar = false;
+            this.config.DISPLAY.EditLancamentos = false;
             this.config.DISPLAY.Registro = true;
         }
 
         console.log("==================");
         console.log("destino = " + destino);
         console.log("==================");
-
     }
 
-    onUpload(event) {
-        for(let file of event.files) {
-            this.dados.uploadedFiles.push(file);
-        }
-
-        // this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
-        // console.log('Uploaded from client');
-    }
 
     public opt(opcao){
         if ( ['dinheiro','debito','credito'].includes(this.dados.selected_edit.meio_de_pagamento) ){
@@ -1011,9 +701,6 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data = '';
                 }
             }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
-            }
         }
         else if(param == 'data_inicio'){
             if(editou=='editou'){
@@ -1028,9 +715,6 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.data_inicio = '';
                 }
             }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
-            }
         }
         else if(param == 'data_termino'){
             if(editou=='editou'){
@@ -1044,9 +728,6 @@ export class EditComponent implements OnInit {
                     // alterna limpando o campo caso já fosse o mesmo valor
                     this.dados.selected_edit.data_termino = '';
                 }
-            }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
             }
         }
         return hoje;
@@ -1120,9 +801,6 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora = '';
                 }
             }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
-            }
         }
         else if(param == 'hora_inicio'){
             if(editou=='editou'){
@@ -1136,9 +814,6 @@ export class EditComponent implements OnInit {
                     // alterna limpando o campo caso já fosse o mesmo valor
                     this.dados.selected_edit.hora_inicio = '';
                 }
-            }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
             }
         }
         else if(param == 'hora_termino'){
@@ -1154,113 +829,11 @@ export class EditComponent implements OnInit {
                     this.dados.selected_edit.hora_termino = '';
                 }
             }
-            if(this.dados.PARAMETRO=='ATENDIMENTOS'){
-                this.avalia_atendimentos();
-            }
         }
         return hora;
     }
 
 
-    public avalia_atendimentos(){
-        console.log("avalia_atendimentos()");
-
-        if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-            let status = 'inativo';
-
-            if(this.dados.selected_edit.data && this.dados.selected_edit.data.length>0){
-                status = 'aberto';
-
-                if(this.dados.selected_edit.data_inicio && this.dados.selected_edit.data_inicio.length>0 && this.dados.selected_edit.hora_inicio && this.dados.selected_edit.hora_inicio.length == 5){
-                    status = 'em_curso';
-
-                    if(this.dados.selected_edit.data_termino &&this.dados.selected_edit.data_termino.length>0 && this.dados.selected_edit.hora_termino && this.dados.selected_edit.hora_termino.length == 5){
-                        status = 'finalizado';
-                    }
-                }
-            }
-
-            this.dados.selected_edit.atendimento = '';
-
-            if(status=='inativo'){
-                this.dados.selected_edit.atendimento = 'inativo';
-            }
-            else if(status=='aberto'){
-                this.dados.selected_edit.atendimento = 'aberto';
-            }
-            else if(status=='em_curso'){
-                this.dados.selected_edit.atendimento = 'em_curso';
-            }
-            else if(status=='finalizado'){
-                this.dados.selected_edit.atendimento = 'finalizado';
-            }
-        }
-    }
-
-
-
-    seta_consulta_para_hoje(){
-        this.dados.selected_edit.ultima_consulta=this.util.hoje();
-        let ultima_alta = this.dados.selected_edit.alta;
-        this.dados.selected_edit.alta = '';
-        this.dados.selected_edit.retornar = '';
-    }
-
-    public seta_alta_para_hoje(){
-        let alta_anterior = this.dados.selected.alta ? this.dados.selected.alta : 'TRATANDO';
-        this.dados.selected_edit.alta = this.dados.selected_edit.ultima_consulta = this.util.hoje();
-        if(this.dados.selected_edit.revisao){
-            this.calcula_retorno();
-        }
-    }
-
-    public seta_alta_para_tratando(){
-        this.dados.selected_edit.alta = '';
-        this.formata_alta();
-    }
-
-    public formata_alta(){
-        let alta_anterior = this.dados.selected.alta;
-        this.dados.selected_edit.alta = this.util.formata_data(this.dados.selected_edit.alta,'recente');
-        let alta = this.util.getTempoDecorridoEmMilisegundos(this.dados.selected_edit.alta);
-        let x = new Date(alta);
-        let mes = Number(this.dados.selected_edit.alta.substr(3,2)) + Number(this.dados.selected_edit.revisao);
-
-        let retornar = x.setMonth(mes-1);
-        let y = this.util.formata_data_de_quando_em_milisegundos(retornar);
-        this.dados.selected_edit.retornar = y.substr(0,10);
-        this.calcula_retorno();
-
-        let quando_ultima_consulta = this.util.getTempoDecorridoEmMilisegundos(this.dados.selected_edit.ultima_consulta);
-        let quando_alta = this.util.getTempoDecorridoEmMilisegundos(this.dados.selected_edit.alta);
-
-        if (quando_alta > quando_ultima_consulta){
-            this.dados.selected_edit.ultima_consulta = this.dados.selected_edit.alta;
-        }
-    }
-
-    public formata_revisao()  {
-        this.dados.selected_edit.revisao = this.util.limpa_string_numerica(this.dados.selected_edit.revisao);
-        this.dados.selected_edit.revisao = this.util.formata_zeros_a_esquerda(this.dados.selected_edit.revisao, 2);
-        this.calcula_retorno();
-    }
-
-    public calcula_retorno ()  {
-        if (this.dados.selected_edit.alta && this.dados.selected_edit.revisao){
-            // converte alta para quando_em_milisegundos
-            let altaObj = this.util.myDateObjFromDataHora(this.dados.selected_edit.alta);
-            let altaMilisegundos = altaObj.quando;
-            let revisao_ms = Number(this.dados.selected_edit.revisao) * this.util.milisegundos_de_um_mes;
-            let retorno = this.util.formata_data_de_quando_em_milisegundos(altaMilisegundos + revisao_ms);
-
-            retorno = retorno.substr(0,10);
-            this.dados.selected_edit.retornar = retorno;
-            this.dados.selected_edit.mes_de_revisao = retorno.substr(3,2);
-        }
-        else {
-            this.dados.selected_edit.retornar = '';
-        }
-    }
 
 
     public salvar(param : string = ''){
@@ -1296,29 +869,6 @@ export class EditComponent implements OnInit {
             if(this.dados.selected_edit.data) {
                 this.dados.selected_edit.data_quando = this.util.quando_em_milisegundos(this.dados.selected_edit.data);
             }
-        }
-
-
-        if(this.dados.PARAMETRO == 'ATENDIMENTOS'){
-            let data_hora, data_hora_quando;
-
-            this.avalia_atendimentos();
-
-            if(this.dados.selected_edit.data && this.dados.selected_edit.data.length>0 && this.dados.selected_edit.hora && this.dados.selected_edit.hora.length == 5){
-                data_hora = this.dados.selected_edit.data + ' ' + this.dados.selected_edit.hora;
-                data_hora_quando = this.util.quando_em_milisegundos(data_hora);
-                console.log("data_hora_quando = " + data_hora_quando)
-            }
-            else if(this.dados.selected_edit.data && this.dados.selected_edit.data.length>0){
-                data_hora = this.dados.selected_edit.data + ' ' + '00:00';
-                data_hora_quando = this.util.quando_em_milisegundos(data_hora);
-                console.log("data_hora_quando = " + data_hora_quando)
-            }
-            else {
-                data_hora_quando = 0;
-                console.log("data_hora_quando = " + data_hora_quando)
-            }
-            this.dados.selected_edit.data_hora_quando = data_hora_quando;
         }
 
 
@@ -1409,10 +959,6 @@ export class EditComponent implements OnInit {
         }
 
 
-        // if(this.dados.selected_edit.centros_de_custos_codigo=='R-001' && this.dados.filtered_lancamentos_receita.length<1){
-        //     this.vendaDiretaDialog = true;
-        //     return;
-        // }
 
         this.dados.salvar_registro(this.dados.PARAMETRO, this.dados.selected_edit);
 
@@ -1435,437 +981,6 @@ export class EditComponent implements OnInit {
         }
     }
 
-
-    // CAPTURA E UPLOAD DE IMAGENS
-    public ativar_arquivo(qual : number) : void {
-        if(qual==1) {
-            if(this.arquivo1_ativado){
-                this.arquivo1_ativado = false;
-
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-
-                this.showWebcam = false;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-            else {
-                this.arquivo1_ativado = true;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-
-                this.showWebcam = false;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-        }
-        else if(qual==2) {
-            if(this.arquivo2_ativado){
-                this.arquivo2_ativado = false;
-
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-
-                this.showWebcam = false;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-            else {
-                this.arquivo2_ativado = true;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-
-                this.showWebcam = false;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-        }
-    }
-
-    public ativar_link(qual : number) : void {
-        if(qual==1){
-            if(this.link1_ativado){
-                this.link1_ativado = false;
-
-                this.arquivo1_ativado = false;
-                this.camera1_ativada = false;
-
-                this.showWebcam = false;
-                // document.getElementById("img_link").focus();
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-            else {
-                this.link1_ativado = true;
-
-                this.arquivo1_ativado = false;
-                this.camera1_ativada = false;
-
-                this.showWebcam = false;
-                // document.getElementById("img_link").focus();
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-        }
-        else if(qual==2){
-            if(this.link2_ativado){
-                this.link2_ativado = false;
-
-                this.arquivo2_ativado = false;
-                this.camera2_ativada = false;
-
-                this.showWebcam = false;
-                // document.getElementById("img_link").focus();
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-            else {
-                this.link2_ativado = true;
-                this.arquivo2_ativado = false;
-                this.camera2_ativada = false;
-
-                this.showWebcam = false;
-                // document.getElementById("img_link").focus();
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-        }
-    }
-
-    public ativar_camera(qual : number) : void {
-        if(qual==1){
-            if(this.camera1_ativada){
-                this.camera1_ativada = false;
-                this.showWebcam = false;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-            else {
-                this.camera1_ativada = true;
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-                this.camera2_ativada = false;
-            }
-        }
-        else if(qual==2){
-            if(this.camera2_ativada){
-                this.camera2_ativada = false;
-                this.showWebcam = false;
-
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-            else {
-                this.camera2_ativada = true;
-                this.arquivo2_ativado = false;
-                this.link2_ativado = false;
-
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
-                this.arquivo1_ativado = false;
-                this.link1_ativado = false;
-                this.camera1_ativada = false;
-            }
-        }
-    }
-
-
-
-    // ========== FILE UPLOAD ==========================
-    //
-    // uploadFile_to_Firestore(event, qual : number) {
-    //     console.log("uploadFile_to_Firestore(" + qual + ")");
-    //
-    //     // UPLOAD TO FIRESTORE
-    //     this.mostrar_upload_firestore_progress = true;
-    //
-    //     // id = Math.random().toString(36).substring(2);  // option of using a random id for id
-    //     let id = 'img' + String(qual);
-    //     id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
-    //
-    //     this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + id;
-    //     console.log("filePath = " + this.filePath)
-    //
-    //     if(qual==1){
-    //         this.dados.selected_edit.img_url = this.filePath;
-    //     }
-    //     else if(qual==2){
-    //         this.dados.selected_edit.img_url2 = this.filePath;
-    //     }
-    //
-    //     const fileRef = this.afStorage.ref(this.filePath);
-    //     const file = event.target.files[0];
-    //     this.task = this.afStorage.upload(this.filePath, file);
-    //
-    //     // observe upload progress
-    //     this.uploadPercent = this.task.percentageChanges();
-    //
-    //     // get notified when the download URL is available
-    //     this.task.snapshotChanges().pipe(
-    //         finalize(() => {
-    //             this.downloadURL = fileRef.getDownloadURL();
-    //             console.log("downloadURL = ");
-    //             console.log( this.downloadURL );
-    //
-    //             this.mostrar_upload_firestore_progress = false;
-    //
-    //             this.download_imagem_do_firestore(qual);
-    //
-    //             if(qual==1){
-    //                 this.dados.selected_edit.tipo_da_imagem1 = "firestore";
-    //                 this.dados.selected_edit.origem_da_imagem1 = "upload de arquivo";
-    //             }
-    //             else if(qual==2){
-    //                 this.dados.selected_edit.tipo_da_imagem2 = "firestore";
-    //                 this.dados.selected_edit.origem_da_imagem2 = "upload de arquivo";
-    //             }
-    //
-    //             this.desligar_botoes_de_upload();
-    //         })
-    //      )
-    //     .subscribe();
-    //     console.log("\n=================\ndownloadURL = ");
-    //     console.log( this.downloadURL );
-    // }
-    //
-
-    saveFile_as_base64(fileInput: any, qual : number) {
-        console.log("saveFile_as_base64(fileInput,qual)");
-
-        // UPLOAD TO BASE64 dentro do campo img_url do Firebase
-        if(qual==1){
-            this.dados.selected_edit.img_url = this.filePath;
-        }
-        else if(qual==2){
-            this.dados.selected_edit.img_url2 = this.filePath;
-        }
-
-        this.imageError = null;
-        if (fileInput.target.files && fileInput.target.files[0]) {
-            // Size Filter Bytes
-            const max_size = 12048000;
-            const allowed_types = ['image/png', 'image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-            const max_height = 2048;
-            const max_width = 2048;
-
-            if (fileInput.target.files[0].size > max_size) {
-                this.imageError =
-                'Excedeu tamanho máximo de ' + max_size / 1000 + 'Mb';
-                return false;
-            }
-            if (!_.includes(allowed_types, fileInput.target.files[0].type)) {
-                this.imageError = 'O formato deve ser JPG, PNG ou GIF)';
-                return false;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-                const image = new Image();
-                image.src = e.target.result;
-                image.onload = rs => {
-                    const img_height = rs.currentTarget['height'];
-                    const img_width = rs.currentTarget['width'];
-                    console.log("Imagem: altura = " + img_height + " largura = " + img_width);
-
-                    if (img_height > max_height && img_width > max_width) {
-                        this.imageError = 'Tamanho excedeu os limites de h:' + max_height + ' x w:' + max_width + ' px';
-                        return false;
-                    } else {
-                        if(qual==1){
-                            this.dados.selected_edit.img_url = image.src;
-                            this.dados.selected_edit.tipo_da_imagem1 = 'base64';
-                            this.dados.selected_edit.origem_da_imagem1 = 'upload de arquivo';
-                        }
-                        else if(qual==2){
-                            this.dados.selected_edit.img_url2 = image.src;
-                            this.dados.selected_edit.tipo_da_imagem2 = 'base64';
-                            this.dados.selected_edit.origem_da_imagem2 = 'upload de arquivo';
-                        }
-                    }
-                    this.desligar_botoes_de_upload();
-                };
-            };
-
-            reader.readAsDataURL(fileInput.target.files[0]);
-        }
-    }
-    // ========== FILE UPLOAD ==========================
-
-
-    // ========= CAMERA UPLOAD =========================
-    //
-    // public uploadCamera_to_Firestore(webcamImage: WebcamImage, qual : number): void {
-    //   console.log('uploadCamera_to_Firestore()');
-    //
-    //   // id = Math.random().toString(36).substring(2);  // option of using a random id for id
-    //   let id = 'img' + String(qual);
-    //   // abaixo usei getAgoraEmMilisegundos para nao sobrescrever a referencia, mas o ideal é usar a key do registro (é preciso gewrar uma para arquivos novos, pois atualmente ela é gerada apenas no momento de salvar)
-    //   id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
-    //
-    //   let img_webcam = webcamImage.imageAsDataUrl
-    //   let img_blob = this.util.dataURItoBlob(img_webcam);
-    //
-    //
-    //   this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + id ;
-    //
-    //   if (qual==1){
-    //       this.dados.selected_edit.img_url = this.filePath; // opção em upload to Firestore
-    //       this.dados.selected_edit.tipo_da_imagem1 = "firestore";
-    //   }
-    //   else if(qual==2){
-    //       this.dados.selected_edit.img_url2 = this.filePath; // opção em upload to Firestore
-    //       this.dados.selected_edit.tipo_da_imagem2 = "firestore";
-    //   }
-    //
-    //   const fileRef = this.afStorage.ref(this.filePath);
-    //
-    //   this.task = this.afStorage.upload(this.filePath, img_blob);
-    //   this.task.snapshotChanges().pipe(
-    //       finalize(() => {
-    //           this.downloadURL = fileRef.getDownloadURL();
-    //           console.log("downloadURL = ");
-    //           console.log( this.downloadURL );
-    //
-    //           // Atualiza imagem na paginas
-    //           this.download_imagem_do_firestore(qual);
-    //
-    //           this.desligar_botoes_de_upload();
-    //       })
-    //    )
-    //   .subscribe()
-    // }
-    //
-
-    public uploadCamera_as_base64(webcamImage: WebcamImage, qual : number): void {
-      console.log("uploadCamera_as_base64()");
-
-      if(qual==1){
-          this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
-          this.dados.selected_edit.tipo_da_imagem1 = "base64";
-          this.dados.selected_edit.origem_da_imagem1 = 'imagem de câmera';
-      }
-      else  if(qual==2){
-          this.dados.selected_edit.img_url2 = webcamImage.imageAsDataUrl; // opção em data file base64
-          this.dados.selected_edit.tipo_da_imagem2 = "base64";
-          this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
-      }
-
-      this.desligar_botoes_de_upload();
-    }
-
-    // ========= CAMERA UPLOAD =========================
-
-
-    // ================ IMG LINK =====================
-    public saveFile_as_link(qual : number){
-
-        if(qual == 1){
-            this.dados.selected_edit.img_url = this.img_link1;
-            if(this.img_link1.substr(0,10)=='data:image'){
-                // em vez de link a imagem era um arquio base64
-                this.dados.selected_edit.tipo_da_imagem1 = 'base64';
-                this.dados.selected_edit.origem_da_imagem1 = 'link da web';
-            }
-            else {
-                // link normal
-                this.dados.selected_edit.tipo_da_imagem1 = 'link';
-                this.dados.selected_edit.origem_da_imagem1 = 'link da web';
-            }
-        }
-        else if(qual == 2){
-            this.dados.selected_edit.img_url2 = this.img_link2;
-            if(this.img_link2.substr(0,10)=='data:image'){
-                // em vez de link a imagem era um arquio base64
-                this.dados.selected_edit.tipo_da_imagem2 = 'base64';
-                this.dados.selected_edit.origem_da_imagem2 = 'link';
-            }
-            else {
-                // link normal
-                this.dados.selected_edit.tipo_da_imagem2 = 'link';
-                this.dados.selected_edit.origem_da_imagem2 = 'link';
-            }
-        }
-
-        this.desligar_botoes_de_upload();
-    }
-    // ================ IMG LINK =====================
-
-
-    // ========= CAMERA ================================
-    public triggerSnapshot(): void {
-       this.trigger.next();
-       this.camera1_ativada = false;
-       this.camera2_ativada = false;
-       this.showWebcam = false;
-     }
-     public handleInitError(error: WebcamInitError): void {
-       this.errors.push(error);
-     }
-     public showNextWebcam(directionOrDeviceId: boolean|string): void {
-       // true => move forward through devices
-       // false => move backwards through devices
-       // string => move to device with given deviceId
-       this.nextWebcam.next(directionOrDeviceId);
-     }
-     public cameraWasSwitched(deviceId: string): void {
-       console.log('active device: ' + deviceId);
-       this.deviceId = deviceId;
-     }
-     public get triggerObservable(): Observable<void> {
-       return this.trigger.asObservable();
-     }
-     public get nextWebcamObservable(): Observable<boolean|string> {
-       return this.nextWebcam.asObservable();
-     }
-     // ========= CAMERA ================================
-
-
-    public desligar_botoes_de_upload(){
-        this.camera1_ativada = false;
-        this.camera2_ativada = false;
-        this.link1_ativado = false;
-        this.link2_ativado = false;
-        this.arquivo1_ativado = false;
-        this.arquivo2_ativado = false;
-    }
 
 
     public popup_alerta(cabecalho:string='', mensagem:string='') {

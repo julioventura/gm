@@ -1,0 +1,259 @@
+<div class="container_principal">
+
+    <!-- CABEÇALHO  -->
+    <div class="header-toolbar">
+        <div class="fc-left">
+            <img src="https://gestormix.com/img/sair.png" (click)="voltar()" class="img_nav">
+        </div>
+
+        <div class="fc-right title">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+
+        <div class="fc-center title">
+            <div class="espacador_vertical">&nbsp;</div>
+            <span *ngIf="config[dados.PARAMETRO].titulo_lista">{{ config[dados.PARAMETRO].titulo_unidade }} </span>
+        </div>
+        <div class="fc-clear"></div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+    </div>
+
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+    <!-- BARRA DE TITULO - titulo_barra -->
+    <div class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_top back_blue">
+        <div>
+            <span class="titulo_barra">{{dados.selected_edit.key ? 'Editar' : 'Incluir'}}</span>
+        </div>
+    </div>
+
+
+
+    <div *ngIf="dados.PARAMETRO == 'PERFIL'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+        <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
+            <div class="form_label_ext2">{{label_nome}}</div>
+            <div class="fw83">
+                <input name='nome' pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" />
+            </div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].razaosocial" class="ui-grid-row">
+            <div class="form_label_ext2">Razão Social</div>
+            <div class="fw83">
+                <input name='razaosocial' pInputText type="text" [(ngModel)]="dados.selected_edit.razaosocial" (change)="dados.selected_edit.razaosocial=util.capitalizar(dados.selected_edit.razaosocial)" autocomplete="off" />
+            </div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].cpf && !dados.selected_edit.cnpj" class="ui-grid-row">
+            <div class="form_label_ext2">CPF</div>
+            <div class="fw83"><input name='cpf' pInputText type="text" [(ngModel)]="dados.selected_edit.cpf" (change)="dados.selected_edit.cpf=util.formata_cpf(dados.selected_edit.cpf)" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].cnpj && !dados.selected_edit.cpf" class="ui-grid-row">
+            <div class="form_label_ext2">CNPJ</div>
+            <div class="fw83"><input name='cnpj' pInputText type="text" [(ngModel)]="dados.selected_edit.cnpj" (change)="dados.selected_edit.cnpj=util.formata_cnpj(dados.selected_edit.cnpj)" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].inscricaoestadual && dados.selected_edit.cnpj" class="ui-grid-row">
+            <div class="form_label_ext2">Insc.Est.</div>
+            <div class="fw83"><input name='inscricaoestadual' pInputText type="text" [(ngModel)]="dados.selected_edit.inscricaoestadual" (change)="dados.selected_edit.inscricaoestadual=util.formata_inscricaoestadual(dados.selected_edit.inscricaoestadual)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].cpf || config[dados.PARAMETRO].cnpj" class="espacador_vertical">&nbsp;</div>
+
+        <div *ngIf="config[dados.PARAMETRO].sexo && !dados.selected_edit.cnpj" class="ui-grid-row">
+            <div class="form_label_ext2">Sexo (M/F)</div>
+            <div class="fw20"><input name='sexo' pInputText [(ngModel)]="dados.selected_edit.sexo" (change)="dados.selected_edit.sexo=util.formata_sexo(dados.selected_edit.sexo)" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].nascimento">
+            <div class="ui-grid-row">
+                <div class="form_label_ext2">Nasc.</div>
+                <div class="fw43 left">
+                    <input name='nascimento' pInputText [(ngModel)]="dados.selected_edit.nascimento" (change)="mudou_nascimento()" autocomplete="off" />
+                </div>
+                <div *ngIf="dados.selected_edit.nascimento" class="fw40">
+                    &nbsp; <span class="idade">{{TEMP.idade}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].identidade" class="ui-grid-row">
+            <div class="form_label_ext2">Identidade</div>
+            <div class="fw83"><input name='identidade' pInputText [(ngModel)]="dados.selected_edit.identidade" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].telefone" class="ui-grid-row">
+            <div class="form_label_ext2">Telefone</div>
+            <div class="fw83"><input name='telefone' pInputText type="text" [(ngModel)]="dados.selected_edit.telefone" (change)="dados.selected_edit.telefone=util.formata_tel(dados.selected_edit.telefone)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].whatsapp" class="ui-grid-row">
+            <div class="form_label_ext2">Whatsapp</div>
+            <div class="fw43"><input name='whatsapp' pInputText [(ngModel)]="dados.selected_edit.whatsapp" (change)="dados.selected_edit.whatsapp=util.formata_tel(dados.selected_edit.whatsapp)" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].email" class="ui-grid-row">
+            <div class="form_label_ext2 red">LOGIN</div>
+            <div class="fw83"><input name='email' pInputText class="w100disabled" disabled="true" type="text" [(ngModel)]="dados.selected_edit.email" autocomplete="off" /></div>
+        </div>
+
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <div *ngIf="config[dados.PARAMETRO].site" class="ui-grid-row">
+            <div class="form_label_ext2">Site</div>
+            <div class="fw83"><input name='site' pInputText [(ngModel)]="dados.selected_edit.site" (change)="dados.selected_edit.site=util.formata_url(dados.selected_edit.site)" autocomplete="off" /></div>
+        </div>
+
+
+        <!-- IMAGEM -->
+        <div *ngIf="config[dados.PARAMETRO].img_url">
+            <div class="espacador_vertical_metade">&nbsp;</div>
+
+            <!-- IMAGEM 1 -->
+            <div class="ui-grid-row">
+                <div class="form_label_ext2">Imagem 1</div>
+                <div class="fw20 small bold blue">
+                    <img src="{{ arquivo1_ativado ? 'https://gestormix.com/img/arquivo_ativado.png'  : 'https://gestormix.com/img/arquivo.png' }}" (click)="ativar_arquivo(1)" class="img_source" />
+                    <img src="{{ camera1_ativada ? 'https://gestormix.com/img/camera_ativada.png'  : 'https://gestormix.com/img/camera.png' }}" (click)="ativar_camera(1)" class="img_source" />
+                    <img src="{{ link1_ativado ? 'https://gestormix.com/img/link_ativado.png'  : 'https://gestormix.com/img/link.png' }}" (click)="ativar_link(1)" class="img_source" />
+                </div>
+                <!-- ARQUIVO -->
+                <div *ngIf="arquivo1_ativado" class="fw43">
+                    <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 1)" />
+                </div>
+                <!-- LINK -->
+                <div *ngIf="link1_ativado" class="fw43">
+                    <input pInputText class="normal small" type="text" [(ngModel)]="img_link1" (keyup)="saveFile_as_link(1)" autocomplete="off" />
+                </div>
+                <!-- CAMERA -->
+                <div *ngIf="camera1_ativada && showWebcam" class="fw43">
+                    <button class="actionBtn" (click)="triggerSnapshot();">Capturar Imagem</button>
+                    <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Mudar Câmera</button>
+                </div>
+                <!-- STATUS -->
+                <div *ngIf="!arquivo1_ativado && !camera1_ativada && !link1_ativado" class="fw43">
+                    <span *ngIf="this.dados.selected_edit.img_url.trim()" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
+                    </span>
+                    <span *ngIf="!this.dados.selected_edit.img_url.trim()" class="result">(sem imagem)
+                    </span>
+                </div>
+            </div>
+
+            <!-- FIRESTORES PROGRESS -->
+            <!-- <div *ngIf="arquivo1_ativado && mostrar_upload_firestore_progress">
+                <div *ngIf="uploadPercent | async; let x">
+                    <progress *ngIf="x<100" max="100" [value]="x"></progress>
+                </div>
+            </div> -->
+
+            <!-- CAMERA -->
+            <div *ngIf="camera1_ativada && showWebcam">
+                <webcam
+                    *ngIf="showWebcam"
+                    [height]="200" [width]="300"
+                    [trigger]="triggerObservable"
+                    (imageCapture)="uploadCamera_as_base64($event,1)"
+                    [allowCameraSwitch]="allowCameraSwitch"
+                    [switchCamera]="nextWebcamObservable"
+                    [videoOptions]="videoOptions"
+                    [imageQuality]="1"
+                    (cameraSwitched)="cameraWasSwitched($event)"
+                    (initError)="handleInitError($event)">
+                </webcam>
+
+                <!-- ERROS -->
+                <div class="espacador_vertical">&nbsp;</div>
+                <h4 *ngIf="errors.length > 0">Messages:</h4>
+                <ul *ngFor="let error of errors">
+                    <li>{{error | json}}</li>
+                </ul>
+            </div>
+
+            <!-- MOSTRA AS IMAGENS -->
+            <div *ngIf="dados.selected_edit.img_url && !showWebcam">
+                <div class="espacador_vertical_metade">&nbsp;</div>
+                <div class="ui-grid-row">
+                    <div class="form_label_ext2"> &nbsp; </div>
+                    <div class="fw83">
+                        <!-- LINK OU BASE64 -->
+                        <span *ngIf="dados.selected_edit.img_url && (!dados.selected_edit.tipo_da_imagem1 || dados.selected_edit.tipo_da_imagem1 != 'firestore')" (click)="zoom_da_imagem(1)">
+                            <img src="{{dados.selected_edit.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
+                        </span>
+                        <!-- FIRESTORE -->
+                        <!-- <span *ngIf="dados.selected_edit.img_url && (dados.selected_edit.tipo_da_imagem1 && dados.selected_edit.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                            <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
+                                <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
+                            </span>
+                        </span> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div *ngIf="config[dados.PARAMETRO].facebook" class="espacador_vertical">&nbsp;</div>
+        <div *ngIf="config[dados.PARAMETRO].facebook" class="ui-grid-row">
+            <div class="form_label_ext2">Facebook</div>
+            <div class="fw83"><input name='facebook' pInputText [(ngModel)]="dados.selected_edit.facebook" (change)="dados.selected_edit.facebook=util.formata_url(dados.selected_edit.facebook)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].instagram" class="ui-grid-row">
+            <div class="form_label_ext2">Instagram</div>
+            <div class="fw83"><input name='instagram' pInputText [(ngModel)]="dados.selected_edit.instagram" (change)="dados.selected_edit.instagram=util.formata_url(dados.selected_edit.instagram)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].linkedin" class="ui-grid-row">
+            <div class="form_label_ext2">Linkedin</div>
+            <div class="fw83"><input name='linkedin' pInputText [(ngModel)]="dados.selected_edit.linkedin" (change)="dados.selected_edit.linkedin=util.formata_url(dados.selected_edit.linkedin)" autocomplete="off" /></div>
+        </div>
+
+        <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
+        <div *ngIf="config[dados.PARAMETRO].endereco" class="ui-grid-row">
+            <div class="form_label_ext2">Endereco</div>
+            <div class="fw83"><input name='endereco' pInputText type="text" [(ngModel)]="dados.selected_edit.endereco" (change)="dados.selected_edit.endereco=util.capitalizar(dados.selected_edit.endereco)" autocomplete="off" />                </div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].bairro" class="ui-grid-row">
+            <div class="form_label_ext2">Bairro</div>
+            <div class="fw83"><input name='bairro' pInputText type="text" [(ngModel)]="dados.selected_edit.bairro" (change)="dados.selected_edit.bairro=util.capitalizar(dados.selected_edit.bairro)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].cidade" class="ui-grid-row">
+            <div class="form_label_ext2">Cidade</div>
+            <div class="fw83"><input name='cidade' pInputText type="text" [(ngModel)]="dados.selected_edit.cidade" (change)="dados.selected_edit.cidade=util.formata_cidade(dados.selected_edit.cidade)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].estado" class="ui-grid-row">
+            <div class="form_label_ext2">Estado</div>
+            <div class="fw20"><input name='estado' pInputText [(ngModel)]="dados.selected_edit.estado" (change)="dados.selected_edit.estado=util.formata_maiusculas(dados.selected_edit.estado)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].cep" class="ui-grid-row">
+            <div class="form_label_ext2">CEP</div>
+            <div class="fw43"><input name='cep' pInputText [(ngModel)]="dados.selected_edit.cep" (change)="dados.selected_edit.cep=util.formata_cep(dados.selected_edit.cep)" autocomplete="off" /></div>
+        </div>
+        <div *ngIf="config[dados.PARAMETRO].endereco" class="espacador_vertical">&nbsp;</div>
+
+
+        <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical"> &nbsp; </div>
+        <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+            <div class="form_label_ext2">{{label_obs}}</div>
+            <div class="fw83">
+                <textarea pInputTextarea rows="2" cols="30" autoResize=false wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- RODAPÉ COM ICONES -->
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="fc-left menu_home">
+            <img src="https://gestormix.com/img/vazio.png" class="img_nav" />
+        </div>
+        <div class="float-right">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+        <div class="float-center">
+        </div>
+        <div class="fc-clear"></div>
+    </div>
+
+</div>

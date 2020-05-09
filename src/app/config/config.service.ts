@@ -21,7 +21,7 @@ export class ConfigService {
   // ATIVAR GERENCIAMENTO DE CLIENTES E SOCIOS
   // ===================================================
   public ATIVAR_CLIENTES : boolean = true;
-  public ATIVAR_SOCIOS : boolean = true;
+  public ATIVAR_SOCIOS : boolean = false;
 
   // =====================================================
   // Configuração de navegação
@@ -98,6 +98,10 @@ export class ConfigService {
       Revisoes : false,
       StartPage : false,
       Whatsapp : false,
+      Config : false,
+      EditAtendimentos : false,
+      EditPerfil : false,
+      EditLancamentos : false,
   };
 
 
@@ -591,6 +595,9 @@ export class ConfigService {
           key : true,
           id : true,
           label_id : "ID",
+          nome : true,
+          label_nome : "Cliente",
+          razaosocial : true,
           celular : true,
           cep : true,
           cidade : true,
@@ -607,9 +614,6 @@ export class ConfigService {
           nacionalidade : true,
           nascimento : true,
           naturalidade : true,
-          nome : true,
-          label_nome : "Cliente",
-          razaosocial : true,
           obs: true,
           label_obs: "Obs",
           pode_incluir : true,
@@ -710,6 +714,11 @@ export class ConfigService {
       singular : "registro",
       plural : "registros",
       key : true,
+      id : false,
+      label_id : "ID",
+      nome : true,
+      label_nome : "Cliente",
+      razaosocial : false,
       cep : true,
       cidade : true,
       bairro : true,
@@ -723,9 +732,9 @@ export class ConfigService {
       instagram : true,
       linkedin : true,
       img_url : true,
-      nome : true,
       obs: true,
       cpf : true,
+      cnpj : true,
       especialidade : true,
       nascimento : true,
       funcao : true,

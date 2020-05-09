@@ -1,11 +1,9 @@
 
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 // Firebase
 import { AngularFireDatabase } from '@angular/fire/database';
-// import { FirebaseApp } from '@angular/fire';
 import 'firebase/database';
 
 // Autenticação com Firebase
@@ -1008,7 +1006,6 @@ export class DadosService {
             else if (destino == 'AGENDA') {
                 this.config.DISPLAY.Agenda = true;
             }
-
             else {
                 console.log("go() -> else");
                 this.PARAMETRO = destino;
@@ -1022,6 +1019,11 @@ export class DadosService {
 
     public desativar_DISPLAYS() {
         this.config.DISPLAY.Home = false;
+        this.config.DISPLAY.Config = false;
+        this.config.DISPLAY.EditAtendimentos = false;
+        this.config.DISPLAY.EditEstoque = false;
+        this.config.DISPLAY.EditLancamentos = false;
+        this.config.DISPLAY.EditPerfil = false;
         this.config.DISPLAY.Registro = false;
         this.config.DISPLAY.Editar = false;
         this.config.DISPLAY.Agenda = false;
@@ -4261,6 +4263,7 @@ export class DadosService {
         this.listar_centros_de_custos_lista = false;
 
         this.config.DISPLAY.Lista = false;
+        this.config.DISPLAY.Config = false;
         this.config.DISPLAY.Registro = false;
         this.config.DISPLAY.Home = true;
     }

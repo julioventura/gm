@@ -1,0 +1,321 @@
+<div class="container_principal">
+
+    <!-- CABEÇALHO  -->
+    <div class="header-toolbar">
+        <div class="fc-left">
+            <img src="https://gestormix.com/img/sair.png" (click)="voltar()" class="img_nav">
+        </div>
+
+        <div class="fc-right title">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+
+        <div class="fc-center title">
+            <div class="espacador_vertical">&nbsp;</div>
+            <span *ngIf="config[dados.PARAMETRO].titulo_lista">{{ config[dados.PARAMETRO].titulo_unidade }} </span>
+        </div>
+        <div class="fc-clear"></div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
+    </div>
+
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+    <!-- BARRA DE TITULO - titulo_barra -->
+    <div class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_top back_blue">
+        <div>
+            <span class="titulo_barra">{{dados.selected_edit.key ? 'Editar' : 'Incluir'}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="!config[dados.PARAMETRO].tem_sublista">
+
+        <!-- EXIBE O ULTIMO INCLUIDO -->
+		<div class="container_dialogBox_body back_white">
+			<div class="espacador_vertical_metade">&nbsp;</div>
+            <span class="small">Último cadastrado: &nbsp; {{ultimo_cadastrado}}</span>
+		</div>
+
+
+        <div *ngIf="dados.PARAMETRO == 'ESTOQUE'" class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+
+            <div *ngIf="config[dados.PARAMETRO].nome" class="ui-grid-row">
+                <div class="form_label_ext2">{{config[dados.PARAMETRO].label_nome}}</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.nome" (change)="dados.selected_edit.nome=util.capitalizar(dados.selected_edit.nome)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].id" class="ui-grid-row">
+                <div class="form_label_ext2">Código</div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.id" (change)="dados.selected_edit.id = util.formata_maiusculas(dados.selected_edit.id)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].codigodebarras" class="ui-grid-row">
+                <div class="form_label_ext2">Barcode EAN-13</div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.codigodebarras" (change)="dados.selected_edit.codigodebarras = util.verificaEAN13(dados.selected_edit.codigodebarras)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].categoria || config[dados.PARAMETRO].descricao" class="espacador_vertical_metade">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].categoria" class="ui-grid-row">
+                <div class="form_label_ext2">Categoria</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.categoria" (change)="dados.selected_edit.categoria = util.capitalizar(dados.selected_edit.categoria)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].descricao" class="ui-grid-row">
+                <div class="form_label_ext2">Descricão</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.descricao" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].material" class="ui-grid-row">
+                <div class="form_label_ext2">Material</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.material" (change)="dados.selected_edit.material = util.capitalizar(dados.selected_edit.material)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].cor" class="ui-grid-row">
+                <div class="form_label_ext2">Cor</div>
+                <div class="fw83"><input pInputText type="text" [(ngModel)]="dados.selected_edit.cor" (change)="dados.selected_edit.cor = util.capitalizar(dados.selected_edit.cor)" autocomplete="off" /></div>
+            </div>
+
+
+            <div *ngIf="config[dados.PARAMETRO].img_url">
+                <div class="espacador_vertical_metade">&nbsp;</div>
+
+                <!-- IMAGEM 1 -->
+                <div class="ui-grid-row">
+                    <div class="form_label_ext2">Imagem 1</div>
+                    <div class="fw40 small bold blue">
+                        <img src="{{ arquivo1_ativado ? 'https://gestormix.com/img/arquivo_ativado.png'  : 'https://gestormix.com/img/arquivo.png' }}" (click)="ativar_arquivo(1)" class="img_source" />
+                        <img src="{{ camera1_ativada ? 'https://gestormix.com/img/camera_ativada.png'  : 'https://gestormix.com/img/camera.png' }}" (click)="ativar_camera(1)" class="img_source" />
+                        <img src="{{ link1_ativado ? 'https://gestormix.com/img/link_ativado.png'  : 'https://gestormix.com/img/link.png' }}" (click)="ativar_link(1)" class="img_source" />
+                    </div>
+
+                    <!-- ARQUIVO -->
+                    <div *ngIf="arquivo1_ativado" class="fw43">
+                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 1)" />
+                    </div>
+
+                    <!-- LINK -->
+                    <div *ngIf="link1_ativado" class="fw43">
+                        <input pInputText class="normal small" type="text" [(ngModel)]="img_link1" (keyup)="saveFile_as_link(1)" autocomplete="off" />
+                    </div>
+
+                    <!-- CAMERA -->
+                    <div *ngIf="camera1_ativada && showWebcam" class="fw43">
+                        <button class="actionBtn" (click)="triggerSnapshot();">Capturar Imagem</button>
+                        <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Mudar Câmera</button>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div *ngIf="!arquivo1_ativado && !camera1_ativada && !link1_ativado" class="fw43">
+                        <span *ngIf="this.dados.selected_edit.img_url.trim()" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
+                            <!-- <br>1 ({{this.dados.selected_edit.img_url}})
+                            <br>1 ({{this.dados.selected_edit.tipo_da_imagem1}}) -->
+                        </span>
+                        <span *ngIf="!this.dados.selected_edit.img_url.trim()" class="result">(sem imagem)
+                            <!-- <br>1 ({{this.dados.selected_edit.img_url}})
+                            <br>1 ({{this.dados.selected_edit.tipo_da_imagem1}}) -->
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CAMERA -->
+                <div *ngIf="camera1_ativada && showWebcam">
+                    <webcam
+                        *ngIf="showWebcam"
+                        [height]="200" [width]="300"
+                        [trigger]="triggerObservable"
+                        (imageCapture)="uploadCamera_as_base64($event,1)"
+                        [allowCameraSwitch]="allowCameraSwitch"
+                        [switchCamera]="nextWebcamObservable"
+                        [videoOptions]="videoOptions"
+                        [imageQuality]="1"
+                        (cameraSwitched)="cameraWasSwitched($event)"
+                        (initError)="handleInitError($event)">
+                    </webcam>
+
+                    <!-- ERROS -->
+                    <div class="espacador_vertical">&nbsp;</div>
+                    <!-- <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label> -->
+                    <!-- DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px"> <button (click)="showNextWebcam(deviceId);">Activate</button> -->
+                    <h4 *ngIf="errors.length > 0">Messages:</h4>
+                    <ul *ngFor="let error of errors">
+                        <li>{{error | json}}</li>
+                    </ul>
+                </div>
+
+                <!-- IMAGEM 2 -->
+                <div class="ui-grid-row">
+                    <div class="form_label_ext2">Imagem 2</div>
+                    <div class="fw40 small bold blue">
+                        <img src="{{ arquivo2_ativado ? 'https://gestormix.com/img/arquivo_ativado.png'  : 'https://gestormix.com/img/arquivo.png' }}" (click)="ativar_arquivo(2)" class="img_source" />
+                        <img src="{{ camera2_ativada ? 'https://gestormix.com/img/camera_ativada.png'  : 'https://gestormix.com/img/camera.png' }}" (click)="ativar_camera(2)" class="img_source" />
+                        <img src="{{ link2_ativado ? 'https://gestormix.com/img/link_ativado.png'  : 'https://gestormix.com/img/link.png' }}" (click)="ativar_link(2)" class="img_source" />
+                    </div>
+
+                    <!-- ARQUIVO -->
+                    <div *ngIf="arquivo2_ativado" class="fw43">
+                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 2)" />
+                    </div>
+
+                    <!-- LINK -->
+                    <div *ngIf="link2_ativado" class="fw43">
+                        <input pInputText class="normal small" type="text" [(ngModel)]="img_link2" (keyup)="saveFile_as_link(2)" autocomplete="off" />
+                    </div>
+
+                    <!-- CAMERA -->
+                    <div *ngIf="camera2_ativada && showWebcam" class="fw43">
+                        <button class="actionBtn" (click)="triggerSnapshot();">Capturar Imagem</button>
+                        <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Mudar Câmera</button>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div *ngIf="!arquivo2_ativado && !camera2_ativada && !link2_ativado" class="fw43">
+                        <span *ngIf="this.dados.selected_edit.img_url2.trim()" class="result">{{this.dados.selected_edit.origem_da_imagem2}}
+                            <!-- <br>2 ({{this.dados.selected_edit.img_url2}})
+                            <br>2 ({{this.dados.selected_edit.tipo_da_imagem2}}) -->
+                        </span>
+                        <span *ngIf="!this.dados.selected_edit.img_url2.trim()" class="result">(sem imagem)
+                            <!-- <br>2 ({{this.dados.selected_edit.img_url2}})
+                            <br>2 ({{this.dados.selected_edit.tipo_da_imagem2}})  -->
+                        </span>
+                    </div>
+                </div>
+
+                <!-- CAMERA -->
+                <div *ngIf="camera2_ativada && showWebcam">
+
+                    <div class="espacador_vertical">&nbsp;</div>
+                    <webcam
+                        *ngIf="showWebcam"
+                        [height]="200" [width]="300"
+                        [trigger]="triggerObservable"
+                        (imageCapture)="uploadCamera_as_base64($event,2)"
+                        [allowCameraSwitch]="allowCameraSwitch"
+                        [switchCamera]="nextWebcamObservable"
+                        [videoOptions]="videoOptions"
+                        [imageQuality]="1"
+                        (cameraSwitched)="cameraWasSwitched($event)"
+                        (initError)="handleInitError($event)">
+                    </webcam>
+
+                    <!-- <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label> -->
+                    <!-- DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px"> <button (click)="showNextWebcam(deviceId);">Activate</button> -->
+
+                    <h4 *ngIf="errors.length > 0">Messages:</h4>
+                    <ul *ngFor="let error of errors">
+                        <li>{{error | json}}</li>
+                    </ul>
+                </div>
+
+                <!-- MOSTRA AS IMAGENS -->
+                <div *ngIf="(dados.selected_edit.img_url || dados.selected_edit.img_url2) && !showWebcam">
+                    <div class="espacador_vertical_metade">&nbsp;</div>
+                    <div class="ui-grid-row">
+                        <div class="form_label_ext2"> &nbsp; </div>
+                        <div class="fw83">
+                            <!-- LINK OU BASE64 -->
+                            <span *ngIf="dados.selected_edit.img_url && (!dados.selected_edit.tipo_da_imagem1 || dados.selected_edit.tipo_da_imagem1 != 'firestore')" (click)="zoom_da_imagem(1)">
+                                <img src="{{dados.selected_edit.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
+                            </span>
+                            <span *ngIf="dados.selected_edit.img_url2 && (!dados.selected_edit.tipo_da_imagem2 || dados.selected_edit.tipo_da_imagem2 != 'firestore')" (click)="zoom_da_imagem(2)">
+                                <img src="{{dados.selected_edit.img_url2}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior2 ? 'img_url_maior' : 'no_display'}}">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div *ngIf="config[dados.PARAMETRO].url" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].url" class="ui-grid-row">
+                <div class="form_label_ext2">Site</div>
+                <div class="fw83"><input pInputText class="normal small" type="text" [(ngModel)]="dados.selected_edit.url" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].preco_venda || config[dados.PARAMETRO].preco_custo" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].preco_venda" class="ui-grid-row">
+                <div class="form_label_ext2">Preço Venda</div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.preco_venda" (change)="dados.selected_edit.preco_venda=util.formata_valor(dados.selected_edit.preco_venda)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].preco_custo" class="ui-grid-row">
+                <div class="form_label_ext2">Preço Custo</div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.preco_custo" (change)="dados.selected_edit.preco_custo=util.formata_valor(dados.selected_edit.preco_custo)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].quantidade" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].quantidade" class="ui-grid-row">
+                <div class="form_label_ext2">Quantidade</div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].quantidade_minima" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].quantidade_minima" class="ui-grid-row">
+                <div class="form_label_ext2">Quantidade Mínima</div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade_minima" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].quantidade_maxima" class="ui-grid-row">
+                <div class="form_label_ext2">Quantidade Máxima</div>
+                <div class="fw20"><input pInputText type="text" [(ngModel)]="dados.selected_edit.quantidade_maxima" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].unidade" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].unidade" class="ui-grid-row">
+                <div class="form_label_ext2">Unidade de medida</div>
+                <div class="fw43"><input pInputText type="text" [(ngModel)]="dados.selected_edit.unidade" (change)="dados.selected_edit.unidade = util.capitalizar(dados.selected_edit.unidade)" autocomplete="off" /></div>
+            </div>
+
+            <div *ngIf="config[dados.PARAMETRO].obs" class="espacador_vertical">&nbsp;</div>
+
+            <div *ngIf="config[dados.PARAMETRO].obs" class="ui-grid-row">
+                <div class="form_label_ext2">{{label_obs}}</div>
+                <div class="fw83">
+                    <textarea pInputTextarea rows="2" cols="30" wrap="hard" [(ngModel)]="dados.selected_edit.obs"></textarea>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- RODAPÉ COM ICONES -->
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="fc-left menu_home">
+            <img *ngIf="pode_excluir && dados.selected_edit.key" src="https://gestormix.com/img/lixo.png" (click)="dialogExcluir()" class="img_nav">
+            <img *ngIf="!pode_excluir || !dados.selected_edit.key" src="https://gestormix.com/img/vazio.png" class="img_nav" />
+        </div>
+        <div class="float-right">
+            <img src="https://gestormix.com/img/salvar.png" (click)="salvar()" class="img_nav">
+        </div>
+        <div class="float-center">
+
+            <!-- POPUPS DE ALERTA  -->
+
+            <!-- Excluir  -->
+            <div *ngIf="estornar_ou_excluir_dialog">
+                <div class="center">
+                    &nbsp; <br />
+                    <span class="button_red" (click)="confirmar_exclusao()"> Excluir </span> &nbsp;
+                    <span class="button_green" (click)="estornar_ou_excluir_dialog=false"> Cancelar </span>
+                </div>
+            </div>
+
+
+            <!-- Confirmar Exclusão -->
+            <div *ngIf="confirmar_exclusao_dialog">
+                <div class="center">
+                    &nbsp; <br />
+                    <span class="button_red" (click)="excluir()"> Confirmar a Exclusão </span> &nbsp;
+                    <span class="button_green" (click)="confirmar_exclusao_dialog=false"> Cancelar a Exclusão </span>
+                </div>
+            </div>
+        </div>
+        <div class="fc-clear"></div>
+    </div>
+
+</div>

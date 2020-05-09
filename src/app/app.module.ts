@@ -14,7 +14,6 @@ import { Observable, Subject } from 'rxjs';
 
 // AngularFire libs
 import { AngularFireModule } from '@angular/fire';
-// import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
@@ -23,6 +22,11 @@ import { ListComponent } from './list/list.component';
 import { DetailComponent } from './detail/detail.component';
 import { EditComponent } from './edit/edit.component';
 import { HomeComponent } from './home/home.component';
+import { ConfigComponent } from './config/config.component';
+import { AtendimentosComponent } from './atendimentos/atendimentos.component';
+import { EditPerfilComponent } from './perfil/edit_perfil.component';
+import { EditEstoqueComponent } from './estoque/edit_estoque.component';
+import { EditLancamentosComponent } from './edit/edit-lancamentos.component';
 
 // Services (for all components)
 // import { ConfigService } from './config/config.service';
@@ -30,8 +34,6 @@ import { HomeComponent } from './home/home.component';
 // import { UtilService } from './util/util.service';
 
 // PrimeNG
-// import {ConfirmationService} from 'primeng/api';
-// import {MessageService} from 'primeng/api';
 
 import {DataViewModule} from 'primeng/dataview';
 import {TableModule} from 'primeng/table';
@@ -45,9 +47,9 @@ import {CalendarModule} from 'primeng/calendar';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 
-// import {ConfirmationService} from 'primeng/api';
-import {MessagesModule} from 'primeng/messages';
+import {ConfirmationService} from 'primeng/api';
 
+// import {MessageService} from 'primeng/api';
 // import {MessagesModule} from 'primeng/messages';
 // import {MessageModule} from 'primeng/message';
 // import {DialogModule} from 'primeng/dialog';
@@ -56,7 +58,7 @@ import {MessagesModule} from 'primeng/messages';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // https://github.com/basst314/ngx-webcam
-import {WebcamModule} from 'ngx-webcam';
+// import {WebcamModule} from 'ngx-webcam';
 
 
 
@@ -80,6 +82,11 @@ const firebaseConfig = {
     DetailComponent,
     EditComponent,
     HomeComponent,
+    ConfigComponent,
+    AtendimentosComponent,
+    EditPerfilComponent,
+    EditEstoqueComponent,
+    EditLancamentosComponent
   ],
 
   imports: [
@@ -92,15 +99,15 @@ const firebaseConfig = {
         CalendarModule, ProgressSpinnerModule, OverlayPanelModule,
         InputTextModule, InputTextareaModule, InputSwitchModule,
         ConfirmDialogModule, ButtonModule,
-        MessagesModule,
+        // MessagesModule,
         // MessagesModule, MessageModule,
         // DialogModule,
         // Initialize Firebase
         AngularFireModule.initializeApp(firebaseConfig),
         // AngularFirestoreModule,
         AngularFireAuthModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-        WebcamModule
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+        // WebcamModule
     ],
     entryComponents: [
     ],
@@ -113,8 +120,8 @@ const firebaseConfig = {
       // DadosService,
       // UtilService,
       //
-      // ConfirmationService,
-      // MessageService
+      // MessageService,
+      ConfirmationService
   ],
   bootstrap: [AppComponent],
   schemas: [ NO_ERRORS_SCHEMA ]

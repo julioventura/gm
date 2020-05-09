@@ -21,6 +21,33 @@
         <app-edit></app-edit>
     </div>
 
+    <!-- CONFIG -->
+    <div *ngIf="config.DISPLAY.Config">
+        <app-config></app-config>
+    </div>
+
+    <!-- ATENDIMENTOS -->
+    <div *ngIf="config.DISPLAY.EditAtendimentos">
+        <app-edit_atendimentos></app-edit_atendimentos>
+    </div>
+
+    <!-- PERFIL -->
+    <div *ngIf="config.DISPLAY.EditPerfil">
+        <app-edit_perfil></app-edit_perfil>
+    </div>
+
+    <!-- ESTOQUE -->
+    <div *ngIf="config.DISPLAY.EditEstoque">
+        <app-edit_estoque></app-edit_estoque>
+    </div>
+
+
+    <!-- LANCAMENTOS -->
+    <div *ngIf="config.DISPLAY.EditLancamentos">
+        <app-edit_lancamentos></app-edit_lancamentos>
+    </div>
+
+
 
 
 

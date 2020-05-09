@@ -97,15 +97,6 @@
 
     <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
 
-    <!-- <p-confirmDialog></p-confirmDialog> -->
-    <!-- <button type="button" (click)="confirm1()" pButton icon="pi pi-check" label="Confirmar"></button>
-    <button type="button" (click)="confirm2()" pButton icon="pi pi-times" label="Sair"></button> -->
-    <!-- <button type="button" (click)="confirm1()" pButton icon="pi pi-check"></button>
-    <button type="button" (click)="confirm2()" pButton icon="pi pi-times"></button> -->
-
-    <p-messages [value]="msgs"></p-messages>
-
-
 
     <div *ngIf="['REL_DINHEIRO','REL_DEBITO','REL_CREDITO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)
         && !dados.listar_dinheiro_dia && !dados.listar_debito_dia && !dados.listar_credito_dia && !dados.listar_cheque_pre_dia && !dados.listar_cheque_pre_dia_bom_para
