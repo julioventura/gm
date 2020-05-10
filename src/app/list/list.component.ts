@@ -6,7 +6,7 @@ import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
 // ConfirmDialog xxxxx
-import {ConfirmationService} from 'primeng/api';    
+import {ConfirmationService} from 'primeng/api';
 
 
 @Component({
@@ -4664,7 +4664,32 @@ export class ListComponent implements OnInit {
         }
 
         this.config.DISPLAY.Lista = false;
-        this.config.DISPLAY.Editar = true;
+
+
+        if (this.dados.PARAMETRO == 'ATENDIMENTOS') {
+            this.config.DISPLAY.EditAtendimentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'CONFIGURACAO') {
+            this.config.DISPLAY.Config = true;
+        }
+        else if (this.dados.PARAMETRO == 'PERFIL') {
+            this.config.DISPLAY.EditPerfil = true;
+        }
+        else if (this.dados.PARAMETRO == 'ESTOQUE') {
+            this.config.DISPLAY.EditEstoque = true;
+        }
+        else if (this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'BANCOS') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else {
+            this.config.DISPLAY.Editar = true;
+        }
     }
 
     public mostrar_lista(opcao : string){
