@@ -1,17 +1,12 @@
 import { NgModule, Component, OnInit } from '@angular/core';
-// import { NgModule, Component, OnInit, OnChanges } from '@angular/core';
-// import { Observable } from 'rxjs';
 
 // Services
 import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
-// import {OverlayPanelModule} from 'primeng/overlaypanel';
-
-// ConfirmDialog
+// ConfirmDialog xxxxx
 import {ConfirmationService} from 'primeng/api';
-// import {Message} from 'primeng/api';
 
 
 @Component({
@@ -183,21 +178,8 @@ export class ListComponent implements OnInit {
     ngOnInit(): void {
         console.log("\n\n==========================");
         console.log("INIT listagens => " + this.dados.PARAMETRO);
-        // console.log(this.config[this.dados.PARAMETRO].selected);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].selected]);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].selected]?.length);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].total_de]);
-        // console.log("==========================\n\n");
-
-        // console.log("\n\n==========================");
-        // console.log("this.usuario_logado");
-        // console.log("==========================");
+        console.log("==========================\n\n");
         console.log(this.dados.usuario_logado);
-        // console.log(this.dados.auth_object.displayName);
-        // console.log(this.dados.auth_object.email);
-        // console.log(this.dados.auth_object.photoURL);
-        // console.log(this.dados.auth_object.uid);
-        // console.log(this.dados.auth_object.providerId);
         console.log("==========================\n");
 
 
@@ -4182,6 +4164,12 @@ export class ListComponent implements OnInit {
     public voltar() {
         console.log("voltar()");
 
+        if( ['REL_RECEITAS_E_DESPESAS','REL_CENTROS_DE_CUSTOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_EXTRATO_DE_CONTAS','CENTROS_DE_CUSTOS_LISTA'].includes(this.dados.PARAMETRO) ){
+            this.mostrar_opcao_1 = true;
+            this.mostrar_opcao_2 = false;
+            this.mostrar_lista('1');
+        }
+
         this.dados.registro_envio_whatsapp = {};
 
         if(this.config.DISPLAY.PopupWhatsapp){
@@ -4488,6 +4476,7 @@ export class ListComponent implements OnInit {
         }
     }
 
+
     public verRegistro(registro : any, lista : string = '') : void {
         console.log("PARAMETRO = " + this.dados.PARAMETRO);
         console.log("verRegistro(registro)");
@@ -4675,7 +4664,32 @@ export class ListComponent implements OnInit {
         }
 
         this.config.DISPLAY.Lista = false;
-        this.config.DISPLAY.Editar = true;
+
+
+        if (this.dados.PARAMETRO == 'ATENDIMENTOS') {
+            this.config.DISPLAY.EditAtendimentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'CONFIGURACAO') {
+            this.config.DISPLAY.Config = true;
+        }
+        else if (this.dados.PARAMETRO == 'PERFIL') {
+            this.config.DISPLAY.EditPerfil = true;
+        }
+        else if (this.dados.PARAMETRO == 'ESTOQUE') {
+            this.config.DISPLAY.EditEstoque = true;
+        }
+        else if (this.dados.PARAMETRO == 'LANCAMENTOS_DESPESA') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'LANCAMENTOS_RECEITA') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else if (this.dados.PARAMETRO == 'BANCOS') {
+            this.config.DISPLAY.EditLancamentos = true;
+        }
+        else {
+            this.config.DISPLAY.Editar = true;
+        }
     }
 
     public mostrar_lista(opcao : string){
@@ -4688,7 +4702,6 @@ export class ListComponent implements OnInit {
             this.menu_financeiro_opcao2_classe = 'menu_financeiro_inativo float_none';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
-                // this.dados.database = this.dados.filtered_receitas ? 'filtered_receitas' : 'selected_receitas';
                 this.dados.database = 'selected_receitas';
                 this.dados.database_caption = 'RECEITAS';
             }
@@ -4699,8 +4712,8 @@ export class ListComponent implements OnInit {
             }
         }
         else if(opcao=='2'){
-            this.menu_financeiro_opcao1_classe = 'menu_financeiro float_none';
-            this.menu_financeiro_opcao2_classe = 'menu_financeiro_inativo float_none';
+            this.menu_financeiro_opcao1_classe = 'menu_financeiro_inativo float_none';
+            this.menu_financeiro_opcao2_classe = 'menu_financeiro float_none';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
                 // this.dados.database = this.dados.filtered_despesas ? 'filtered_despesas' : 'selected_despesas';

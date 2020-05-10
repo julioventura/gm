@@ -28,13 +28,7 @@ import { EditPerfilComponent } from './perfil/edit_perfil.component';
 import { EditEstoqueComponent } from './estoque/edit_estoque.component';
 import { EditLancamentosComponent } from './edit/edit-lancamentos.component';
 
-// Services (for all components)
-// import { ConfigService } from './config/config.service';
-// import { DadosService } from './dados/dados.service';
-// import { UtilService } from './util/util.service';
-
 // PrimeNG
-
 import {DataViewModule} from 'primeng/dataview';
 import {TableModule} from 'primeng/table';
 import {InputTextModule} from 'primeng/inputtext';
@@ -49,16 +43,11 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 import {ConfirmationService} from 'primeng/api';
 
-// import {MessageService} from 'primeng/api';
-// import {MessagesModule} from 'primeng/messages';
-// import {MessageModule} from 'primeng/message';
-// import {DialogModule} from 'primeng/dialog';
-
 // For PrimeNG animations
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 // https://github.com/basst314/ngx-webcam
-// import {WebcamModule} from 'ngx-webcam';
+import {WebcamModule} from 'ngx-webcam';
 
 
 
@@ -69,9 +58,9 @@ const firebaseConfig = {
     databaseURL: "https://gestormix-com.firebaseio.com",
     projectId: "gestormix-com",
     messagingSenderId: "1015127613041",
+    storageBucket: "gestormix-com.appspot.com",
     appId: "1:1015127613041:web:c3cd655665f9322ec445d0"
 }
-// storageBucket: "gestormix-com.appspot.com",
 
 
 
@@ -93,34 +82,26 @@ const firebaseConfig = {
         BrowserModule, FormsModule, CommonModule,
         BrowserAnimationsModule,
         AppRoutingModule,
-        // HostListener,
         // PrimeNG
         DataViewModule, TableModule, CheckboxModule,
         CalendarModule, ProgressSpinnerModule, OverlayPanelModule,
         InputTextModule, InputTextareaModule, InputSwitchModule,
         ConfirmDialogModule, ButtonModule,
-        // MessagesModule,
-        // MessagesModule, MessageModule,
-        // DialogModule,
         // Initialize Firebase
         AngularFireModule.initializeApp(firebaseConfig),
         // AngularFirestoreModule,
         AngularFireAuthModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
-        // WebcamModule
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+        WebcamModule
     ],
     entryComponents: [
     ],
   providers: [
-      // { provide: BUCKET, useValue: 'my-bucket-name' }
-
       // no need to place any providers due to the `providedIn` flag...
-
       // ConfigService,
       // DadosService,
       // UtilService,
-      //
-      // MessageService,
+
       ConfirmationService
   ],
   bootstrap: [AppComponent],

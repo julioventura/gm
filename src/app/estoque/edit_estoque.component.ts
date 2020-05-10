@@ -89,7 +89,7 @@ export class EditEstoqueComponent implements OnInit {
     public vendaDiretaDialog : boolean = false;
     public confirmar_atendimento_sem_obs : boolean = false;
 
-    public estornar_ou_excluir_dialog : boolean = false;
+    public excluir_dialog : boolean = false;
     public confirmar_exclusao_dialog : boolean = false;
 
     public ultimo_cadastrado : string = '';
@@ -134,9 +134,6 @@ export class EditEstoqueComponent implements OnInit {
 
     public imageError: string;
 
-    downloadURL: Observable<string>;
-    uploadPercent: Observable<number>;
-    task: any;
     public arquivo_escolhido: string = '';
     filePath : string = '';
 
@@ -508,9 +505,6 @@ export class EditEstoqueComponent implements OnInit {
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
 
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
                 this.camera2_ativada = false;
@@ -521,7 +515,6 @@ export class EditEstoqueComponent implements OnInit {
                 this.link1_ativado = false;
 
                 this.showWebcam = true;
-                this.downloadURL = undefined;
 
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
@@ -536,9 +529,6 @@ export class EditEstoqueComponent implements OnInit {
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
 
-                this.showWebcam = true;
-                this.downloadURL = undefined;
-
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
                 this.camera1_ativada = false;
@@ -549,7 +539,6 @@ export class EditEstoqueComponent implements OnInit {
                 this.link2_ativado = false;
 
                 this.showWebcam = true;
-                this.downloadURL = undefined;
 
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
@@ -743,12 +732,12 @@ export class EditEstoqueComponent implements OnInit {
 
 
     public dialogExcluir() {
-        this.estornar_ou_excluir_dialog = true;
+        this.excluir_dialog = true;
     }
 
 
     public confirmar_exclusao(){
-        this.estornar_ou_excluir_dialog = false;
+        this.excluir_dialog = false;
         this.confirmar_exclusao_dialog = true;
     }
 
