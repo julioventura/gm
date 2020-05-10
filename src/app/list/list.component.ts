@@ -179,21 +179,8 @@ export class ListComponent implements OnInit {
     ngOnInit(): void {
         console.log("\n\n==========================");
         console.log("INIT listagens => " + this.dados.PARAMETRO);
-        // console.log(this.config[this.dados.PARAMETRO].selected);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].selected]);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].selected]?.length);
-        // console.log(this.dados[this.config[this.dados.PARAMETRO].total_de]);
-        // console.log("==========================\n\n");
-
-        // console.log("\n\n==========================");
-        // console.log("this.usuario_logado");
-        // console.log("==========================");
+        console.log("==========================\n\n");
         console.log(this.dados.usuario_logado);
-        // console.log(this.dados.auth_object.displayName);
-        // console.log(this.dados.auth_object.email);
-        // console.log(this.dados.auth_object.photoURL);
-        // console.log(this.dados.auth_object.uid);
-        // console.log(this.dados.auth_object.providerId);
         console.log("==========================\n");
 
 
