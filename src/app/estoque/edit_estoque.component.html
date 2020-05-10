@@ -297,11 +297,11 @@
             <!-- POPUPS DE ALERTA  -->
 
             <!-- Excluir  -->
-            <div *ngIf="estornar_ou_excluir_dialog">
+            <div *ngIf="excluir_dialog">
                 <div class="center">
                     &nbsp; <br />
                     <span class="button_red" (click)="confirmar_exclusao()"> Excluir </span> &nbsp;
-                    <span class="button_green" (click)="estornar_ou_excluir_dialog=false"> Cancelar </span>
+                    <span class="button_green" (click)="excluir_dialog=false"> Cancelar </span>
                 </div>
             </div>
 

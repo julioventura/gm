@@ -1,17 +1,13 @@
 import { NgModule, Component, OnInit } from '@angular/core';
-// import { NgModule, Component, OnInit, OnChanges } from '@angular/core';
-// import { Observable } from 'rxjs';
 
 // Services
 import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
-// import {OverlayPanelModule} from 'primeng/overlaypanel';
 
 // ConfirmDialog
 import {ConfirmationService} from 'primeng/api';
-// import {Message} from 'primeng/api';
 
 
 @Component({
@@ -4182,6 +4178,12 @@ export class ListComponent implements OnInit {
     public voltar() {
         console.log("voltar()");
 
+        if( ['REL_RECEITAS_E_DESPESAS','REL_CENTROS_DE_CUSTOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_EXTRATO_DE_CONTAS','CENTROS_DE_CUSTOS_LISTA'].includes(this.dados.PARAMETRO) ){
+            this.mostrar_opcao_1 = true;
+            this.mostrar_opcao_2 = false;
+            this.mostrar_lista('1');
+        }
+
         this.dados.registro_envio_whatsapp = {};
 
         if(this.config.DISPLAY.PopupWhatsapp){
@@ -4688,7 +4690,6 @@ export class ListComponent implements OnInit {
             this.menu_financeiro_opcao2_classe = 'menu_financeiro_inativo float_none';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
-                // this.dados.database = this.dados.filtered_receitas ? 'filtered_receitas' : 'selected_receitas';
                 this.dados.database = 'selected_receitas';
                 this.dados.database_caption = 'RECEITAS';
             }
@@ -4699,8 +4700,8 @@ export class ListComponent implements OnInit {
             }
         }
         else if(opcao=='2'){
-            this.menu_financeiro_opcao1_classe = 'menu_financeiro float_none';
-            this.menu_financeiro_opcao2_classe = 'menu_financeiro_inativo float_none';
+            this.menu_financeiro_opcao1_classe = 'menu_financeiro_inativo float_none';
+            this.menu_financeiro_opcao2_classe = 'menu_financeiro float_none';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
                 // this.dados.database = this.dados.filtered_despesas ? 'filtered_despesas' : 'selected_despesas';
