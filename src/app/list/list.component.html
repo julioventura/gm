@@ -10,9 +10,8 @@
         <!-- *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','PAGAMENTOS','RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <!-- *ngIf="['RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <div class="fc-right">
-            <div *ngIf="dados.PARAMETRO=='FINANCEIRO' || dados.PARAMETRO=='RELATORIOS' || dados.PARAMETRO=='MOVIMENTACAO'">
-                <!-- <img src="https://gestormix.com/img/vazio.png" class="img_nav">
-                <img src="https://gestormix.com/img/vazio.png" class="img_nav"> -->
+            <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS'].includes(dados.PARAMETRO)">
+                <!-- A exibição do dia ocupa a largura dos 2 ícones de navegação -->
                 <div class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
 
@@ -31,6 +30,7 @@
                 && dados.PARAMETRO!='LANCAMENTOS_DESPESA'
                 && dados.PARAMETRO!='RELATORIOS'
                 && dados.PARAMETRO!='MOVIMENTACAO'
+                && dados.PARAMETRO!='RESULTADOS'
                 && dados.PARAMETRO!='FINANCEIRO'">
 
                 <img *ngIf="dados.imprimir_especial && !config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/impressos.png" class="img_nav {{dados.imprimir_etiquetas ? 'disabled' : ''}}" (click)="preview_imprimir()">
@@ -380,8 +380,8 @@
 
                                     <ng-template pTemplate="caption">
                                         <span *ngIf="dados.PARAMETRO != 'RESULTADOS' && dados.PARAMETRO != 'DISPONIBILIDADE'">{{dados.sub_titulo_pagina}}</span>
-                                        <span *ngIf="dados.PARAMETRO == 'RESULTADOS'">LISTA POR DIA</span>
-                                        <span *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">DISPONIBILIDADE FUTURA POR DIA</span>
+                                        <span *ngIf="dados.PARAMETRO == 'RESULTADOS'">LISTA POR DATA</span>
+                                        <span *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">DISPONIBILIDADE POR DATA</span>
                                     </ng-template>
 
                                     <ng-template pTemplate="header">

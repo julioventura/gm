@@ -207,9 +207,6 @@ export class EditComponent implements OnInit {
                 case 'FORNECEDORES':
                     this.ultimo_cadastrado = this.dados.selected_fornecedores_ultimos_incluidos?.length ? this.dados.selected_fornecedores_ultimos_incluidos[0].nome : '';
                     break;
-                case 'ESTOQUE':
-                    this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
-                    break;
                 default:
                     this.ultimo_cadastrado = '';
             }
