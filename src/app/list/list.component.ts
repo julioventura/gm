@@ -4490,6 +4490,7 @@ export class ListComponent implements OnInit {
         }
     }
 
+
     public verRegistro(registro : any, lista : string = '') : void {
         console.log("PARAMETRO = " + this.dados.PARAMETRO);
         console.log("verRegistro(registro)");
