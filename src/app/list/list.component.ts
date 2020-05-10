@@ -5,8 +5,7 @@ import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
-
-// ConfirmDialog
+// ConfirmDialog x
 import {ConfirmationService} from 'primeng/api';
 
 
