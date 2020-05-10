@@ -193,11 +193,9 @@ export class EditEstoqueComponent implements OnInit {
             // REGISTRO NOVO
             console.log("incluindo registro em PARAMETRO " + this.dados.PARAMETRO);
 
-            // repete o ultimo conteudo incluido para facilitar inclusões sequenciais
-
             // ULTIMO CADASTRADO
             this.ultimo_cadastrado = this.dados.selected_estoque_ultimos_incluidos?.length ? this.dados.selected_estoque_ultimos_incluidos[0].nome : '';
-
+            console.log("Ultimo cadastrado estoque = " + this.ultimo_cadastrado);
 
             // cidade e estado iniciais
             if(this.config[this.dados.PARAMETRO].cidade && this.dados.usuario_logado.cidade_default){

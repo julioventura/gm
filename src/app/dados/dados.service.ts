@@ -1446,19 +1446,9 @@ export class DadosService {
     }
 
     public refresh_calendar(){
-        // console.log("=======");
-        // console.log("dados.refresh_calendar()");
-        // console.log("=======");
+        // console.log("refresh_calendar()");
 
         this.inicializar_rangeDates();
-
-        // console.log("this.config.rangeDates");
-        // console.log(this.config.rangeDates);
-        // console.log("this.config.rangeDates[0].getTime()")
-        // console.log(this.config.rangeDates[0].getTime())
-        // console.log("this.config.rangeDates[1].getTime()")
-        // console.log(this.config.rangeDates[1].getTime())
-        // console.log("=======");
 
         this.filtra_lancamentos_por_data('LANCAMENTOS_RECEITA')
         this.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA')
@@ -1698,7 +1688,7 @@ export class DadosService {
                 }
             }
             if(this.is_clientes_aniversarios){
-                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1) //// sort a list of objects by a property, ascending
+                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
             this[this.config[parametro].filtered] = x_list;
         }
@@ -1730,7 +1720,7 @@ export class DadosService {
                 }
             }
             if(this.is_socios_aniversarios){
-                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1) //// sort a list of objects by a property, ascending
+                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
             this[this.config[parametro].filtered] = x_list;
         }
@@ -1763,7 +1753,7 @@ export class DadosService {
                 }
             }
             if(this.is_equipe_aniversarios){
-                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1) //// sort a list of objects by a property, ascending
+                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
             this[this.config[parametro].filtered] = x_list;
         }
@@ -1795,7 +1785,7 @@ export class DadosService {
                 }
             }
             if(this.is_fornecedores_aniversarios){
-                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1) //// sort a list of objects by a property, ascending
+                x_list = x_list.sort((a, b) => (a.nascimento.substr(0,2) > b.nascimento.substr(0,2)) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
             this[this.config[parametro].filtered] = x_list;
         }
@@ -1876,21 +1866,17 @@ export class DadosService {
             let fornecedores = {};
 
             for(let i in this.filtered_lancamentos_despesa){
-                // if(this.filtered_lancamentos_despesa[i].produto_id == this.selected.key){
-                    // console.log("filtered_lancamentos_despesa");
-                    // console.log(this.filtered_lancamentos_despesa);
-                    if(!fornecedores[this.filtered_lancamentos_despesa[i]?.contraparte_key]){
-                        for(let x in this.selected_fornecedores){
-                            if(this.selected_fornecedores[x].key == this.filtered_lancamentos_despesa[i].contraparte_key){
-                                xtemp.push(this.selected_fornecedores[x]);
-                                fornecedores[this.filtered_lancamentos_despesa[i].contraparte_key] = true;
-                            }
+                if(!fornecedores[this.filtered_lancamentos_despesa[i]?.contraparte_key]){
+                    for(let x in this.selected_fornecedores){
+                        if(this.selected_fornecedores[x].key == this.filtered_lancamentos_despesa[i].contraparte_key){
+                            xtemp.push(this.selected_fornecedores[x]);
+                            fornecedores[this.filtered_lancamentos_despesa[i].contraparte_key] = true;
                         }
                     }
-                    // }
                 }
-                this.filtered_fornecedores = xtemp;
             }
+            this.filtered_fornecedores = xtemp;
+        }
 
         if(parametro=='LANCAMENTOS_RECEITA' && this.PARAMETRO=='ESTOQUE' && this.mostrar_estoque_clientes_flag){
             console.log("identifica os CLIENTES dos LANCAMENTOS_RECEITA feitos em ESTOQUE");
@@ -1899,41 +1885,17 @@ export class DadosService {
             let clientes = {};
 
             for(let i in this.filtered_lancamentos_receita){
-                // if(this.filtered_lancamentos_receita[i].produto_id == this.selected.key){
-                    // console.log("filtered_lancamentos_receita");
-                    // console.log(this.filtered_lancamentos_receita);
-                    if(!clientes[this.filtered_lancamentos_receita[i]?.contraparte_key]){
-                        for(let x in this.selected_clientes){
-                            if(this.selected_clientes[x].key == this.filtered_lancamentos_receita[i].contraparte_key){
-                                xtemp.push(this.selected_clientes[x]);
-                                clientes[this.filtered_lancamentos_receita[i].contraparte_key] = true;
-                            }
+                if(!clientes[this.filtered_lancamentos_receita[i]?.contraparte_key]){
+                    for(let x in this.selected_clientes){
+                        if(this.selected_clientes[x].key == this.filtered_lancamentos_receita[i].contraparte_key){
+                            xtemp.push(this.selected_clientes[x]);
+                            clientes[this.filtered_lancamentos_receita[i].contraparte_key] = true;
                         }
                     }
-                    // }
                 }
-                this.filtered_clientes = xtemp;
             }
-
-        // if(parametro=='LANCAMENTOS_RECEITA' && this.PARAMETRO=='ESTOQUE' && this.mostrar_estoque_socios_flag){
-        //     console.log("identifica os SOCIOS dos LANCAMENTOS_RECEITA feitos em ESTOQUE");
-        //
-        //     let xtemp = [];
-        //     let socios = {};
-        //
-        //     for(let i in this.filtered_lancamentos_receita){
-        //         if(!this.socios[this.filtered_lancamentos_receita[i]?.contraparte_key]){
-        //             for(let x in this.selected_socios){
-        //                 if(this.selected_socios[x].key == this.filtered_lancamentos_receita[i].contraparte_key){
-        //                     xtemp.push(this.selected_socios[x]);
-        //                     socios[this.filtered_lancamentos_receita[i].contraparte_key] = true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     this.filtered_socios = xtemp;
-        // }
-
+            this.filtered_clientes = xtemp;
+        }
     }
 
     private removeFilter(parametro : string = '') {
@@ -2007,16 +1969,10 @@ export class DadosService {
         let x = this.config.rangeDates;
 
         this.config.data_inicial  = this.util.DateObj_to_data(x[0])
-        // console.log("this.config.data_inicial");
-        // console.log(this.config.data_inicial);
-
         this.config.data_final = this.util.DateObj_to_data(x[1])
-        // console.log("this.config.data_final");
-        // console.log(this.config.data_final);
 
         this.config.rangeDates_iniciododia_data_inicial  = this.util.getTime(x[0])
         this.config.rangeDates_fimdodia_data_final  = this.util.getTime(x[1])+1;
-
 
         if (['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(parametro)){
 
@@ -2059,17 +2015,17 @@ export class DadosService {
 
                 // Por data de lançamento
                 if(quando >= this.config.rangeDates_iniciododia_data_inicial && quando < this.config.rangeDates_fimdodia_data_final){
-                    if(!this[this.config[parametro].selected][i].estorno){
+                    // if(!this[this.config[parametro].selected][i].estorno){
                         // Apenas registros não estornados
                         this[this.config[parametro].filtered].push(this[this.config[parametro].selected][i]);
-                    }
+                    // }
                 }
                 // Por data de bom para
                 if(quando_bom_para && quando_bom_para >= this.config.rangeDates_iniciododia_data_inicial && quando_bom_para < this.config.rangeDates_fimdodia_data_final){
-                    if(!this[this.config[parametro].selected][i].estorno){
+                    // if(!this[this.config[parametro].selected][i].estorno){
                         // Apenas registros não estornados
                         this[this.config[parametro].filtered_bom_para].push(this[this.config[parametro].selected][i]);
-                    }
+                    // }
                 }
             }
         }
@@ -2132,7 +2088,6 @@ export class DadosService {
                 }
             }
 
-
             else if(this.PARAMETRO == "RESULTADOS" && this.mostrar_lancamentos_do_dia){
                 if(this.filtered_lancamentos_receita[i].data == this.data_selecionada){
                     // Filtra os estornos
@@ -2142,9 +2097,8 @@ export class DadosService {
                 }
             }
 
-
             else {
-                // Filtra só os estornos
+                // Filtra só os estornos, sem segmentos por contraparte, produto ou data
                 if(this.filtered_lancamentos_receita[i].estorno != 'ESTORNO'){
                     this.xtemp.push(this.filtered_lancamentos_receita[i]);
                 }
@@ -2232,7 +2186,7 @@ export class DadosService {
             }
 
             else {
-                // Filtra só os estornos
+                // Filtra só os estornos, sem segmentos por contraparte, produto ou data
                 if(this.filtered_lancamentos_despesa[i].estorno != 'ESTORNO'){
                     this.xtemp.push(this.filtered_lancamentos_despesa[i]);
                 }
@@ -2285,10 +2239,6 @@ export class DadosService {
 
 
 
-
-
-
-
     public observar_usuarios(){
         // console.log("dados.observar_usuarios()");
 
@@ -2297,20 +2247,20 @@ export class DadosService {
         this.filtered_usuarios = {};
 
         this.ref_usuarios = 'USUARIOS';
-        // this.usuarios$ = this.db.list(this.ref_usuarios).valueChanges();
         this.usuarios$ = this.db.list(this.ref_usuarios, ref => ref.orderByChild('nome')).valueChanges();
-        // db.list('/items', ref => ref.orderByChild('nome').equalTo('xxxxx'))
 
+        // OPTOU-SE AQUI POR FAZER O SORT NO PROPRIO ACESSO AO BANCO DE DADOS.
+        // A OUTRA OPÇÃO SERIA LER DO DATABASE SEM O SORT E FAZÊ-LO DENTRO DO SUBSCRIBE ABAIXO: (1)
+        // this.usuarios$ = this.db.list(this.ref_usuarios).valueChanges();
 
         this.usuarios$.subscribe(
             val => {
                 this.total_de_usuarios = val.length;
-                // this.selected_usuarios = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
                 this.selected_usuarios = val;
                 this.usuarios = this.selected_usuarios;
 
-                // console.log("Total de usuários = " + this.total_de_usuarios);
-                // console.log(this.selected_usuarios);
+                // (1) OPCAO DE SORT APÒS A LEITURA DO DATABASE
+                // this.selected_usuarios = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2324,12 +2274,12 @@ export class DadosService {
         this.clientes$.subscribe(
             val => {
                 this.total_de_clientes = val.length;
-                this.selected_clientes = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_clientes = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
 
                 // =============================================================
                 // SORTING OBJECTS
-                // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
-                // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? -1 : 1) //// sort a list of objects by a property, DESCENDING
+                // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
+                // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? -1 : 1);  // sort a list of objects by a property, DESCENDING
                 // =============================================================
                 // the callback function could calculate other properties too, to handle the case where the property is the same,
                 // and order by a secondary property as well:
@@ -2352,20 +2302,7 @@ export class DadosService {
             this.socios$.subscribe(
                 val => {
                     this.total_de_socios = val.length;
-                    this.selected_socios = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
-
-                    // =============================================================
-                    // SORTING OBJECTS
-                    // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
-                    // Objectlist = val.sort((a, b) => (a.nome > b.nome) ? -1 : 1) //// sort a list of objects by a property, DESCENDING
-                    // =============================================================
-                    // the callback function could calculate other properties too, to handle the case where the property is the same,
-                    // and order by a secondary property as well:
-                    // list.sort((a, b) => (a.color > b.color) ? 1 : (a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
-                    // =============================================================
-                    // SORTING LISTS
-                    // list = val.sort(function(a, b){return b-a}); // função de sort descendente para arrays simples
-                    // =============================================================
+                    this.selected_socios = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
                 }
             );
         }
@@ -2380,7 +2317,7 @@ export class DadosService {
         this.equipe$.subscribe(
             val => {
                 this.total_de_equipe = val.length;
-                this.selected_equipe = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_equipe = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2394,7 +2331,7 @@ export class DadosService {
         this.fornecedores$.subscribe(
             val => {
                 this.total_de_fornecedores = val.length;
-                this.selected_fornecedores = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_fornecedores = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2408,7 +2345,7 @@ export class DadosService {
         this.atendimentos$.subscribe(
             val => {
                 this.total_de_atendimentos = val.length;
-                this.selected_atendimentos = val.sort((a, b) => (a.data_hora_quando > b.data_hora_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_atendimentos = val.sort((a, b) => (a.data_hora_quando > b.data_hora_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2422,7 +2359,7 @@ export class DadosService {
         this.estoque$.subscribe(
             val => {
                 this.total_de_estoque = val.length;
-                this.selected_estoque = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_estoque = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2435,64 +2372,10 @@ export class DadosService {
 
         this.financeiro$.subscribe(
             val => {
-                this.selected_financeiro = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_financeiro = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1);  // sort a list of objects by a property, ascending
                 this.total_de_financeiro = this.selected_financeiro.length;
             }
         );
-
-        // this.selected_financeiro = [
-        //     // {
-        //     //     "embreve" : false,
-        //     //     "nome" : "Movimentação Financeira",
-        //     //     "posicao" : 4,
-        //     //     "key" : "-009",
-        //     //     "sublista" : "TRANSFERENCIAS"
-        //     // },
-        //     {
-        //         "embreve" : false,
-        //         "nome" : "Relatórios",
-        //         "posicao" : 5,
-        //         "key" : "-008",
-        //         "sublista" : "RELATORIOS"
-        //     },
-        //     {
-        //         "nome" : "Receita",
-        //         "posicao" : 1,
-        //         "key" : "-007",
-        //         "sublista" : "LANCAMENTOS_RECEITA"
-        //     },
-        //     {
-        //         "embreve" : false,
-        //         "nome" : "Despesa",
-        //         "posicao" : 2,
-        //         "key" : "-006",
-        //         "sublista" : "LANCAMENTOS_DESPESA"
-        //     },
-        //     // {
-        //     //     "embreve" : false,
-        //     //     "nome" : "Conciliação Bancária",
-        //     //     "posicao" : 6,
-        //     //     "key" : "-004",
-        //     //     "sublista" : "CONCILIACAO"
-        //     // },
-        //     {
-        //         "embreve" : false,
-        //         "nome" : "Centros de Custos",
-        //         "posicao" : 3,
-        //         "key" : "-003",
-        //         "sublista" : "CENTROS_DE_CUSTOS_LISTA"
-        //     },
-        //     {
-        //         "embreve" : false,
-        //         "nome" : "Bancos",
-        //         "key" : "-003",
-        //         "posicao" : 4,
-        //         "sublista" : "BANCOS"
-        //     }
-        // ];
-        //
-        // this.selected_financeiro = this.selected_financeiro.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
-        // this.total_de_financeiro = this.selected_financeiro.length;
     }
 
     public observar_historicos(){
@@ -2504,7 +2387,7 @@ export class DadosService {
         this.historicos$.subscribe(
             val => {
                 this.total_de_historicos = val.length;
-                this.selected_historicos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_historicos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1);  // sort a list of objects by a property, descending
                 this.filtered_historicos = this.selected_historicos;
             }
         );
@@ -2519,67 +2402,9 @@ export class DadosService {
         this.relatorios$.subscribe(
             val => {
                 this.total_de_relatorios = val.length;
-                this.selected_relatorios = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_relatorios = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
-
-        // this.selected_relatorios = [
-        //     {
-        //         "embreve" : true,
-        //         "nome" : "Despesas",
-        //         "posicao" : 8,
-        //         "key" : "-009",
-        //         "sublista" : "LANCAMENTOS_DESPESA"
-        //     },
-        //     {
-        //         "embreve" : true,
-        //         "nome" : "Receitas",
-        //         "posicao" : 9,
-        //         "key" : "-008",
-        //         "sublista" : "LANCAMENTOS_RECEITA"
-        //     },
-        //     {
-        //         "nome" : "Resultado Financeiro",
-        //         "posicao" : 7,
-        //         "key" : "-007",
-        //         "sublista" : "RESULTADOS"
-        //     },
-            // {
-            //     "embreve" : false,
-            //     "nome" : "Comissionamentos",
-            //     "posicao" : 5,
-            //     "key" : "-006",
-            //     "sublista" : "PRODUCAO_PROFISSIONAL"
-            // },
-            // {
-            //     "embreve" : false,
-            //     "nome" : "Receitas e Despesas Detalhadas",
-            //     "posicao" : 6,
-            //     "key" : "-005",
-            //     "sublista" : "REL_RECEITAS_E_DESPESAS"
-            // },
-        //     {
-        //         "embreve" : false,
-        //         "nome" : "Disponibilidade Financeira",
-        //         "posicao" : 8,
-        //         "key" : "-004",
-        //         "sublista" : "DISPONIBILIDADE"
-        //     },
-        //     {
-        //         "nome" : "Centros de Custos Totalizados",
-        //         "posicao" : 4,
-        //         "key" : "-003",
-        //         "sublista" : "REL_CENTROS_DE_CUSTOS_TOTALIZADOS"
-        //     },
-        //     {
-        //         "nome" : "Caixa",
-        //         "posicao" : 1,
-        //         "key" : "-001",
-        //         "sublista" : "CAIXA"
-        //     }
-        // ];
-        // this.selected_relatorios = this.selected_relatorios.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
-        // this.total_de_relatorios = this.selected_relatorios.length;
     }
 
     public observar_bancos(){
@@ -2591,7 +2416,7 @@ export class DadosService {
         this.bancos$.subscribe(
             val => {
                 this.total_de_bancos = val.length;
-                this.selected_bancos = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_bancos = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2605,45 +2430,9 @@ export class DadosService {
         this.caixa$.subscribe(
             val => {
                 this.total_de_caixa = val.length;
-                this.selected_caixa = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_caixa = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
-
-        // this.selected_caixa =
-        // [
-        //     {
-        //         "nome" : "Dinheiro",
-        //         "posicao" : 1,
-        //         "key" : "-001",
-        //         "sublista" : "REL_DINHEIRO"
-        //     },
-        //     {
-        //         "key" : "-002",
-        //         "nome" : "Cheques à vista",
-        //         "posicao" : 2,
-        //         "sublista" : "REL_CHEQUES_A_VISTA"
-        //     },
-        //     {
-        //         "nome" : "Cheques pré-datados",
-        //         "posicao" : 3,
-        //         "key" : "-003",
-        //         "sublista" : "REL_CHEQUES_PRE"
-        //     },
-        //     {
-        //         "nome" : "Cartões de Débito",
-        //         "posicao" : 4,
-        //         "key" : "-004",
-        //         "sublista" : "REL_DEBITO"
-        //     },
-        //     {
-        //         "nome" : "Cartões de Crédito",
-        //         "posicao" : 5,
-        //         "key" : "-005",
-        //         "sublista" : "REL_CREDITO"
-        //     }
-        // ];
-        // this.selected_caixa = this.selected_caixa.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
-        // this.total_de_caixa = this.selected_caixa.length;
     }
 
     public observar_lancamentos_receita(){
@@ -2683,7 +2472,7 @@ export class DadosService {
         this.receitas$.subscribe(
             val => {
                 this.total_de_receitas = val.length;
-                this.selected_receitas = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_receitas = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2697,7 +2486,7 @@ export class DadosService {
         this.despesas$.subscribe(
             val => {
                 this.total_de_despesas = val.length;
-                this.selected_despesas = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_despesas = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2711,7 +2500,7 @@ export class DadosService {
         this.transferencias$.subscribe(
             val => {
                 this.total_de_transferencias = val.length;
-                this.selected_transferencias = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_transferencias = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2740,7 +2529,7 @@ export class DadosService {
         this.config_financeiro$.subscribe(
             val => {
                 this.total_de_config_financeiro = val.length;
-                this.selected_config_financeiro = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_config_financeiro = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2755,7 +2544,7 @@ export class DadosService {
         this.codigos_de_bancos$.subscribe(
             val => {
                 this.total_de_codigos_de_bancos = val.length;
-                this.selected_codigos_de_bancos = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_codigos_de_bancos = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2775,34 +2564,6 @@ export class DadosService {
         );
     }
 
-    // public observar_orcamentos(){
-    //     console.log("dados.observar_orcamentos()");
-    //
-    //     this.ref_orcamentos = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.ORCAMENTOS.database + "/" + this.cliente.key;
-    //     this.orcamentos$ = this.db.list(this.ref_orcamentos).valueChanges();
-    //
-    //     this.orcamentos$.subscribe(
-    //         val => {
-    //             this.total_de_orcamentos = val.length;
-    //             this.selected_orcamentos = val.sort((a, b) => (a.data > b.data) ? -1 : 1) //// sort a list of objects by a property, descending
-    //         }
-    //     );
-    // }
-
-    // public observar_pagamentos(){
-    //     console.log("dados.observar_pagamentos()");
-    //
-    //     this.ref_pagamentos = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.PAGAMENTOS.database + "/" + this.cliente.key + "/" + this.plano_de_tratamento.key;
-    //     this.pagamentos$ = this.db.list(this.ref_pagamentos).valueChanges();
-    //
-    //     this.pagamentos$.subscribe(
-    //         val => {
-    //             this.total_de_pagamentos = val.length;
-    //             this.selected_pagamentos = val.sort((a, b) => (a.pagamento > b.pagamento) ? -1 : (a.pagamento === b.pagamento) ? ((a.criado_quando > b.criado_quando) ? -1 : 1) : 1 )
-    //         }
-    //     );
-    // }
-
     public observar_todos_pagamentos(){
         // console.log("dados.observar_todos_pagamentos()");
 
@@ -2812,7 +2573,7 @@ export class DadosService {
         this.todos_pagamentos$.subscribe(
             val => {
                 this.total_de_todos_pagamentos = val.length;
-                this.selected_todos_pagamentos = val.sort((a, b) => (a.pagamento > b.pagamento) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_todos_pagamentos = val.sort((a, b) => (a.pagamento > b.pagamento) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2826,7 +2587,7 @@ export class DadosService {
         this.centros_de_custos$.subscribe(
             val => {
                 this.total_de_centros_de_custos = val.length;
-                this.selected_centros_de_custos = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+                this.selected_centros_de_custos = val.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1);  // sort a list of objects by a property, ascending
             }
         );
     }
@@ -2839,7 +2600,7 @@ export class DadosService {
 
         this.clientes_ultimos_visualizados$.subscribe(
             val => {
-                this.selected_clientes_ultimos_visualizados = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_clientes_ultimos_visualizados = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2852,7 +2613,7 @@ export class DadosService {
 
         this.clientes_ultimos_incluidos$.subscribe(
             val => {
-                this.selected_clientes_ultimos_incluidos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_clientes_ultimos_incluidos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2865,7 +2626,7 @@ export class DadosService {
 
         this.socios_ultimos_visualizados$.subscribe(
             val => {
-                this.selected_socios_ultimos_visualizados = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_socios_ultimos_visualizados = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2878,7 +2639,7 @@ export class DadosService {
 
         this.socios_ultimos_incluidos$.subscribe(
             val => {
-                this.selected_socios_ultimos_incluidos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_socios_ultimos_incluidos = val.sort((a, b) => (a.criado_quando > b.criado_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2892,7 +2653,7 @@ export class DadosService {
 
         this.fornecedores_ultimos_incluidos$.subscribe(
             val => {
-                this.selected_fornecedores_ultimos_incluidos = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_fornecedores_ultimos_incluidos = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2905,7 +2666,7 @@ export class DadosService {
 
         this.estoque_ultimos_incluidos$.subscribe(
             val => {
-                this.selected_estoque_ultimos_incluidos = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1) //// sort a list of objects by a property, descending
+                this.selected_estoque_ultimos_incluidos = val.sort((a, b) => (a.visualizado_em_quando > b.visualizado_em_quando) ? -1 : 1);  // sort a list of objects by a property, descending
             }
         );
     }
@@ -2933,7 +2694,7 @@ export class DadosService {
             this.registros$.subscribe(
                 val => {
                     this.total_de_registros = val.length;
-                    this.selected_registros = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1) //// sort a list of objects by a property, ascending
+                    this.selected_registros = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
                 }
             );
         }
@@ -2950,8 +2711,6 @@ export class DadosService {
                 this.selected_geo = val;
             }
         );
-
-
     }
 
     // ===================
@@ -3209,7 +2968,7 @@ export class DadosService {
             // Ultimos incluidos
             if(incluiu_registro){
                 // if  (['CLIENTES','ESTOQUE','FORNECEDORES'].includes(parametro) ) {
-                if  (['CLIENTES','SOCIOS','FORNECEDORES'].includes(parametro) ) {
+                if  (['CLIENTES','SOCIOS','FORNECEDORES','ESTOQUE'].includes(parametro) ) {
                     this.db.list(this[this.config[parametro].ultimos_incluidos]).update(this.selected.key, this.selected);
                 }
             }
@@ -3384,9 +3143,6 @@ export class DadosService {
                 // console.log("recalcula saldo do orcamento");
                 // this.atualizar_saldos_dos_orcamentos(temp.orcamento_key);
             }
-
-            // console.log("Refazendo filtro de lancamentos de despesas");
-            // this.filterDatabase(this.selected.centro_de_custos, parametro);
         }
 
         else if (parametro == 'IMPRESSOS'){
@@ -3433,7 +3189,6 @@ export class DadosService {
                 console.log(this.selected_geo);
             }
         }
-
     }
 
 
@@ -3612,11 +3367,7 @@ export class DadosService {
                     this.usuarios[i].dataset_nome = this.usuario_logado.dataset_nome;
                     // Troca nome e imagem pelos editados pelo usuário (e salvos em dados.usuarios)
                     this.usuario_logado = this.usuarios[i];
-                    // this.usuario_logado.nome = this.usuarios[i].nome;
                     this.usuario_logado.img_url = this.usuarios[i].img_url ? this.usuarios[i].img_url : this.auth_object.photoURL;
-
-                    // this.usuario_logado.dataset = this.usuarios[i].dataset;
-                    // this.usuario_logado.dataset_nome = this.usuarios[i].dataset_nome;
 
                     this.usuario_logado.is_admin = this.usuarios[i].is_admin ? this.usuarios[i].is_admin : false;
                     this.config.is_admin = this.usuario_logado.is_admin;
@@ -3707,7 +3458,6 @@ export class DadosService {
             console.log(this.voltar_pilha);
             this.voltar_pilha.pop();
 
-
             key = this.selected_edit.key;
             this.db.list(this.ref_clientes).remove(key);
             this.db.list(this.ref_clientes_ultimos_visualizados).remove(key);
@@ -3764,11 +3514,7 @@ export class DadosService {
             this.db.list(this.ref_estoque_ultimos_incluidos).remove(this.selected_edit.key);
             this.salvar_HISTORICOS(this.historicos);
         }
-        // else if (this.PARAMETRO=="PAGAMENTOS"){
-        //     this.db.list(this.ref_pagamentos).remove(this.selected_edit.key);
-        //     // TODO estornar o estoque?
-        //     this.salvar_HISTORICOS(this.historicos);
-        // }
+
         else if (this.PARAMETRO=="USUARIOS"){
             this.db.list(this.ref_usuarios).remove(this.selected_edit.key);
             this.salvar_HISTORICOS(this.historicos);
@@ -3926,18 +3672,6 @@ export class DadosService {
         else if (this.PARAMETRO=="REL_EXTRATO_DE_CONTAS"){
             this.db.list(this.ref_rel_extrato_de_contas).remove(this.selected_edit.key);
         }
-
-        // else if (this.PARAMETRO=="REL_CHEQUES_PRE"){
-        //     this.db.list(this.ref_rel_cheque_pre).remove(this.selected_edit.key);
-        // }
-
-        // else if (this.PARAMETRO=="MOVIMENTACAO"){
-        //     this.db.list(this.ref_movimentacao).remove(this.selected_edit.key);
-        // }
-
-        // else if (this.PARAMETRO=="DISPONIBILIDADE"){
-        //     this.db.list(this.ref_disponibilidade).remove(this.selected_edit.key);
-        // }
 
         else {
             console.log("Excluindo de ref_registros");
