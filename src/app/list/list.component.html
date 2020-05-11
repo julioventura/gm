@@ -1083,7 +1083,7 @@
             </p-table>
         </div>
 
-        <div id="x20" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x20" *ngIf="dados.PARAMETRO!='REL_CHEQUES_PRE'" class="espacador_vertical_duplo">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_cheque_pre
         && !dados.listar_cheque_pre_dia
@@ -1345,7 +1345,6 @@
             </div>
 
             <div *ngIf="dados.datas_com_lancamentos && dados.datas_com_lancamentos.length > 0">
-                <!-- <div *ngIf="dados.datas_com_lancamentos && !dados.listar_lancamentos_dia && dados.datas_com_lancamentos.length > 0"> -->
                 <p-table
                 [value]="dados.datas_com_lancamentos"
                 [resizableColumns]="true"
@@ -1359,7 +1358,7 @@
                              <th class="but_data">Data</th>
                              <th>Meio</th>
                              <th class="big_screen">Centro de Custos</th>
-                             <th>De/Para</th>
+                             <th class="big_screen">De/Para</th>
                              <th class="but_data">Valor</th>
                              <th *ngIf="dados.is_em_caixa" class="but_data">Depositar</th>
                              <th *ngIf="dados.is_em_caixa" class="wbut1"></th>
@@ -1376,7 +1375,7 @@
                             <td class="normal" (click)="movimentacao_detalhe($event,registro,op)">{{util.diminui_data(registro.data)}}</td>
                             <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.meio_de_pagamento}}</td>
                             <td class="{{registro.tipo=='receita' ? 'big_screen blue' : 'big_screen red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.centro_de_custos}}</td>
-                            <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.contraparte}}</td>
+                            <td class="{{registro.tipo=='receita' ? 'big_screen blue' : 'big_screen red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.contraparte}}</td>
                              <td *ngIf="registro.valor_receita>0" class="blue right bold" (click)="movimentacao_detalhe($event,registro,op)">{{util.formata_valor(registro.valor_receita)}}</td>
                              <td *ngIf="registro.valor_despesa!=0" class="red right bold" (click)="movimentacao_detalhe($event,registro,op)">- {{util.formata_valor(registro.valor_despesa)}}</td>
 
@@ -1413,7 +1412,9 @@
 
         <p-overlayPanel #op>
             <ng-template pTemplate>
+                <p>Meio: <span class="bold">{{overlayDetail.registro.meio_de_pagamento}}</span></p>
                 <p>Centro de Custos: <span class="bold">{{overlayDetail.registro.centro_de_custos}}</span></p>
+                <p>De/Para: <span class="bold">{{overlayDetail.registro.contraparte}}</span></p>
                     <span *ngIf="overlayDetail.registro.produto">Produto: <span class="bold">{{overlayDetail.registro.produto}}</span></span>
                 <div>
                     &nbsp;<br />

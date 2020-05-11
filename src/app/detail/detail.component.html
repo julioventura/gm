@@ -1692,7 +1692,7 @@
              <div class="espacador_vertical_metade">&nbsp;</div>
 
               <div *ngIf="dados.selected.latitude" class="ui-grid-row">
-                  <div class="form_label_ext">Coordenadas</div>
+                  <div class="form_label_ext">GPS</div>
                   <div class="form_content left"><span class= "dados bold">{{ dados.selected.latitude }},{{ dados.selected.longitude }}</span></div>
                   <div class="fc-clear"></div>
               </div>
@@ -1702,7 +1702,7 @@
                   <div class="fc-clear"></div>
               </div>
               <div *ngIf="dados.selected.gps_timestamp" class="ui-grid-row">
-                  <div class="form_label_ext">Data/Hora</div>
+                  <div class="form_label_ext">Quando</div>
                   <div class="form_content left"><span class= "dados bold">{{ util.formata_data_de_quando_em_milisegundos_com_minutos_e_segundos(dados.selected.gps_timestamp) }}</span></div>
                   <div class="fc-clear"></div>
               </div>

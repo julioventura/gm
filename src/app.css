@@ -897,7 +897,7 @@ background: #d1e1f7;
 
 @media (max-width: 500px) {
     .ui-widget-header {
-        font-size: 10pt;
+        font-size: 8pt;
     }
 }
 
@@ -955,7 +955,7 @@ background: #d1e1f7;
 
 @media (max-width: 500px) {
     .title {
-        font-size: 11pt;
+        font-size: 9pt;
     }
     .titulo_barra {
         font-size: 10pt;
@@ -3019,7 +3019,7 @@ body .ui-widget {
 
 @media (max-width: 500px) {
     body .ui-widget {
-        font-size: 7pt;
+        font-size: 6pt;
     }
 }
 
@@ -3027,9 +3027,18 @@ body .ui-corner-bottom {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
+
 body .ui-table .ui-table-tbody > tr > td {
     padding: 0.3em 0.5em;
     font-size: 10pt;
+}
+
+@media (max-width: 500px) {
+    body .ui-table .ui-table-tbody > tr > td {
+        padding: 0.3em 0.5em;
+        font-size: 7pt;
+    }
 }
 
 body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {
