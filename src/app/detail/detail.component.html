@@ -10,14 +10,14 @@
         <div class="fc-right">
             <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/vazio.png" class="img_nav">
             <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/editar.png" class="img_nav" (click)="editar()" />
-            <!-- <img *ngIf="!(config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para)" src="https://gestormix.com/img/vazio.png" class="img_nav" /> -->
             <div *ngIf="!(config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para)" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
         </div>
 
 
         <div class="fc-center title">
             <div class="espacador_vertical">&nbsp;</div>
-            <span>{{ dados.titulo_pagina ? dados.titulo_pagina : config[dados.PARAMETRO].titulo_unidade }}</span>
+            <!-- <span>{{ dados.titulo_pagina ? dados.titulo_pagina : config[dados.PARAMETRO].titulo_unidade }}</span> -->
+            <span>{{config[dados.PARAMETRO].titulo_unidade }}</span>
         </div>
         <div class="fc-clear"></div>
     </div>
@@ -1692,7 +1692,7 @@
              <div class="espacador_vertical_metade">&nbsp;</div>
 
               <div *ngIf="dados.selected.latitude" class="ui-grid-row">
-                  <div class="form_label_ext">Coordenadas</div>
+                  <div class="form_label_ext">GPS</div>
                   <div class="form_content left"><span class= "dados bold">{{ dados.selected.latitude }},{{ dados.selected.longitude }}</span></div>
                   <div class="fc-clear"></div>
               </div>
@@ -1702,7 +1702,7 @@
                   <div class="fc-clear"></div>
               </div>
               <div *ngIf="dados.selected.gps_timestamp" class="ui-grid-row">
-                  <div class="form_label_ext">Data/Hora</div>
+                  <div class="form_label_ext">Quando</div>
                   <div class="form_content left"><span class= "dados bold">{{ util.formata_data_de_quando_em_milisegundos_com_minutos_e_segundos(dados.selected.gps_timestamp) }}</span></div>
                   <div class="fc-clear"></div>
               </div>

@@ -4816,7 +4816,8 @@ export class ListComponent implements OnInit {
         console.log('whatsapp_destino = ' + this.dados.whatsapp_destino)
 
         if(this.assunto_da_mensagem=="ANIVERSÁRIO"){
-            this.mensagem = "Olá " + this.dados.selected.nome + " \n\nFELIZ ANIVERSÁRIO!!!\n\n";
+            this.mensagem = "Olá " + this.dados.selected.nome + "\n\n";
+            this.mensagem = "FELIZ ANIVERSÁRIO!!!\n\n";
             this.mensagem += "Aproveitamos esta ocasião para te desejar muitas felicidades e muitos anos de vida repletos de realizações!\n\n";
             this.mensagem += "E, claro, também muitos sorrisos!\nConte com a gente pra isso!\n\n";
             this.mensagem += this.dados.usuario_logado.nome;

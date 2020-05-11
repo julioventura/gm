@@ -897,7 +897,7 @@ background: #d1e1f7;
 
 @media (max-width: 500px) {
     .ui-widget-header {
-        font-size: 10pt;
+        font-size: 8pt;
     }
 }
 
@@ -955,7 +955,7 @@ background: #d1e1f7;
 
 @media (max-width: 500px) {
     .title {
-        font-size: 11pt;
+        font-size: 9pt;
     }
     .titulo_barra {
         font-size: 10pt;
@@ -1163,7 +1163,8 @@ h2 {
     color: #fff;
     font-size: 10pt;
     vertical-align: middle;
-    padding: 10pt;
+    border: 1pt solid #6a6a6a;
+    padding: 2pt;
 }
 .head_left {
     float: left;
@@ -2709,25 +2710,18 @@ a {
 
 p-footer {
     font-weight: normal;
-    /* padding: 2pt;  */
-    /* font-size: 11pt; */
 }
 
 
 .mensagem_whatsapp {
-    /* padding: 1em; */
-    /* margin-left: 3em;
-    margin-right: 3em; */
     padding: 1em;
-    /* border: 1pt #6a6a6a solid;
+    border: 1pt #6a6a6a solid;
     border-radius: 10px;
-    box-shadow: 0 0 5pt 5pt #ccc; */
+    box-shadow: 0 0 3pt 3pt #ccc;
 }
 
 @media (max-width: 600px) {
     .mensagem_whatsapp {
-        /* margin-left: .5em;
-        margin-right: .5em; */
         padding: .5em;
         border: 1pt #6a6a6a solid;
         border-radius: 6px;
@@ -3025,7 +3019,7 @@ body .ui-widget {
 
 @media (max-width: 500px) {
     body .ui-widget {
-        font-size: 7pt;
+        font-size: 6pt;
     }
 }
 
@@ -3033,9 +3027,18 @@ body .ui-corner-bottom {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
+
 body .ui-table .ui-table-tbody > tr > td {
     padding: 0.3em 0.5em;
     font-size: 10pt;
+}
+
+@media (max-width: 500px) {
+    body .ui-table .ui-table-tbody > tr > td {
+        padding: 0.3em 0.5em;
+        font-size: 7pt;
+    }
 }
 
 body .ui-table .ui-table-caption, body .ui-table .ui-table-summary {

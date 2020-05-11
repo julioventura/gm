@@ -2879,8 +2879,8 @@ export class DadosService {
             console.log(this.selected)
 
             // Compartilha localização do membro da equipe nos atendimentos EM CURSO
-            let email_responsavel = this.responsavel.email;
-            let email_cliente = this.cliente.email;
+            let email_responsavel = this.responsavel?.email;
+            let email_cliente = this.cliente?.email;
 
             if(temp.atendimento = 'em_curso'){
                 // ativa compartilhamento de geolocalização de email_responsavel para email_cliente
