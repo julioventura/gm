@@ -3238,11 +3238,9 @@ body .ui-button.ui-button-text-only .ui-button-text {
 
 
 
-
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     body .ui-inputtext {
         font-size: 8pt;
-        padding: 0em;
         font-weight: normal;
         padding-bottom: 1px;
     }
@@ -3421,11 +3419,6 @@ body .ui-button.ui-button-text-icon-left .ui-button-text {
     opacity: 0.3;
 }
 
-@media (max-width: 600px) {
-    body .ui-inputtext {
-        font-size: 9pt;
-    }
-}
 
 
 /* PRINT  */
