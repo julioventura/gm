@@ -1841,6 +1841,14 @@ thead {
     font-size: 9pt;
     font-family: "Open Sans", "Helvetica Neue", sans-serif;
     padding-top: 2px;
+    /* font-size: 7pt; */
+    padding-top: 5px;
+    /* border-bottom: 1pt solid lightgrey; */
+    /* border-top: 1pt solid lightgrey; */
+    border: 1pt solid lightgrey;
+    background: #ececec;
+    border-radius: 6px;
+    /* height: 40px; */
 }
 
 /* @media (min-width: 600px) {
@@ -1853,6 +1861,13 @@ thead {
     .hoje {
         font-size: 7pt;
         padding-top: 5px;
+        /* border-bottom: 1pt solid lightgrey; */
+        /* border-top: 1pt solid lightgrey; */
+        border: 1pt solid lightgrey;
+        background: #ececec;
+        border-radius: 6px;
+        height: 40px;
+        width: 80px;
     }
 }
 
@@ -3019,7 +3034,7 @@ body .ui-widget {
 
 @media (max-width: 500px) {
     body .ui-widget {
-        font-size: 6pt;
+        font-size: 7pt;
     }
 }
 
@@ -3214,35 +3229,15 @@ body .ui-button.ui-button-text-only .ui-button-text {
     font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-/* @keyframes ui-progress-spinner-color {
-    100%,
-    0% {
-        stroke: #FFF;
-    }
-    10% {
-        stroke: #DDD;
-    }
-    30% {
-        stroke: #AAA;
-    }
-    50% {
-        stroke: #333;
-    }
-    70% {
-    stroke: #AAA;
-    }
-    90% {
-        stroke: #DDD;
-    }
-} */
-
-
 
 @media (max-width: 500px) {
     body .ui-inputtext {
         font-size: 8pt;
         font-weight: normal;
         padding-bottom: 1px;
+    }
+    .data_range {
+        font-size: 9pt;
     }
 }
 

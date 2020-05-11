@@ -77,7 +77,7 @@
                 (onFocus)="onFocus($event)"
                 (onClose)="onClose($event)"
                 [locale]="pt"
-                dateFormat="dd/mm/yy"
+                dateFormat="dd/mm/y"
                 name="calendario"
                 selectionMode="range"
                 [touchUI]="true"
@@ -90,12 +90,13 @@
             >
             </p-calendar>
         </span>
-        <span class="yy" *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO) && !dados.omitir_refresh">
-            <!-- &nbsp; <img src="https://gestormix.com/img/refresh.png" (click)="refresh_calendar()" class="refresh_button"> -->
-        </span>
 
-            <!-- Para escolher mês: -->
-            <!-- <p-calendar [(ngModel)]="dateValue" view="month"  [locale]="pt" dateFormat="mm/yy" [yearNavigator]="true" yearRange="2000:2030"></p-calendar> -->
+        <!-- <span class="yy" *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO) && !dados.omitir_refresh">
+            &nbsp; <img src="https://gestormix.com/img/refresh.png" (click)="refresh_calendar()" class="refresh_button">
+        </span> -->
+
+        <!-- Para escolher mês: -->
+        <!-- <p-calendar [(ngModel)]="dateValue" view="month"  [locale]="pt" dateFormat="mm/yy" [yearNavigator]="true" yearRange="2000:2030"></p-calendar> -->
     </div>
 
     <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
@@ -105,11 +106,11 @@
         && !dados.listar_dinheiro_dia && !dados.listar_debito_dia && !dados.listar_credito_dia && !dados.listar_cheque_pre_dia && !dados.listar_cheque_pre_dia_bom_para
         && !dados.listar_cheque_dia"
         class="header-toolbar">
-        <div id="x10" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x10" class="espacador_vertical">&nbsp;</div>
         <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
     </div>
     <div *ngIf="dados.omitir_calendario" class="header-toolbar">
-        <div class="espacador_vertical_duplo">&nbsp;</div>
+        <div class="espacador_vertical">&nbsp;</div>
         <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
     </div>
 
@@ -908,7 +909,7 @@
 
     <!-- REL_DINHEIRO -->
     <div *ngIf="dados.listar_rel_dinheiro || dados.listar_dinheiro_dia">
-        <div id="x14" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x14" class="espacador_vertical">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_dinheiro && !dados.listar_dinheiro_dia && dados.datas_com_lancamentos_dinheiro.length < 1">
 
@@ -1043,7 +1044,7 @@
                         <div class="espacador_vertical_duplo">&nbsp;</div>
                     </div>
                 </div>
-                <div id="x19" class="espacador_vertical_duplo">&nbsp;</div>
+                <div id="x119" class="espacador_vertical_duplo">&nbsp;</div>
             </div>
         </div>
 
@@ -1090,6 +1091,8 @@
         && !dados.listar_cheque_pre_dia
         && !dados.listar_cheque_pre_dia_bom_para
         && dados.datas_com_lancamentos_cheque_pre_bom_para.length > 0">
+
+            <div id="x19" class="espacador_vertical_duplo">&nbsp;</div>
 
             <p-table [value]="dados.datas_com_lancamentos_cheque_pre_bom_para" [resizableColumns]="true"
             [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre_bom_para.length>10">
@@ -1191,7 +1194,7 @@
 
     <!-- REL_CHEQUES_A_VISTA -->
     <div *ngIf="dados.listar_rel_cheque || dados.listar_cheque_dia">
-        <div id="x21" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x21" class="espacador_vertical">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_cheque && !dados.listar_cheque_dia">
 
@@ -1694,12 +1697,14 @@
             </p-table>
         </div>
 
-        <div id="x7" class="espacador_vertical_duplo">&nbsp;</div>
+        <!-- <div id="x117" class="espacador_vertical_duplo">&nbsp;</div> -->
 
         <div *ngIf="dados.listar_rel_credito
         && !dados.listar_credito_dia
         && !dados.listar_credito_dia_bom_para
         && dados.datas_com_lancamentos_credito.length > 0">
+
+            <div id="x7" class="espacador_vertical">&nbsp;</div>
 
             <p-table [value]="dados.datas_com_lancamentos_credito_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_credito_bom_para.length>10">
 
