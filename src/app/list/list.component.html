@@ -597,25 +597,25 @@
                                             <span *ngIf="dados.PARAMETRO=='BANCOS'">
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_RECEITA'">
-                                                Saldo:
+                                                Saldo: &nbsp;
                                                 <span class="{{dados.saldo_lancamentos_receita == 0 ? 'normal' : dados.saldo_lancamentos_receita>0 ? 'bold blue' : 'bold red'}}">
                                                     {{util.formata_valor(dados.saldo_lancamentos_receita)}}
                                                 </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_DESPESA'">
-                                                Saldo:
+                                                Saldo: &nbsp;
                                                 <span class="{{dados.saldo_lancamentos_despesa == 0 ? 'normal' : dados.saldo_lancamentos_despesa>0 ? 'bold blue' : 'bold red'}}">
                                                     {{util.formata_valor(dados.saldo_lancamentos_despesa)}}
                                                 </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='RESULTADOS' && dados.lancamentos_por_dia.length>0">
-                                                Saldo:
+                                                Saldo: &nbsp;
                                                 <span class="{{dados.saldo_lancamentos == 0 ? 'normal' : dados.saldo_lancamentos>0 ? 'bold blue' : 'bold red'}}">
                                                     {{util.formata_valor(dados.saldo_lancamentos)}}
                                                 </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='DISPONIBILIDADE' && dados.lancamentos_futuros_por_dia.length>0">
-                                                Saldo:
+                                                Saldo: &nbsp;
                                                 <span class="{{dados.saldo_lancamentos_futuros == 0 ? 'normal' : dados.saldo_lancamentos_futuros>0 ? 'bold blue' : 'bold red'}}">
                                                     {{util.formata_valor(dados.saldo_lancamentos_futuros)}}
                                                 </span>
@@ -743,7 +743,6 @@
 
             <div *ngIf="dados.mostrar_lancamentos_do_dia">
                <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
-                   <!-- <div id="x2" class="espacador_vertical">&nbsp;</div> -->
 
                    <p-table [value]="dados.lancamentos_do_dia" [resizableColumns]="true">
                        <ng-template pTemplate="caption">
