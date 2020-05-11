@@ -1049,6 +1049,7 @@ export class UtilService {
 
     public diminui_data(data : string = '') : string {
         // Recebe dd/mm/aaaa e devolve dd/mm/aa
+        data = this.formata_data(data);
         data = data.substr(0,6) + data.substr(8,2);
         return data;
     }

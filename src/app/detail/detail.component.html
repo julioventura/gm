@@ -1221,7 +1221,6 @@
                 <textarea pInputTextarea rows="2" cols="30" wrap="hard" disabled='true' [(ngModel)]="dados.selected.obs"></textarea>
             </div>
         </div>
-
     </div>
 
 
@@ -1230,37 +1229,37 @@
 
         <div *ngIf="config.ATIVAR_CLIENTES">
             <div class="sub_title_menor left">
-                MOSTRAR CAMPO DE CÓDIGO PARA CLIENTES?
+                INCLUIR CAMPO DE CÓDIGO PARA CLIENTES?
             </div>
             <div class="float_clear"></div>
-            <div class="espacador_vertical">&nbsp;</div>
+            <div class="espacador_vertical_metade">&nbsp;</div>
 
             <div class="left">
                 <p-checkbox name="id_para_clientes" [(ngModel)]="dados.selected.id_para_clientes" binary="true" disabled="true"></p-checkbox>
-                &nbsp; <span *ngIf="dados.selected.id_para_clientes" class="config_item red">COM CAMPO DE CÓDIGO DO CLIENTE</span>
-                &nbsp; <span *ngIf="!dados.selected.id_para_clientes" class="config_item grey">SEM CAMPO DE CÓDIGO DO CLIENTE</span>
+                &nbsp; <span *ngIf="dados.selected.id_para_clientes" class="config_item red">Com código</span>
+                &nbsp; <span *ngIf="!dados.selected.id_para_clientes" class="config_item grey">Sem código</span>
             </div>
             <div class="float_clear"></div>
         </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div *ngIf="config.ATIVAR_SOCIOS">
             <div class="sub_title_menor left">
-                MOSTRAR CAMPO DE CÓDIGO PARA SOCIOS?
+                INCLUIR CAMPO DE CÓDIGO PARA SOCIOS?
             </div>
             <div class="float_clear"></div>
-            <div class="espacador_vertical">&nbsp;</div>
+            <div class="espacador_vertical_metade">&nbsp;</div>
 
             <div class="left">
                 <p-checkbox name="id_para_socios" [(ngModel)]="dados.selected.id_para_socios" binary="true" disabled="true"></p-checkbox>
-                &nbsp; <span *ngIf="dados.selected.id_para_socios" class="config_item red">COM CAMPO DE CÓDIGO DO SOCIO</span>
-                &nbsp; <span *ngIf="!dados.selected.id_para_socios" class="config_item grey">SEM CAMPO DE CÓDIGO DO SOCIO</span>
+                &nbsp; <span *ngIf="dados.selected.id_para_socios" class="config_item red">Com código</span>
+                &nbsp; <span *ngIf="!dados.selected.id_para_socios" class="config_item grey">Sem código</span>
             </div>
             <div class="float_clear"></div>
         </div>
 
-
         <div class="espacador_vertical_duplo">&nbsp;</div>
-        <div class="espacador_vertical">&nbsp;</div>
 
         <div class="sub_title_menor left">
             TÍTULO PROFISSIONAL PARA USAR NAS MENSAGENS
@@ -1273,27 +1272,28 @@
             <div class="form_content left"><input pInputText type="text" [(ngModel)]="dados.selected.titulo_profissional" disabled="true" /></div>
         </div>
         <div class="float_clear"></div>
-        <div class="espacador_vertical_duplo">&nbsp;</div>
 
-        <div class="sub_title_menor left">
-            VALORES INICIAIS PARA SUGERIR NOS FORMULÁRIOS
+        <!-- <div class="espacador_vertical_duplo">&nbsp;</div> -->
+
+        <!-- <div class="sub_title_menor left">
+            VALORES PARA SUGERIR NOS FORMULÁRIOS
         </div>
         <div class="float_clear"></div>
-        <div class="espacador_vertical">&nbsp;</div>
+        <div class="espacador_vertical">&nbsp;</div> -->
 
-        <div>
+        <!-- <div>
             <div *ngIf="config[dados.PARAMETRO].cidade_default" class="ui-grid-row">
-                <div class="form_label_ext2">CIDADE INICIAL</div>
+                <div class="form_label_ext2">Cidade</div>
                 <div class="form_content left"><input pInputText class="w100" type="text" [(ngModel)]="dados.selected.cidade_default" disabled="true" /></div>
             </div>
 
             <div *ngIf="config[dados.PARAMETRO].estado_default" class="ui-grid-row">
-                <div class="form_label_ext2">ESTADO INICIAL</div>
+                <div class="form_label_ext2">Estado</div>
                 <div class="form_content left"><input pInputText [(ngModel)]="dados.selected.estado_default" disabled="true" /></div>
             </div>
-        </div>
+        </div> -->
 
-        <!-- <div class="espacador_vertical">&nbsp;</div> -->
+        <div class="espacador_vertical_metade">&nbsp;</div>
     </div>
 
 

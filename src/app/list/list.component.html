@@ -7,8 +7,6 @@
             <img src="https://gestormix.com/img/home.png" class="img_nav" (click)="dados.home()">
         </div>
 
-        <!-- *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','PAGAMENTOS','RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
-        <!-- *ngIf="['RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <div class="fc-right">
             <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS','HISTORICOS'].includes(dados.PARAMETRO)">
                 <!-- A exibição do dia ocupa a largura dos 2 ícones de navegação -->
@@ -36,7 +34,10 @@
 
                 <img *ngIf="dados.imprimir_especial && !config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/impressos.png" class="img_nav {{dados.imprimir_etiquetas ? 'disabled' : ''}}" (click)="preview_imprimir()">
                 <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
-                <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
+                <img *ngIf="(!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp)
+                    && !(!dados.imprimir_etiquetas && (dados.pode_incluir && !config.DISPLAY.PopupWhatsapp))
+                    && !(dados.imprimir_etiquetas)" class="img_nav"
+                    src="https://gestormix.com/img/vazio.png" >
 
                 <img *ngIf="!dados.imprimir_etiquetas && (dados.pode_incluir && !config.DISPLAY.PopupWhatsapp)" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
                 <img *ngIf="dados.imprimir_etiquetas" src="https://gestormix.com/img/impressos_2.png" class="img_nav" (click)="imprimir()">
@@ -105,11 +106,11 @@
         && !dados.listar_cheque_dia"
         class="header-toolbar">
         <div id="x10" class="espacador_vertical_duplo">&nbsp;</div>
-        <span class="data_range">{{config.data_inicial}} a {{config.data_final}}</span>
+        <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
     </div>
     <div *ngIf="dados.omitir_calendario" class="header-toolbar">
         <div class="espacador_vertical_duplo">&nbsp;</div>
-        <span class="data_range">{{config.data_inicial}} a {{config.data_final}}</span>
+        <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
     </div>
 
 
@@ -1380,14 +1381,14 @@
                              <td *ngIf="registro.valor_despesa!=0" class="red right bold" (click)="movimentacao_detalhe($event,registro,op)">- {{util.formata_valor(registro.valor_despesa)}}</td>
 
                              <td *ngIf="dados.is_em_caixa">
-                                 <input name='data_depositar' pInputText [(ngModel)]="dados.data_depositar" (change)="dados.data_depositar=util.diminui_data(util.formata_data(dados.data_depositar))" autocomplete="off" />
+                                 <input name='data_depositar' pInputText [(ngModel)]="dados.data_depositar" (change)="dados.data_depositar=util.diminui_data(dados.data_depositar)" autocomplete="off" />
                              </td>
                              <td *ngIf="dados.is_em_caixa">
                                  <p-checkbox name="depositar" (click)="registro.depositado = depositar(registro)" [(ngModel)]="registro.depositado" binary="true"></p-checkbox>
                              </td>
 
                              <td *ngIf="dados.is_aguardando">
-                                 <input name='data_quitar' pInputText [(ngModel)]="dados.data_quitar" (change)="dados.data_quitar=util.diminui_data(util.formata_data(dados.data_quitar))" autocomplete="off" />
+                                 <input name='data_quitar' pInputText [(ngModel)]="dados.data_quitar" (change)="dados.data_quitar=util.diminui_data(dados.data_quitar)" autocomplete="off" />
                              </td>
                              <td *ngIf="dados.is_aguardando">
                                  <p-checkbox name="quitar" (click)="registro.quitado = quitar(registro)" [(ngModel)]="registro.quitado" binary="true"></p-checkbox>
