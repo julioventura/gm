@@ -1163,7 +1163,8 @@ h2 {
     color: #fff;
     font-size: 10pt;
     vertical-align: middle;
-    padding: 10pt;
+    border: 1pt solid #6a6a6a;
+    padding: 2pt;
 }
 .head_left {
     float: left;
@@ -2709,25 +2710,18 @@ a {
 
 p-footer {
     font-weight: normal;
-    /* padding: 2pt;  */
-    /* font-size: 11pt; */
 }
 
 
 .mensagem_whatsapp {
-    /* padding: 1em; */
-    /* margin-left: 3em;
-    margin-right: 3em; */
     padding: 1em;
-    /* border: 1pt #6a6a6a solid;
+    border: 1pt #6a6a6a solid;
     border-radius: 10px;
-    box-shadow: 0 0 5pt 5pt #ccc; */
+    box-shadow: 0 0 3pt 3pt #ccc;
 }
 
 @media (max-width: 600px) {
     .mensagem_whatsapp {
-        /* margin-left: .5em;
-        margin-right: .5em; */
         padding: .5em;
         border: 1pt #6a6a6a solid;
         border-radius: 6px;

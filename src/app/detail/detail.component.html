@@ -10,14 +10,14 @@
         <div class="fc-right">
             <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/vazio.png" class="img_nav">
             <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/editar.png" class="img_nav" (click)="editar()" />
-            <!-- <img *ngIf="!(config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para)" src="https://gestormix.com/img/vazio.png" class="img_nav" /> -->
             <div *ngIf="!(config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para)" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
         </div>
 
 
         <div class="fc-center title">
             <div class="espacador_vertical">&nbsp;</div>
-            <span>{{ dados.titulo_pagina ? dados.titulo_pagina : config[dados.PARAMETRO].titulo_unidade }}</span>
+            <!-- <span>{{ dados.titulo_pagina ? dados.titulo_pagina : config[dados.PARAMETRO].titulo_unidade }}</span> -->
+            <span>{{config[dados.PARAMETRO].titulo_unidade }}</span>
         </div>
         <div class="fc-clear"></div>
     </div>

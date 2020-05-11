@@ -10,7 +10,7 @@
         <!-- *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','PAGAMENTOS','RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <!-- *ngIf="['RESULTADOS','REL_CENTROS_DE_CUSTOS_TOTALIZADOS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)" -->
         <div class="fc-right">
-            <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS'].includes(dados.PARAMETRO)">
+            <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS','HISTORICOS'].includes(dados.PARAMETRO)">
                 <!-- A exibição do dia ocupa a largura dos 2 ícones de navegação -->
                 <div class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
@@ -30,10 +30,12 @@
                 && dados.PARAMETRO!='LANCAMENTOS_DESPESA'
                 && dados.PARAMETRO!='RELATORIOS'
                 && dados.PARAMETRO!='MOVIMENTACAO'
+                && dados.PARAMETRO!='HISTORICOS'
                 && dados.PARAMETRO!='RESULTADOS'
                 && dados.PARAMETRO!='FINANCEIRO'">
 
                 <img *ngIf="dados.imprimir_especial && !config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/impressos.png" class="img_nav {{dados.imprimir_etiquetas ? 'disabled' : ''}}" (click)="preview_imprimir()">
+                <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
                 <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
 
                 <img *ngIf="!dados.imprimir_etiquetas && (dados.pode_incluir && !config.DISPLAY.PopupWhatsapp)" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
@@ -46,7 +48,7 @@
 
             <div class="fc-center title">
                 <div class="espacador_vertical">&nbsp;</div>
-                <div *ngIf="titulo_lista">&nbsp;<br />{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
+                <div *ngIf="titulo_lista">{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
                     <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
                     <!-- <span *ngIf="dados.PARAMETRO=='REVISOES' && dados.mes_de_revisao!=''"> de {{dados.mes_de_revisao}}</span> -->
                 </div>
@@ -595,16 +597,28 @@
                                             <span *ngIf="dados.PARAMETRO=='BANCOS'">
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_RECEITA'">
-                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_receita)}}
+                                                Saldo:
+                                                <span class="{{dados.saldo_lancamentos_receita == 0 ? 'normal' : dados.saldo_lancamentos_receita>0 ? 'bold blue' : 'bold red'}}">
+                                                    {{util.formata_valor(dados.saldo_lancamentos_receita)}}
+                                                </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='LANCAMENTOS_DESPESA'">
-                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_despesa)}}
+                                                Saldo:
+                                                <span class="{{dados.saldo_lancamentos_despesa == 0 ? 'normal' : dados.saldo_lancamentos_despesa>0 ? 'bold blue' : 'bold red'}}">
+                                                    {{util.formata_valor(dados.saldo_lancamentos_despesa)}}
+                                                </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='RESULTADOS' && dados.lancamentos_por_dia.length>0">
-                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos)}}
+                                                Saldo:
+                                                <span class="{{dados.saldo_lancamentos == 0 ? 'normal' : dados.saldo_lancamentos>0 ? 'bold blue' : 'bold red'}}">
+                                                    {{util.formata_valor(dados.saldo_lancamentos)}}
+                                                </span>
                                             </span>
                                             <span *ngIf="dados.PARAMETRO=='DISPONIBILIDADE' && dados.lancamentos_futuros_por_dia.length>0">
-                                                Saldo: {{util.formata_valor(dados.saldo_lancamentos_futuros)}}
+                                                Saldo:
+                                                <span class="{{dados.saldo_lancamentos_futuros == 0 ? 'normal' : dados.saldo_lancamentos_futuros>0 ? 'bold blue' : 'bold red'}}">
+                                                    {{util.formata_valor(dados.saldo_lancamentos_futuros)}}
+                                                </span>
                                             </span>
                                             &nbsp;
                                         </ng-template>
@@ -669,11 +683,11 @@
                                 <p class="sub_title_blue">{{util.formata_maiusculas(dados.selected.nome)}}</p>
 
                                 <div *ngIf="assunto_da_mensagem == 'ANIVERSÁRIO'">
-                                    <p class="dados pad0">{{util.get_idade(dados.selected.nascimento)}} anos ({{dados.selected.nascimento}})</p>
-                                    <p class="dados pad0" *ngIf="dados.selected.telefone">Tel: {{dados.selected.telefone}}</p>
-                                    <p class="dados pad0">Whatsapp: {{dados.selected.whatsapp}}<br />&nbsp;</p>
+                                    <p class="dados pad0">{{util.get_idade(dados.selected.nascimento)}} anos &nbsp; (<span class="bold">{{dados.selected.nascimento}}</span>)</p>
+                                    <p class="dados pad0" *ngIf="dados.selected.telefone">Tel: &nbsp; <span class="bold">{{dados.selected.telefone}}</span></p>
+                                    <p class="dados pad0">Whatsapp: &nbsp; <span class="bold">{{dados.selected.whatsapp}}</span></p>
 
-                                    <div class="espacador_vertical_metade">&nbsp;</div>
+                                    <div class="espacador_vertical">&nbsp;</div>
 
                                     <textarea pInputTextarea rows="13" cols="30" wrap="hard" [(ngModel)]="mensagem" disabled="true"></textarea>
 
@@ -700,7 +714,6 @@
                                         <div class="center">
                                             <p (click)="voltar()" class="button_aviso"> &nbsp; MENSAGEM ENVIADA E REGISTRADA NO HISTÓRICO &nbsp; </p>
                                         </div>
-                                        <div class="espacador_vertical">&nbsp;</div>
                                     </div>
 
                                     <div *ngIf="nao_confirmou_envio_mensagem">
@@ -722,8 +735,6 @@
                                         </p>
                                     </div>
                                 </div>
-
-                            <div class="espacador_vertical">&nbsp;</div>
                         </div>
                         <div class="espacador_vertical_duplo">&nbsp;</div>
                     </div>
@@ -748,13 +759,17 @@
                         <ng-template pTemplate="body" let-registro>
                              <tr>
                                  <td (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.contraparte}}</td>
-                                 <td class="right blue" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
-                                 <td class="right red" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                                 <td class="right blue bold" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                                 <td class="right red bold" (click)="ver_lancamento(registro.registro,'RESULTADOS')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
                              </tr>
                         </ng-template>
                          <ng-template pTemplate="summary">
                              <span *ngIf="dados.lancamentos_do_dia.length>0">
-                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_do_dia)}} &nbsp;|&nbsp; Saldo do dia: {{util.formata_valor(dados.saldo_lancamentos_do_dia)}}
+                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_do_dia)}}<br />
+                                 Saldo do dia:
+                                 <span class="{{dados.saldo_lancamentos_do_dia == 0 ? 'normal' : dados.saldo_lancamentos_do_dia>0 ? 'bold blue' : 'bold red'}}">
+                                     {{util.formata_valor(dados.saldo_lancamentos_do_dia)}}
+                                 </span>
                              </span>
                          </ng-template>
                    </p-table>
@@ -780,13 +795,17 @@
                         <ng-template pTemplate="body" let-registro>
                              <tr>
                                  <td (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.contraparte}}</td>
-                                 <td class="right blue" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
-                                 <td class="right red" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
+                                 <td class="right blue bold" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.receita ? util.formata_valor(registro.receita) : ''}}</td>
+                                 <td class="right red bold" (click)="ver_lancamento(registro.registro,'DISPONIBILIDADE')">{{registro.despesa ? util.formata_valor(registro.despesa) : ''}}</td>
                              </tr>
                         </ng-template>
                          <ng-template pTemplate="summary">
                              <span *ngIf="dados.lancamentos_futuros_do_dia.length>0">
-                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_futuras_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_futuras_do_dia)}} &nbsp;|&nbsp; Saldo do dia: {{util.formata_valor(dados.saldo_lancamentos_futuros_do_dia)}}
+                                 Receitas: {{util.formata_valor(dados.valor_total_receitas_futuras_do_dia)}} &nbsp;|&nbsp; Despesas: {{util.formata_valor(dados.valor_total_despesas_futuras_do_dia)}}<br />
+                                 Saldo do dia:
+                                 <span class="{{dados.saldo_lancamentos_futuros_do_dia == 0 ? 'normal' : dados.saldo_lancamentos_futuros_do_dia>0 ? 'bold blue' : 'bold red'}}">
+                                     {{util.formata_valor(dados.saldo_lancamentos_futuros_do_dia)}}
+                                 </span>
                              </span>
                          </ng-template>
                    </p-table>
@@ -874,7 +893,11 @@
             <ng-template pTemplate="summary">
                 &nbsp;
                 <span *ngIf="dados[dados.database]?.length>0">
-                    {{ util.complementa(dados[dados.database].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}} &nbsp; Total: {{util.formata_valor(dados.valor_total_centros_de_custos)}}
+                    {{ util.complementa(dados[dados.database].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}<br />
+                    Total:
+                    <span class="{{dados.valor_total_centros_de_custos == 0 ? 'normal' : dados.valor_total_centros_de_custos>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_total_centros_de_custos)}}
+                    </span>
                 </span>
                 &nbsp;
             </ng-template>
@@ -921,15 +944,19 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr>
                          <td class="normal">{{registro.data}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" (click)="listar_dinheiro(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" (click)="listar_dinheiro(registro.data,'despesa')" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_dinheiro(registro.data,'receita')" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" (click)="listar_dinheiro(registro.data,'despesa')" class="right red bold">- {{util.formata_valor(registro.valor_despesas)}}</td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="summary">
-                    Entrada: {{util.formata_valor(dados.valor_total_receitas_dinheiro)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_dinheiro)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_dinheiro)}}
+                    Entrada: {{util.formata_valor(dados.valor_total_receitas_dinheiro)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_dinheiro)}}<br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_dinheiro == 0 ? 'normal' : dados.valor_saldo_dinheiro>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_dinheiro)}}
+                    </span>
                 </ng-template>
             </p-table>
         </div>
@@ -956,7 +983,7 @@
                         <tr (click)="verRegistro(registro)">
                             <td>{{registro.centro_de_custos}}</td>
                             <td>{{registro.contraparte}}</td>
-                            <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                            <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                         </tr>
                     </ng-template>
 
@@ -986,7 +1013,7 @@
                         <tr (click)="verRegistro(registro)">
                             <td>{{registro.centro_de_custos}}</td>
                             <td>{{registro.contraparte}}</td>
-                            <td class="right red">{{util.formata_valor(registro.valor)}}</td>
+                            <td class="right red bold">{{util.formata_valor(registro.valor)}}</td>
                         </tr>
                     </ng-template>
 
@@ -1040,14 +1067,20 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr>
                          <td class="normal">{{util.diminui_data(registro.data)}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" (click)="listar_cheque_pre(registro.data)" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_cheque_pre(registro.data)">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_cheque_pre(registro.data)" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red bold" (click)="listar_cheque_pre(registro.data)">- {{util.formata_valor(registro.valor_despesas)}}</td>
                      </tr>
                 </ng-template>
 
-                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque_pre)}}</ng-template>
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre)}}<br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_cheque_pre == 0 ? 'normal' : dados.valor_saldo_cheque_pre>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_cheque_pre)}}
+                    </span>
+                </ng-template>
+
             </p-table>
         </div>
 
@@ -1073,14 +1106,19 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr (click)="listar_cheque_pre_bom_para(registro.data)">
                          <td class="normal">{{util.diminui_data(registro.data)}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red bold">- {{util.formata_valor(registro.valor_despesas)}}</td>
                      </tr>
                 </ng-template>
 
-                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre_bom_para)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque_pre_bom_para)}}</ng-template>
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque_pre_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque_pre_bom_para)}}<br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_cheque_pre_bom_para == 0 ? 'normal' : dados.valor_saldo_cheque_pre_bom_para>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_cheque_pre_bom_para)}}
+                    </span>
+                </ng-template>
 
             </p-table>
         </div>
@@ -1105,11 +1143,15 @@
                         <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.data_cheque_pre}}</td>
                         <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.centro_de_custos}}</td>
                         <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.contraparte}}</td>
-                        <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue">{{util.formata_valor(registro.valor)}}</td>
-                        <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                        <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
+                        <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                      </tr>
                 </ng-template>
-                <ng-template pTemplate="summary">Saldo = {{util.formata_valor(dados.saldo_total_cheque_pre)}}</ng-template>
+                <ng-template pTemplate="summary">Saldo =
+                    <span class="{{dados.saldo_total_cheque_pre == 0 ? 'normal' : dados.saldo_total_cheque_pre>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.saldo_total_cheque_pre)}}
+                    </span>
+                </ng-template>
             </p-table>
         </div>
 
@@ -1132,11 +1174,15 @@
                             <td class="registro.despesa_ou_receita=='receita' ? 'bold blue' : 'bold red'">{{registro.data_cheque_pre}}</td>
                             <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.centro_de_custos}}</td>
                              <td class="registro.despesa_ou_receita=='receita' ? 'blue' : 'red'">{{registro.contraparte}}</td>
-                             <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue">{{util.formata_valor(registro.valor)}}</td>
-                             <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                             <td *ngIf="registro.despesa_ou_receita=='receita'" class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
+                             <td *ngIf="registro.despesa_ou_receita=='despesa'" class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
-                    <ng-template pTemplate="summary">Saldo = {{util.formata_valor(dados.saldo_total_cheque_pre_bom_para)}}</ng-template>
+                    <ng-template pTemplate="summary">Saldo =
+                        <span class="{{dados.saldo_total_cheque_pre_bom_para == 0 ? 'normal' : dados.saldo_total_cheque_pre_bom_para>0 ? 'bold blue' : 'bold red'}}">
+                            {{util.formata_valor(dados.saldo_total_cheque_pre_bom_para)}}
+                        </span>
+                    </ng-template>
                 </p-table>
         </div>
 
@@ -1183,14 +1229,19 @@
                     <ng-template pTemplate="body" let-registro>
                         <tr>
                              <td class="normal">{{util.diminui_data(registro.data)}}</td>
-                             <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                             <td *ngIf="registro.valor_receitas>0" class="right blue" (click)="listar_cheque(registro.data,'receita')">{{util.formata_valor(registro.valor_receitas)}}</td>
-                             <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                             <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_cheque(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                             <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                             <td *ngIf="registro.valor_receitas>0" class="right blue bold" (click)="listar_cheque(registro.data,'receita')">{{util.formata_valor(registro.valor_receitas)}}</td>
+                             <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                             <td *ngIf="registro.valor_despesas>0" class="right red bold" (click)="listar_cheque(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
                          </tr>
                     </ng-template>
 
-                    <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_cheque)}}</ng-template>
+                    <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_cheque)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_cheque)}}<br />
+                        Saldo:
+                        <span class="{{dados.valor_saldo_cheque == 0 ? 'normal' : dados.valor_saldo_cheque>0 ? 'bold blue' : 'bold red'}}">
+                            {{util.formata_valor(dados.valor_saldo_cheque)}}
+                        </span>
+                    </ng-template>
                 </p-table>
             </div>
         </div>
@@ -1218,7 +1269,7 @@
                         <tr (click)="verRegistro(registro)">
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                             <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
 
@@ -1247,7 +1298,7 @@
                         <tr (click)="verRegistro(registro)">
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                             <td class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
 
@@ -1327,24 +1378,10 @@
                             <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.meio_de_pagamento}}</td>
                             <td class="{{registro.tipo=='receita' ? 'big_screen blue' : 'big_screen red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.centro_de_custos}}</td>
                             <td class="{{registro.tipo=='receita' ? 'blue' : 'red'}}" (click)="movimentacao_detalhe($event,registro,op)">{{registro.contraparte}}</td>
-                             <td *ngIf="registro.valor_receita>0" class="blue right" (click)="movimentacao_detalhe($event,registro,op)">{{util.formata_valor(registro.valor_receita)}}</td>
-                             <td *ngIf="registro.valor_despesa!=0" class="red right" (click)="movimentacao_detalhe($event,registro,op)">- {{util.formata_valor(registro.valor_despesa)}}</td>
+                             <td *ngIf="registro.valor_receita>0" class="blue right bold" (click)="movimentacao_detalhe($event,registro,op)">{{util.formata_valor(registro.valor_receita)}}</td>
+                             <td *ngIf="registro.valor_despesa!=0" class="red right bold" (click)="movimentacao_detalhe($event,registro,op)">- {{util.formata_valor(registro.valor_despesa)}}</td>
 
                              <td *ngIf="dados.is_em_caixa">
-                                 <!-- <p-calendar
-                                     [(ngModel)]="registro.registro.data_depositar"
-                                     (change)="depositar($event, registro.registro, registro.tipo)"
-                                     (onClose)="depositar($event, registro.registro, registro.tipo)"
-                                     [locale]="pt"
-                                     dateFormat="dd/mm/yy"
-                                     name="registro.registro.key"
-                                     selectionMode="single"
-                                     [touchUI]="true"
-                                     [readonlyInput]="true"
-                                     [showTransitionOptions]="'300ms'"
-                                     [hideTransitionOptions]="'300ms'"
-                                 >
-                                 </p-calendar> -->
                                  <input name='data_depositar' pInputText [(ngModel)]="dados.data_depositar" (change)="dados.data_depositar=util.diminui_data(util.formata_data(dados.data_depositar))" autocomplete="off" />
                              </td>
                              <td *ngIf="dados.is_em_caixa">
@@ -1414,9 +1451,6 @@
             </ng-template>
         </p-overlayPanel>
 
-        <!-- <button type="text" pButton label="Basic" (click)="op.toggle($event)"></button>
-        <div class="espacador_vertical_duplo">&nbsp;</div> -->
-
 
         <div *ngIf="dados.listar_movimentacao_dia">
 
@@ -1441,7 +1475,7 @@
                         <tr (click)="verRegistro(registro)">
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                             <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
 
@@ -1470,7 +1504,7 @@
                         <tr (click)="verRegistro(registro)">
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                             <td class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
 
@@ -1521,15 +1555,19 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr>
                          <td class="normal">{{registro.data}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" (click)="listar_debito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" (click)="listar_debito(registro.data,'despesa')" class="right red">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_debito(registro.data,'receita')" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" (click)="listar_debito(registro.data,'despesa')" class="right red bold">- {{util.formata_valor(registro.valor_despesas)}}</td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="summary">
-                    Entrada: {{util.formata_valor(dados.valor_total_receitas_debito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_debito)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_debito)}}
+                    Entrada: {{util.formata_valor(dados.valor_total_receitas_debito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_debito)}}<br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_debito == 0 ? 'normal' : dados.valor_saldo_debito>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_debito)}}
+                    </span>
                 </ng-template>
             </p-table>
         </div>
@@ -1556,7 +1594,7 @@
                         <tr (click)="verRegistro(registro)">
                             <td>{{registro.centro_de_custos}}</td>
                             <td>{{registro.contraparte}}</td>
-                            <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                            <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                         </tr>
                     </ng-template>
 
@@ -1586,7 +1624,7 @@
                         <tr (click)="verRegistro(registro)">
                             <td>{{registro.centro_de_custos}}</td>
                             <td>{{registro.contraparte}}</td>
-                            <td class="right red">{{util.formata_valor(registro.valor)}}</td>
+                            <td class="right red bold">{{util.formata_valor(registro.valor)}}</td>
                         </tr>
                     </ng-template>
 
@@ -1639,15 +1677,19 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr>
                          <td class="normal">{{util.diminui_data(registro.data)}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red bold" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
                      </tr>
                 </ng-template>
 
-                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_credito)}}</ng-template>
-
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito)}} <br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_credito == 0 ? 'normal' : dados.valor_saldo_credito>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_credito)}}
+                    </span>
+                </ng-template>
             </p-table>
         </div>
 
@@ -1672,15 +1714,19 @@
                 <ng-template pTemplate="body" let-registro>
                     <tr>
                          <td class="normal">{{util.diminui_data(registro.data)}}</td>
-                         <td *ngIf="registro.valor_receitas==0" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue">{{util.formata_valor(registro.valor_receitas)}}</td>
-                         <td *ngIf="registro.valor_despesas==0" class="right red">{{util.formata_valor(registro.valor_despesas)}}</td>
-                         <td *ngIf="registro.valor_despesas>0" class="right red" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_receitas==0" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_receitas>0" (click)="listar_credito(registro.data,'receita')" class="right blue bold">{{util.formata_valor(registro.valor_receitas)}}</td>
+                         <td *ngIf="registro.valor_despesas==0" class="right red bold">{{util.formata_valor(registro.valor_despesas)}}</td>
+                         <td *ngIf="registro.valor_despesas>0" class="right red bold" (click)="listar_credito(registro.data,'despesa')">- {{util.formata_valor(registro.valor_despesas)}}</td>
                      </tr>
                 </ng-template>
 
-                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito_bom_para)}} &nbsp;&nbsp; Saldo: {{util.formata_valor(dados.valor_saldo_credito_bom_para)}}</ng-template>
-
+                <ng-template pTemplate="summary">Entrada: {{util.formata_valor(dados.valor_total_receitas_credito_bom_para)}} &nbsp;&nbsp; Saída: {{util.formata_valor(dados.valor_total_despesas_credito_bom_para)}}<br />
+                    Saldo:
+                    <span class="{{dados.valor_saldo_credito_bom_para == 0 ? 'normal' : dados.valor_saldo_credito_bom_para>0 ? 'bold blue' : 'bold red'}}">
+                        {{util.formata_valor(dados.valor_saldo_credito_bom_para)}}
+                    </span>
+                </ng-template>
             </p-table>
         </div>
 
@@ -1705,7 +1751,7 @@
                             <td>{{registro.data_credito}}</td>
                             <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                             <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
                     <ng-template pTemplate="summary">&nbsp;</ng-template>
@@ -1731,7 +1777,7 @@
                             <td>{{registro.data_credito}}</td>
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                             <td class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
                     <ng-template pTemplate="summary">&nbsp;</ng-template>
@@ -1761,7 +1807,7 @@
                             <td class="bold">{{registro.data_credito}}</td>
                             <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right blue">{{util.formata_valor(registro.valor)}}</td>
+                             <td class="right blue bold">{{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
                     <ng-template pTemplate="summary">&nbsp;</ng-template>
@@ -1787,7 +1833,7 @@
                             <td class="bold">{{registro.data_credito}}</td>
                              <td>{{registro.centro_de_custos}}</td>
                              <td>{{registro.contraparte}}</td>
-                             <td class="right red">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
+                             <td class="right red bold">{{registro.valor!=0 ? '- ' : ''}} {{util.formata_valor(registro.valor)}}</td>
                          </tr>
                     </ng-template>
                     <ng-template pTemplate="summary">&nbsp;</ng-template>
@@ -1847,8 +1893,6 @@
                          <th>Nome</th>
                          <th>Email</th>
                          <th>Privilégio</th>
-                         <!-- <th>Atualização</th> -->
-                         <!-- <th>Foto</th> -->
                      </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-registro>
@@ -1856,8 +1900,6 @@
                         <td>{{registro.nome}}</td>
                         <td>{{registro.email}}</td>
                         <td class="bold center">{{registro.is_admin ? 'ADMIN' : ''}}</td>
-                        <!-- <td>{{registro.ultima_atualizacao}}</td> -->
-                        <!-- <td class="center"><img src="{{util.formata_site_com_protocolo(registro.img_url)}}" class="img_url_50"></td> -->
                      </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
