@@ -21,7 +21,7 @@ export class ConfigService {
   // ATIVAR GERENCIAMENTO DE CLIENTES E SOCIOS
   // ===================================================
   public ATIVAR_CLIENTES : boolean = true;
-  public ATIVAR_SOCIOS : boolean = true;
+  public ATIVAR_SOCIOS : boolean = false;
 
   // =====================================================
   // Configuração de navegação

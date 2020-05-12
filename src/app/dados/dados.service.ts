@@ -878,17 +878,6 @@ export class DadosService {
             this.config.DISPLAY.Home = true;
         }
         else {
-            // if (destino == 'PAGAMENTOS'){
-            //     this.origem = 'CLIENTES';
-            //     this.cliente = this.selected;
-            //
-            //     console.log("ORIGEM = " + this.origem);
-            //     console.log("this.cliente");
-            //     console.log(this.cliente);
-            //
-            //     destino = 'LANCAMENTOS_RECEITA';
-            // }
-
             if (destino == 'DESPESAS_FORNECEDOR'){
                 this.origem = 'FORNECEDORES';
                 this.fornecedor = this.selected;
@@ -992,11 +981,6 @@ export class DadosService {
             else if (this.PARAMETRO == 'ESTOQUE'){
                 this.listar_estoque = true;
                 this.config.DISPLAY.Lista = true;
-            }
-            else if (destino == 'PERFIL') {
-                // console.log("PERFIL");
-                this.selected = this.meu_perfil();
-                this.config.DISPLAY.Registro = true;
             }
             else if (destino == 'CONFIGURACAO') {
                 console.log("CONFIGURACAO");
@@ -1208,22 +1192,29 @@ export class DadosService {
     }
 
     public meu_perfil() {
-        this.selected = {};
+        console.log("meu_perfil()");
 
+        this.selected = {};
+        let achou = false;
+
+        console.log("this.auth_object.uid = " + this.auth_object.uid)
         for (let i in this.usuarios){
+            console.log("usuario key " + this.usuarios[i].key)
+
             // Busca o registro do usuario autenticado em USUARIOS
             if (this.usuarios[i].key == this.auth_object.uid) {
+                achou = true;
+                console.log("ACHOU USUARIO")
                 this.usuario = this.usuarios[i];
                 this.usuario_logado = this.usuarios[i];
+                this.selected = this.util.deepClone(this.usuario);
+                if (this.selected.is_admin ){
+                    this.config.is_admin = true;
+                }
                 break;
             }
         }
 
-        this.selected = this.util.deepClone(this.usuario);
-
-        if (this.selected.is_admin ){
-            this.config.is_admin = true;
-        }
         return this.selected;
     }
 
@@ -3397,13 +3388,23 @@ export class DadosService {
     }
 
     public salvar_usuario_logado(salvar_apenas : boolean = false, sem_retorno : boolean = false){
+        console.log("this.usuario_logado.key = " + this.usuario_logado.key)
+        console.log(this.usuario_logado)
+
+        if(this.total_de_usuarios == -1){
+            // nao está observando o database USUARIOS ainda... Aguarda a proxima tentativa.
+            return;
+        }
+
         if(salvar_apenas) {
             // salvar usuario_logado apenas
         }
         else {
             // carrega os dados do arquivo de usuarios para usuario_logado
+            let achou = false;
             for (let i in this.usuarios) {
                 if (this.usuarios[i].key == this.usuario_logado.key){
+                    achou=true;
                     this.usuarios[i].dataset = this.usuario_logado.dataset;
                     this.usuarios[i].dataset_nome = this.usuario_logado.dataset_nome;
                     // Troca nome e imagem pelos editados pelo usuário (e salvos em dados.usuarios)
@@ -3433,6 +3434,9 @@ export class DadosService {
                     this.usuario_logado.dataset_email = "";
                 }
             }
+            if(!achou){
+                console.log("Não achou usuario para o usuario logado. Cria mais abaixo.")
+            }
         }
 
         this.usuario_logado.ultima_atualizacao = this.util.quando_com_segundos();  // datahora_com_segundos = dia hora segundos
@@ -3441,12 +3445,12 @@ export class DadosService {
         // SALVA O USUARIO LOGADO
         this.db.list(this.ref_usuarios).update(this.usuario_logado.key, this.usuario_logado);
 
-        if (!sem_retorno) {
-            this.observar_clientes();
-            if(this.config.ATIVAR_SOCIOS){
-                this.observar_socios();
-            }
-        }
+        // if (!sem_retorno) {
+        //     this.observar_clientes();
+        //     if(this.config.ATIVAR_SOCIOS){
+        //         this.observar_socios();
+        //     }
+        // }
     }
 
     public excluir(){

@@ -76,9 +76,20 @@ export class DetailComponent implements OnInit {
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
 
+        if(!this.dados.selected || (this.dados.selected == {}) ){
+            console.log("sem selected")
+            this.config.DISPLAY.Home = true;
+            this.config.DISPLAY.Registro = false;
+            return;
+        }
+        if( !this.dados.PARAMETRO || (this.dados.PARAMETRO == undefined)){
+            console.log("sem PARAMETRO")
+            this.config.DISPLAY.Home = true;
+            this.config.DISPLAY.Registro = false;
+            return;
+        }
 
-
-        if( ['EQUIPE','USUARIOS','PERFIL'].includes(this.dados.PARAMETRO) ){
+        if( ['EQUIPE'].includes(this.dados.PARAMETRO) ){
             this.mapa_url = "https://www.google.com/maps/search/" + this.dados.selected.latitude + "," + this.dados.selected.longitude;
         }
 
@@ -86,15 +97,11 @@ export class DetailComponent implements OnInit {
         this.dados.HOJE = this.util.hoje();
         this.dados.HOJE_QUANDO = this.util.converte_data_para_milisegundos(this.dados.HOJE);
 
-        // if(this.dados.PARAMETRO == 'ORCAMENTOS'){
-        //     this.dados.atualizar_saldos_dos_orcamentos(this.dados.selected.key);
-        // }
         this.dados.mostrar_estoque_clientes_flag = false;
         this.dados.mostrar_estoque_fornecedores_flag = false;
         this.dados.mostrar_estoque_compras_flag = false;
         this.dados.mostrar_estoque_vendas_flag = false;
 
-        this.util.goTop();
 
         this.dados.registro = this.dados.selected;
 
@@ -113,12 +120,20 @@ export class DetailComponent implements OnInit {
         console.log(this.dados.selected);
 
         this.dados.incluindo = false;
-        if(this.config[this.dados.PARAMETRO].pode_editar){
-            this.dados.pode_editar = true;
+        console.log(this.config[this.dados.PARAMETRO]);
+
+        if(this.config[this.dados.PARAMETRO]){
+            if(this.config[this.dados.PARAMETRO].pode_editar){
+                this.dados.pode_editar = true;
+            }
+            else {
+                this.dados.pode_editar = false;
+            }
         }
         else {
-            this.dados.pode_editar = false;
+            return;
         }
+
         if (this.dados.selected.fixo){
             this.dados.pode_editar = false;
         }
@@ -137,7 +152,7 @@ export class DetailComponent implements OnInit {
 
         this.substituto_url_site = this.config[this.dados.PARAMETRO].substituto_url_site ? this.config[this.dados.PARAMETRO].substituto_url_site : 'CLIQUE PARA VER NA WEB';
 
-        if(this.dados.PARAMETRO == 'PERFIL' || this.dados.PARAMETRO == 'PERFIL'){
+        if(this.dados.PARAMETRO == 'PERFIL'){
             this.config.is_admin = this.dados.selected.is_admin;
 
             if(this.config.is_admin){
@@ -193,105 +208,55 @@ export class DetailComponent implements OnInit {
             console.log(this.dados.filtered_atendimentos)
         }
 
-        if(this.dados.PARAMETRO == "ORCAMENTOS"){
-            console.log(this.dados.PARAMETRO);
 
-            let lancamento, cliente_key;
-            let orcamento, orcamento_key, valor, restante;
-            let saldo = 0;
-            orcamento = this.dados.selected;
-
-            console.log("selected");
-            console.log(this.dados.selected);
-            console.log("selected.key = " + this.dados.selected.key);
-            cliente_key = this.dados.selected.cliente_key;
-            this.orcamentos = {};
-
-            console.log("Calculando orçamentos e pagamentos");
-
-            this.lancamentos_receita_do_orcamento = [];
-
-            for (let x in this.dados.selected_lancamentos_receita){
-                console.log(x)
-                // console.log(this.dados.selected_lancamentos_receita[x]);
-
-                if(this.dados.selected_lancamentos_receita[x].contraparte_key == cliente_key){
-                    // lancamento de receita deste cliente
-                    lancamento = this.dados.selected_lancamentos_receita[x];
-                    console.log("------------------------");
-                    console.log("lancamento");
-                    console.log(lancamento);
-
-                    if(lancamento.orcamento_key == orcamento.key){
-                        valor = this.util.converte_valores_formatados_para_numero(lancamento.valor);
-                        saldo = saldo + valor;
-                        console.log("Saldo = " + saldo);
-
-                        this.lancamentos_receita_do_orcamento.push(this.dados.selected_lancamentos_receita[x]);
-                    }
-                }
-            }
-
-            let valor_do_tratamento =  this.util.converte_valores_formatados_para_numero(orcamento.valor_do_tratamento);
-            restante = valor_do_tratamento - saldo;
-
-            orcamento.restante = this.util.formata_valor(restante);
-            orcamento.saldo = this.util.formata_valor(saldo);
-
-            // this.dados.orcamentos$.update(orcamento.key, orcamento);
-            this.dados.selected = this.util.deepClone(orcamento);
-        }
+                // // =======================================================
+                // //function that gets the location and returns it
+                // var marcalocal = this.dados.selected.latitude + "," + this.dados.selected.longitude;
+                // var bbox1 = (this.dados.selected.longitude + 0.1) + "," + (this.dados.selected.latitude + 0.1);
+                // var bbox2 = (this.dados.selected.longitude - 0.1) + "," + (this.dados.selected.latitude  - 0.1);
+                // function getLocation() {
+                //   if(navigator.geolocation) {
+                //     navigator.geolocation.getCurrentPosition(showPosition);
+                //   } else {
+                //     console.log("Geo Location not supported by browser");
+                //   }
+                // }
+                // //function that retrieves the position
+                // function showPosition(position) {
+                //   var location = {
+                //     longitude: position.coords.longitude,
+                //     latitude: position.coords.latitude
+                //   }
+                //   console.log(location)
+                //
+                //   var html = "<iframe frameborder='0' height='350' marginheight='0' ";
+                //   html += "marginwidth='0' scrolling='no' width='425' ";
+                //
+                //   html += "src='//www.openstreetmap.org/export/embed.html?";
+                //
+                //   html += "bbox=";
+                //   html += bbox1;
+                //   // html += latlon;
+                //   html += ",";
+                //   html += bbox2;
+                //   // html += latlon;
+                //
+                //   html += "&amp;marker=";
+                //   // html += "marker=";
+                //   // html += "-23.009133199999997,-43.3443513";
+                //   html += marcalocal;
+                //
+                //   // html += latlon;
+                //   html += "&amp;layer=mapnik'>";
+                //   html += "</iframe>";
+                // }
+                //
+                // //request for location
+                // getLocation();
+                // // =======================================================
 
 
-        var marcalocal = this.dados.selected.latitude + "," + this.dados.selected.longitude;
-        var bbox1 = (this.dados.selected.longitude + 0.1) + "," + (this.dados.selected.latitude + 0.1);
-        var bbox2 = (this.dados.selected.longitude - 0.1) + "," + (this.dados.selected.latitude  - 0.1);
-
-                // =======================================================
-                //function that gets the location and returns it
-                function getLocation() {
-                  if(navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition);
-                  } else {
-                    console.log("Geo Location not supported by browser");
-                  }
-                }
-                //function that retrieves the position
-                function showPosition(position) {
-                  var location = {
-                    longitude: position.coords.longitude,
-                    latitude: position.coords.latitude
-                  }
-                  console.log(location)
-
-                  var html = "<iframe frameborder='0' height='350' marginheight='0' ";
-                  html += "marginwidth='0' scrolling='no' width='425' ";
-
-                  html += "src='//www.openstreetmap.org/export/embed.html?";
-
-                  html += "bbox=";
-                  html += bbox1;
-                  // html += latlon;
-                  html += ",";
-                  html += bbox2;
-                  // html += latlon;
-
-                  html += "&amp;marker=";
-                  // html += "marker=";
-                  // html += "-23.009133199999997,-43.3443513";
-                  html += marcalocal;
-
-                  // html += latlon;
-                  html += "&amp;layer=mapnik'>";
-                  html += "</iframe>";
-
-                  // var map = document.querySelector("mapholder");
-                  // map.innerHTML = html;
-                }
-
-                //request for location
-                getLocation();
-                // =======================================================
+        this.util.goTop();
 
         this.mostrar_tela();
     }
@@ -389,7 +354,7 @@ export class DetailComponent implements OnInit {
         if(this.dados.selected.img_url2){
             this.dados.selected.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected.img_url2);
         }
-        
+
         this.util.goTop();  // sobe a tela pro topo
     }
 

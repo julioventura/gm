@@ -99,7 +99,7 @@ export class ConfigComponent implements OnInit {
 
 
             this.config.DISPLAY.Config = false;
-            this.config.DISPLAY.Home = true;
+            this.config.DISPLAY.Registro = true;
 
 
     }
