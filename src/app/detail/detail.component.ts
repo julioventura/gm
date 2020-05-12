@@ -380,9 +380,16 @@ export class DetailComponent implements OnInit {
             this.ativo = true;
         }
 
-        this.dados.selected.img_url = this.util.formata_url_com_protocolo(this.dados.selected.img_url);
-        this.dados.selected.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected.img_url2);
+        console.log("this.dados.selected");
+        console.log(this.dados.selected);
 
+        if(this.dados.selected.img_url){
+            this.dados.selected.img_url = this.util.formata_url_com_protocolo(this.dados.selected.img_url);
+        }
+        if(this.dados.selected.img_url2){
+            this.dados.selected.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected.img_url2);
+        }
+        
         this.util.goTop();  // sobe a tela pro topo
     }
 

@@ -756,8 +756,8 @@ background: #d1e1f7;
     margin: 1em;
     margin-left: 2pt;
     margin-right: 2pt;
-    padding: 1em;
-    padding-top: 5pt;
+    padding: .5em;
+    /* padding-top: 5pt; */
     /* border: 1pt solid #6a6a6a; */
     box-shadow: 1pt 1pt 3pt 3pt #ccc;
 }
@@ -1846,7 +1846,7 @@ thead {
     /* border-bottom: 1pt solid lightgrey; */
     /* border-top: 1pt solid lightgrey; */
     border: 1pt solid lightgrey;
-    background: #ececec;
+    /* background: #ececec; */
     border-radius: 6px;
     /* height: 40px; */
 }
@@ -3046,7 +3046,7 @@ body .ui-corner-bottom {
 
 body .ui-table .ui-table-tbody > tr > td {
     padding: 0.3em 0.5em;
-    font-size: 10pt;
+    font-size: 9pt;
 }
 
 @media (max-width: 500px) {
@@ -3590,4 +3590,15 @@ body .ui-button.ui-button-text-icon-left .ui-button-text {
 
 .no_display {
         display: none;
+}
+
+.list_view {
+    font-family: Open Sans,Helvetica Neue,sans-serif;
+    font-size: 10pt;
+    font-weight: bold;
+}
+@media (max-width: 600px) {
+    .list_view {
+        font-size: 9pt;
+    }
 }

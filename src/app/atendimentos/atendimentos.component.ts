@@ -120,9 +120,6 @@ export class AtendimentosComponent implements OnInit {
             this.avalia_atendimentos();
         }
 
-        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
-        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
-
         this.util.goTop();  // sobe a tela pro topo
     }
 

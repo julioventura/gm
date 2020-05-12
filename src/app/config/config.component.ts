@@ -78,19 +78,11 @@ export class ConfigComponent implements OnInit {
             console.log("RETORNO + " + this.dados.retorno);
         }
 
-
-
         // Registro de procedimentos na ficha do cliente e historicos para o usuario
         this.dados.historicos = {};
         this.dados.historicos.titulo = '';
 
-
-
         this.TEMP.idade = this.util.get_idade_str(this.dados.selected_edit.nascimento);
-
-
-        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
-        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
 
         this.util.goTop();  // sobe a tela pro topo
     }

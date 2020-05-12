@@ -1302,8 +1302,8 @@
 
     <!-- BLOCOS INDIVIDUAIS RESTANTES  -->
 
-    <div *ngIf="!['CLIENTES','EQUIPE','SOCIOS','RESULTADOS','DISPONIBILIDADE','BANCOS','ATENDIMENTOS','ESTOQUE','CAIXA','RECEITAS','DESPESAS','PAGAMENTOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','REL_RECEITAS_E_DESPESAS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA','REL_DEBITO','REL_CREDITO','PRODUCAO_PROFISSIONAL','HISTORICOS','COMPARTILHAMENTOS','CONFIGURACAO','ORCAMENTOS'].includes(dados.PARAMETRO)"
-        class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
+    <div *ngIf="!['CLIENTES','EQUIPE','SOCIOS','RESULTADOS','DISPONIBILIDADE','BANCOS','ATENDIMENTOS','ESTOQUE','CAIXA','RECEITAS','DESPESAS','PAGAMENTOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','REL_RECEITAS_E_DESPESAS','REL_DINHEIRO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA','REL_DEBITO','REL_CREDITO','PRODUCAO_PROFISSIONAL','HISTORICOS','COMPARTILHAMENTOS','CONFIGURACAO','ORCAMENTOS'].includes(dados.PARAMETRO)">
+         <div class="ui-grid ui-grid-responsive ui-fluid container_dialogBox_bottom back_white">
 
          <div *ngIf="config[dados.PARAMETRO].centro_de_custos" class="ui-grid-row">
              <div class="form_label_ext2">Centro de Custos</div>
@@ -1366,7 +1366,6 @@
 	                 </div>
 	             </div>
 	         </div>
-	         <!-- <div class="espacador_vertical">&nbsp;</div> -->
 
              <div *ngIf="config[dados.PARAMETRO].revisao" class="container_registro">
                  <div>
@@ -1417,11 +1416,13 @@
              </div>
 
 
-             <div *ngIf="config[dados.PARAMETRO].data && dados.selected.data" class="ui-grid-row">
-                 <div class="form_label_ext">Data</div>
-                 <div class="form_content left"><span class="dados bold">{{dados.selected.data}}</span></div>
+             <div *ngIf="config[dados.PARAMETRO].data && dados.selected.data">
+                 <div class="ui-grid-row">
+                     <div class="form_label_ext">Data</div>
+                     <div class="form_content left"><span class="dados bold">{{dados.selected.data}}</span></div>
+                 </div>
+                 <div class="espacador_vertical_metade">&nbsp;</div>
              </div>
-             <div class="espacador_vertical_metade">&nbsp;</div>
 
              <div *ngIf="config[dados.PARAMETRO].cpf && dados.selected.cpf" class="ui-grid-row">
                  <div class="form_label_ext">CPF</div>
@@ -1673,6 +1674,9 @@
                  </div>
              </div> -->
 
+             <div id="x34" class="espacador_vertical">&nbsp;</div>
+
+
          </div>
 
 
@@ -1681,10 +1685,11 @@
              <div class="sub_title center"><span class="dados_destaque">ADMINISTRADOR</span></div>
          </div> -->
 
-     </div>
+         </div>
+    </div>
 
 
-      <div id="GEOLOCALIZAÇÃO" *ngIf="['EQUIPE','USUARIOS','PERFIL'].includes(this.dados.PARAMETRO)">
+      <div id="GEOLOCALIZAÇÃO" *ngIf="['EQUIPE'].includes(this.dados.PARAMETRO)">
 
           <div class="container_interno">
               <div class="espacador_vertical_metade">&nbsp;</div>
@@ -1716,20 +1721,16 @@
              <div>
                  <mapholder></mapholder>
              </div>
-
           </div>
-
 
           <!-- {{map}} -->
           <!-- <iframe frameborder='0' height='350' marginheight='0' marginwidth='0' scrolling='no' width='425'
           src={{url}}"></iframe> -->
           <!-- src='https://www.openstreetmap.org/export/embed.html?bbox={{p1}},{{p2}},{{p3}},{{p4}}&amp;marker={{p5}},{{p6}}&amp;layer=mapnik'></iframe> -->
-
       </div>
 
 
     <!-- TABELAS DE DADOS RELACIONADOS  -->
-
 
         <div *ngIf ="dados.PARAMETRO=='ESTOQUE'" id="menu_ficha_estoque">
             <div id="menu_ficha_estoque">
@@ -2048,7 +2049,6 @@
          </div>
 
       </div>
-
 
 
 
