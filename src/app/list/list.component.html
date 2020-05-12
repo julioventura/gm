@@ -1027,7 +1027,7 @@
 
     <!-- REL_CHEQUES_PRE -->
     <div *ngIf="dados.listar_rel_cheque_pre || dados.listar_cheque_pre_dia || dados.listar_cheque_pre_dia_bom_para">
-        <div id="x17" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x17" class="espacador_vertical">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_cheque_pre
         && !dados.listar_cheque_pre_dia
@@ -1523,7 +1523,7 @@
 
     <!-- REL_DEBITO -->
     <div *ngIf="dados.listar_rel_debito || dados.listar_debito_dia">
-        <div id="x26" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x26" class="espacador_vertical">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_debito && !dados.listar_debito_dia && dados.datas_com_lancamentos_debito.length < 1">
 
@@ -1642,7 +1642,7 @@
 
     <!-- REL_CREDITO -->
     <div *ngIf="dados.listar_rel_credito || dados.listar_credito_dia">
-        <div id="x4" class="espacador_vertical_duplo">&nbsp;</div>
+        <div id="x4" class="espacador_vertical">&nbsp;</div>
 
         <div *ngIf="dados.listar_rel_credito
         && !dados.listar_credito_dia
@@ -1651,14 +1651,14 @@
 
             <div class="center">
                 <div class="center">
-                    <div id="x5" class="espacador_vertical_duplo">&nbsp;</div>
+                    <div id="x5" class="espacador_vertical">&nbsp;</div>
                     <div class="container_interno">
                         <div class="espacador_vertical_duplo">&nbsp;</div>
                         <span class="sub_title">Nenhum lançamento <span *ngIf="dados.centro_de_custos_escolhido && dados.centro_de_custos_escolhido.nome">em "{{dados.centro_de_custos_escolhido.nome}}"</span></span>
                         <div class="espacador_vertical_duplo">&nbsp;</div>
                     </div>
                 </div>
-                <div id="x6" class="espacador_vertical_duplo">&nbsp;</div>
+                <div id="x6" class="espacador_vertical">&nbsp;</div>
             </div>
         </div>
 

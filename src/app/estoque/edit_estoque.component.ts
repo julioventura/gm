@@ -206,8 +206,13 @@ export class EditEstoqueComponent implements OnInit {
             }
         }
 
-        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
-        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
+        if(this.dados.selected_edit.img_url){
+            this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
+        }
+        if(this.dados.selected_edit.img_url2){
+            this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
+        }
+
 
         this.util.goTop();  // sobe a tela pro topo
     }

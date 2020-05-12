@@ -2290,6 +2290,47 @@ export class DadosService {
                 // =============================================================
             }
         );
+
+
+        // this.selected_caixa =
+        // [
+        //     {
+        //         "nome" : "Dinheiro",
+        //         "posicao" : 1,
+        //         "key" : "-001",
+        //         "sublista" : "REL_DINHEIRO"
+        //     },
+        //     {
+        //         "key" : "-002",
+        //         "nome" : "Cheques à vista",
+        //         "posicao" : 2,
+        //         "sublista" : "REL_CHEQUES_A_VISTA"
+        //     },
+        //     {
+        //         "nome" : "Cheques pré-datados",
+        //         "posicao" : 3,
+        //         "key" : "-003",
+        //         "sublista" : "REL_CHEQUES_PRE"
+        //     },
+        //     {
+        //         "nome" : "Cartões de Débito",
+        //         "posicao" : 4,
+        //         "key" : "-004",
+        //         "sublista" : "REL_DEBITO"
+        //     },
+        //     {
+        //         "nome" : "Cartões de Crédito",
+        //         "posicao" : 5,
+        //         "key" : "-005",
+        //         "sublista" : "REL_CREDITO"
+        //     }
+        // ];
+        // this.selected_caixa = this.selected_caixa.sort((a, b) => (a.posicao > b.posicao) ? 1 : -1) //// sort a list of objects by a property, ascending
+        // this.total_de_caixa = this.selected_caixa.length;
+
+
+
+
     }
 
 

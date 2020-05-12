@@ -132,9 +132,9 @@
                 </div>
                 <!-- STATUS -->
                 <div *ngIf="!arquivo1_ativado && !camera1_ativada && !link1_ativado" class="fw43">
-                    <span *ngIf="this.dados.selected_edit.img_url.trim()" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
+                    <span *ngIf="this.dados.selected_edit.img_url" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
                     </span>
-                    <span *ngIf="!this.dados.selected_edit.img_url.trim()" class="result">(sem imagem)
+                    <span *ngIf="!this.dados.selected_edit.img_url" class="result">(sem imagem)
                     </span>
                 </div>
             </div>

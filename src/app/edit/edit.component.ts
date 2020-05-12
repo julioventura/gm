@@ -220,10 +220,9 @@ export class EditComponent implements OnInit {
             }
         }
 
-
-
-        this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
-        this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
+        if(this.dados.selected_edit.img_url){
+            this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
+        }
 
         this.util.goTop();  // sobe a tela pro topo
     }
@@ -755,9 +754,6 @@ export class EditComponent implements OnInit {
         if(qual==1){
             this.dados.selected_edit.img_url = this.filePath;
         }
-        else if(qual==2){
-            this.dados.selected_edit.img_url2 = this.filePath;
-        }
 
         this.imageError = null;
         if (fileInput.target.files && fileInput.target.files[0]) {
@@ -795,11 +791,6 @@ export class EditComponent implements OnInit {
                             this.dados.selected_edit.tipo_da_imagem1 = 'base64';
                             this.dados.selected_edit.origem_da_imagem1 = 'upload de arquivo';
                         }
-                        else if(qual==2){
-                            this.dados.selected_edit.img_url2 = image.src;
-                            this.dados.selected_edit.tipo_da_imagem2 = 'base64';
-                            this.dados.selected_edit.origem_da_imagem2 = 'upload de arquivo';
-                        }
                     }
                     this.desligar_botoes_de_upload();
                 };
@@ -818,11 +809,6 @@ export class EditComponent implements OnInit {
           this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
           this.dados.selected_edit.tipo_da_imagem1 = "base64";
           this.dados.selected_edit.origem_da_imagem1 = 'imagem de câmera';
-      }
-      else  if(qual==2){
-          this.dados.selected_edit.img_url2 = webcamImage.imageAsDataUrl; // opção em data file base64
-          this.dados.selected_edit.tipo_da_imagem2 = "base64";
-          this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
       }
 
       this.desligar_botoes_de_upload();
@@ -845,19 +831,6 @@ export class EditComponent implements OnInit {
                 // link normal
                 this.dados.selected_edit.tipo_da_imagem1 = 'link';
                 this.dados.selected_edit.origem_da_imagem1 = 'link da web';
-            }
-        }
-        else if(qual == 2){
-            this.dados.selected_edit.img_url2 = this.img_link2;
-            if(this.img_link2.substr(0,10)=='data:image'){
-                // em vez de link a imagem era um arquio base64
-                this.dados.selected_edit.tipo_da_imagem2 = 'base64';
-                this.dados.selected_edit.origem_da_imagem2 = 'link';
-            }
-            else {
-                // link normal
-                this.dados.selected_edit.tipo_da_imagem2 = 'link';
-                this.dados.selected_edit.origem_da_imagem2 = 'link';
             }
         }
 
