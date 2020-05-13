@@ -1,9 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
+// FIRESTORE
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 import 'firebase/database';
+import 'firebase/storage';   // Firestore
 
 import {Subject, Observable} from 'rxjs';
-import { map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';  // finalize pro Firestore
+// import { finalize, map } from 'rxjs/operators';  // finalize pro Firestore
 
 import {WebcamImage, WebcamInitError, WebcamUtil} from 'ngx-webcam';
 
@@ -29,6 +35,7 @@ export class EditEstoqueComponent implements OnInit {
         public util: UtilService,
         public dados: DadosService,
         private confirmationService: ConfirmationService,
+        private afStorage: AngularFireStorage
     ) { }
 
 
@@ -37,9 +44,9 @@ export class EditEstoqueComponent implements OnInit {
     public label_obs : string = '';
 
     // popup de alerta
+    // public popupAlerta : boolean = false;
     public alerta_titulo : string = '';
     public alerta_mensagem : string = '';
-
 
     public popupSairSemSalvar : boolean = false;
 
@@ -101,6 +108,7 @@ export class EditEstoqueComponent implements OnInit {
     public img_link1 : string = '';
     public img_link2 : string = '';
 
+    public mostrar_upload_firestore_progress : boolean = false;
 
     // CAMERA E FIRESTORE
     // ------------------
@@ -115,12 +123,18 @@ export class EditEstoqueComponent implements OnInit {
     };
     public errors: WebcamInitError[] = [];
 
+    // latest snapshot
+    public webcamImage: WebcamImage = null;
+
     // webcam snapshot trigger
     private trigger: Subject<void> = new Subject<void>();
     // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
     private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
 
     // firestore
+    public mostrar_preview : boolean = false;
+    public local_da_imagem : string = '';
+
     public tipo_da_imagem1 : string = '';
     public tipo_da_imagem2 : string = '';
 
@@ -134,8 +148,18 @@ export class EditEstoqueComponent implements OnInit {
 
     public imageError: string;
 
+    // Firestore
+    downloadURL: Observable<string>;
+    downloadURLfirestore1: Observable<string>;
+    downloadURLfirestore2: Observable<string>;
+    uploadPercent: Observable<number>;
+    task: any;
+    public uploadSrc : any = '';
+
     public arquivo_escolhido: string = '';
     filePath : string = '';
+
+
 
     ngOnInit(): void {
         console.log("\n\nINIT edit");
@@ -146,6 +170,11 @@ export class EditEstoqueComponent implements OnInit {
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
 
+        this.dados.key_provisoria = '';
+
+        // Download de imagens do Firestore
+        this.download_imagem_do_firestore(1);
+        this.download_imagem_do_firestore(2);
 
         WebcamUtil.getAvailableVideoInputs()
               .then((mediaDevices: MediaDeviceInfo[]) => {
@@ -204,7 +233,11 @@ export class EditEstoqueComponent implements OnInit {
             if(this.config[this.dados.PARAMETRO].estado && this.dados.usuario_logado.estado_default){
                 this.dados.selected_edit.estado =  this.dados.usuario_logado.estado_default;
             }
+
+            // Gera a key que será usada (e que já será usada para imagens no Firestore)
+            this.dados.key_provisoria = this.dados.gera_key(this.dados.PARAMETRO);
         }
+
 
         if(this.dados.selected_edit.img_url){
             this.dados.selected_edit.img_url = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url);
@@ -212,7 +245,6 @@ export class EditEstoqueComponent implements OnInit {
         if(this.dados.selected_edit.img_url2){
             this.dados.selected_edit.img_url2 = this.util.formata_url_com_protocolo(this.dados.selected_edit.img_url2);
         }
-
 
         this.util.goTop();  // sobe a tela pro topo
     }
@@ -258,8 +290,6 @@ export class EditEstoqueComponent implements OnInit {
     }
 
 
-
-
     public zoom_da_imagem(qual : number = 0){
         console.log("zoom_da_imagem(" + qual + ")")
 
@@ -288,11 +318,12 @@ export class EditEstoqueComponent implements OnInit {
             }
         }
         else{
-            this.imagem_normal = true;
-            this.imagem_maior2 = false;
+            this.imagem_maior2 = true;
             this.imagem_maior1 = false;
+            this.imagem_normal = false;
         }
     }
+
 
     public mostrar_imagens(){
         if(this.dados.mostrar_imagens_na_lista_estoque){
@@ -311,6 +342,15 @@ export class EditEstoqueComponent implements OnInit {
         console.log("==================");
 
         this.config.DISPLAY.ExcluirDialog = false;
+        this.dados.key_provisoria = '';
+
+        // Firestore
+        if(this.task){
+            // Cancelando task de image upload to firestore
+            console.log("Cancelando TASK")
+            console.log(this.task)
+            this.task.cancel();
+        }
 
         if(!this.dados.salvou_registro){
             // saindo da página sem salvar o registro
@@ -518,6 +558,7 @@ export class EditEstoqueComponent implements OnInit {
                 this.link1_ativado = false;
 
                 this.showWebcam = true;
+                this.downloadURL = undefined;
 
                 this.arquivo2_ativado = false;
                 this.link2_ativado = false;
@@ -542,6 +583,7 @@ export class EditEstoqueComponent implements OnInit {
                 this.link2_ativado = false;
 
                 this.showWebcam = true;
+                this.downloadURL = undefined;
 
                 this.arquivo1_ativado = false;
                 this.link1_ativado = false;
@@ -551,8 +593,92 @@ export class EditEstoqueComponent implements OnInit {
     }
 
 
+
+    // ========== FILE UPLOAD ==========================
+    uploadFile_to_Firestore(event, qual : number = 1) {
+        // RECOMENDADO
+        // DESTINO DOS UPLOADS de imagens base64
+        // firestore ou firebase
+        // o firebase causa alto trafego porque o banco de dados é carregado totalmente a cada inicialização,
+        // o que faz com que todas as imagens no banco de dados sejam carregadas, mesmo sem ser acessadas diretamente,
+        // portanto, NAO USAR o método "firebase" a não ser que por um bom motivo e com os devidos cuidados
+
+        console.log("uploadFile_to_Firestore(" + qual + ")");
+
+        if(qual==1){
+            this.dados.selected_edit.tipo_da_imagem1 = "";
+            this.dados.selected_edit.origem_da_imagem1 = "";
+        }
+        else if(qual==2){
+            this.dados.selected_edit.tipo_da_imagem2 = "";
+            this.dados.selected_edit.origem_da_imagem2 = "";
+        }
+
+        this.mostrar_upload_firestore_progress = true;
+
+        // UPLOAD TO FIRESTORE com endereço fixo do registro (key) para não acumular versões
+        let key = this.dados.selected_edit.key ? this.dados.selected_edit.key : this.dados.key_provisoria;
+        let id = 'img' + String(qual);
+        // ou
+        // id = Math.random().toString(36).substring(2);  // option of using a random id for id
+        // ou
+        // id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
+        this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + key + '/' + id;
+        console.log("filePath = " + this.filePath)
+
+        if(qual==1){
+            this.dados.selected_edit.img_url = this.filePath;
+        }
+        else if(qual==2){
+            this.dados.selected_edit.img_url2 = this.filePath;
+        }
+
+        const fileRef = this.afStorage.ref(this.filePath);
+        const file = event.target.files[0];
+        this.task = this.afStorage.upload(this.filePath, file);
+
+        // observe upload progress
+        this.uploadPercent = this.task.percentageChanges();
+
+        // get notified when the download URL is available
+        this.task.snapshotChanges().pipe(
+            finalize(() => {
+                this.downloadURL = fileRef.getDownloadURL();
+                console.log("downloadURL = ");
+                console.log( this.downloadURL );
+
+                if(qual==1){
+                    this.dados.selected_edit.tipo_da_imagem1 = "firestore";
+                    this.dados.selected_edit.origem_da_imagem1 = "upload de arquivo";
+                }
+                else if(qual==2){
+                    this.dados.selected_edit.tipo_da_imagem2 = "firestore";
+                    this.dados.selected_edit.origem_da_imagem2 = "upload de arquivo";
+                }
+
+                this.mostrar_upload_firestore_progress = false;
+
+                this.download_imagem_do_firestore(qual);
+
+                this.desligar_botoes_de_upload();
+            })
+         )
+        .subscribe();
+        console.log("\n=================\ndownloadURL = ");
+        console.log( this.downloadURL );
+    }
+
+
     public saveFile_as_base64(fileInput: any, qual : number) {
         console.log("saveFile_as_base64(fileInput,qual)");
+
+        // NÃO RECOMENDADO!!!!
+        // DESTINO DOS UPLOADS de imagens base64
+        // firestore ou firebase
+        // o firebase causa alto trafego porque o banco de dados é carregado totalmente a cada inicialização,
+        // o que faz com que todas as imagens no banco de dados sejam carregadas, mesmo sem ser acessadas diretamente,
+        // portanto, NAO USAR o método "firebase" a não ser que por um bom motivo e com os devidos cuidados
+
 
         // UPLOAD TO BASE64 dentro do campo img_url do Firebase
         if(qual==1){
@@ -614,8 +740,90 @@ export class EditEstoqueComponent implements OnInit {
     // ========== FILE UPLOAD ==========================
 
 
-    public uploadCamera_as_base64(webcamImage: WebcamImage, qual : number): void {
-      console.log("uploadCamera_as_base64()");
+
+    // ========= CAMERA UPLOAD =========================
+    public uploadCamera_to_Firestore(webcamImage: WebcamImage, qual : number): void {
+        // RECOMENDADO!!!
+        // DESTINO DOS UPLOADS de imagens base64
+        // firestore ou firebase
+        // o firebase causa alto trafego porque o banco de dados é carregado totalmente a cada inicialização,
+        // o que faz com que todas as imagens no banco de dados sejam carregadas, mesmo sem ser acessadas diretamente,
+        // portanto, NAO USAR o método "firebase" a não ser que por um bom motivo e com os devidos cuidados
+
+      console.log('uploadCamera_to_Firestore()');
+
+      if(qual==1){
+          this.dados.selected_edit.tipo_da_imagem1 = "";
+          this.dados.selected_edit.origem_da_imagem1 = "";
+      }
+      else if(qual==2){
+          this.dados.selected_edit.tipo_da_imagem2 = "";
+          this.dados.selected_edit.origem_da_imagem2 = "";
+      }
+
+
+      let img_webcam = webcamImage.imageAsDataUrl
+      let img_blob = this.util.dataURItoBlob(img_webcam);
+
+
+      // UPLOAD TO FIRESTORE com endereço fixo do registro (key) para não acumular versões
+      let key = this.dados.selected_edit.key ? this.dados.selected_edit.key : this.dados.key_provisoria;
+      let id = 'img' + String(qual);
+      // ou
+      // id = Math.random().toString(36).substring(2);  // option of using a random id for id
+      // ou
+      // id = id + '_' + String( this.util.getAgoraEmMilisegundos() );
+      this.filePath = 'user/' + this.dados.usuario_logado.key + "/" + this.dados.PARAMETRO + '/' + key + '/' + id;
+      console.log("filePath = " + this.filePath)
+
+
+      if (qual==1){
+          this.dados.selected_edit.img_url = this.filePath; // opção em upload to Firestore
+      }
+      else if(qual==2){
+          this.dados.selected_edit.img_url2 = this.filePath; // opção em upload to Firestore
+      }
+
+      const fileRef = this.afStorage.ref(this.filePath);
+      this.task = this.afStorage.upload(this.filePath, img_blob);
+
+      // observe upload progress
+      this.uploadPercent = this.task.percentageChanges();
+
+      this.task.snapshotChanges().pipe(
+          finalize(() => {
+              this.downloadURL = fileRef.getDownloadURL();
+              console.log("downloadURL = ");
+              console.log( this.downloadURL );
+
+              if (qual==1){
+                  this.dados.selected_edit.tipo_da_imagem1 = "firestore";
+                  this.dados.selected_edit.origem_da_imagem1 = "imagem de câmera";
+              }
+              else if(qual==2){
+                  this.dados.selected_edit.tipo_da_imagem2 = "firestore";
+                  this.dados.selected_edit.origem_da_imagem2 = "imagem de câmera";
+              }
+
+              // Atualiza imagem na paginas
+              this.download_imagem_do_firestore(qual);
+
+              this.desligar_botoes_de_upload();
+          })
+       )
+      .subscribe()
+    }
+
+
+    public uploadCamera_to_Firebase(webcamImage: WebcamImage, qual : number): void {
+        // NÃO RECOMENDADO!!!
+        // DESTINO DOS UPLOADS de imagens base64
+        // firestore ou firebase
+        // o firebase causa alto trafego porque o banco de dados é carregado totalmente a cada inicialização,
+        // o que faz com que todas as imagens no banco de dados sejam carregadas, mesmo sem ser acessadas diretamente,
+        // portanto, NAO USAR o método "firebase" a não ser que por um bom motivo e com os devidos cuidados
+
+      console.log("uploadCamera_to_Firebase()");
 
       if(qual==1){
           this.dados.selected_edit.img_url = webcamImage.imageAsDataUrl; // opção em data file base64
@@ -628,14 +836,24 @@ export class EditEstoqueComponent implements OnInit {
           this.dados.selected_edit.origem_da_imagem2 = 'imagem de câmera';
       }
 
+      // Atualiza imagem na paginas
+      this.download_imagem_do_firestore(qual);
+
       this.desligar_botoes_de_upload();
     }
-
+    
     // ========= CAMERA UPLOAD =========================
 
 
     // ================ IMG LINK =====================
     public saveFile_as_link(qual : number){
+
+        // ATENCAO!!! NO CASO DO 'data:image BASE64
+        // ESSE TIPO DE LINK NA VERDADE É UM ARQUIVO E SOBRECARREGA
+        // A TRANSFERENCIA DE DADOS PORQUE É O ARQUIVO DA IMAGEM
+        // E É CARREGADO TODOS) COM O BANCO DE DADOS NAS INICIALIZACOES
+        // TODO - NAO ÈRMITIR ISSO E TRANSFORMAR EM UPLOAD PRO FIRESTORE!!!!!
+
 
         if(qual == 1){
             this.dados.selected_edit.img_url = this.img_link1;
@@ -751,5 +969,22 @@ export class EditEstoqueComponent implements OnInit {
         this.voltar('lista');
     }
 
+
+    public download_imagem_do_firestore(qual){
+        if(qual==1){
+            if(this.dados.selected_edit.img_url && this.dados.selected_edit.tipo_da_imagem1 == 'firestore'){
+                this.filePath = this.dados.selected_edit.img_url;
+                this.tipo_da_imagem1 = this.dados.selected_edit.tipo_da_imagem1;
+                this.downloadURLfirestore1 = this.afStorage.ref(this.filePath).getDownloadURL();
+            }
+        }
+        else if(qual==2){
+            if(this.dados.selected_edit.img_url2 && this.dados.selected_edit.tipo_da_imagem2 == 'firestore'){
+                this.filePath = this.dados.selected_edit.img_url2;
+                this.tipo_da_imagem2 = this.dados.selected_edit.tipo_da_imagem2;
+                this.downloadURLfirestore2 = this.afStorage.ref(this.filePath).getDownloadURL();
+            }
+        }
+    }
 
 }

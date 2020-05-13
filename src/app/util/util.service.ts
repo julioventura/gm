@@ -1453,6 +1453,10 @@ export class UtilService {
             // é uma string base64 e não uma url
             return url;
         }
+        if(url.substr(0,5)=='user/'){
+            // é um ref do Firestore que o app coloca na base "user/...filepath..." e não uma url
+            return url;
+        }
 
         let regex = /(http)/;
         let x = regex.exec(url);

@@ -76,6 +76,7 @@
             </div>
 
 
+            <!-- IMAGEM -->
             <div *ngIf="config[dados.PARAMETRO].img_url">
                 <div class="espacador_vertical_metade">&nbsp;</div>
 
@@ -90,7 +91,7 @@
 
                     <!-- ARQUIVO -->
                     <div *ngIf="arquivo1_ativado" class="fw43">
-                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 1)" />
+                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="uploadFile_to_Firestore($event, 1)" />
                     </div>
 
                     <!-- LINK -->
@@ -107,13 +108,16 @@
                     <!-- STATUS -->
                     <div *ngIf="!arquivo1_ativado && !camera1_ativada && !link1_ativado" class="fw43">
                         <span *ngIf="this.dados.selected_edit.img_url" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
-                            <!-- <br>1 ({{this.dados.selected_edit.img_url}})
-                            <br>1 ({{this.dados.selected_edit.tipo_da_imagem1}}) -->
                         </span>
                         <span *ngIf="!this.dados.selected_edit.img_url" class="result">(sem imagem)
-                            <!-- <br>1 ({{this.dados.selected_edit.img_url}})
-                            <br>1 ({{this.dados.selected_edit.tipo_da_imagem1}}) -->
                         </span>
+                    </div>
+                </div>
+
+                <!-- FIRESTORES PROGRESS -->
+                <div *ngIf="arquivo1_ativado && mostrar_upload_firestore_progress">
+                    <div *ngIf="uploadPercent | async; let x">
+                        <progress *ngIf="x<100" max="100" [value]="x"></progress>
                     </div>
                 </div>
 
@@ -123,19 +127,17 @@
                         *ngIf="showWebcam"
                         [height]="200" [width]="300"
                         [trigger]="triggerObservable"
-                        (imageCapture)="uploadCamera_as_base64($event,1)"
+                        (imageCapture)="uploadCamera_to_Firestore($event,1)"
                         [allowCameraSwitch]="allowCameraSwitch"
                         [switchCamera]="nextWebcamObservable"
                         [videoOptions]="videoOptions"
-                        [imageQuality]="1"
+                        [imageQuality]="5"
                         (cameraSwitched)="cameraWasSwitched($event)"
                         (initError)="handleInitError($event)">
                     </webcam>
 
                     <!-- ERROS -->
-                    <div class="espacador_vertical">&nbsp;</div>
-                    <!-- <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label> -->
-                    <!-- DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px"> <button (click)="showNextWebcam(deviceId);">Activate</button> -->
+                    <div *ngIf="errors.length > 0" class="espacador_vertical">&nbsp;</div>
                     <h4 *ngIf="errors.length > 0">Messages:</h4>
                     <ul *ngFor="let error of errors">
                         <li>{{error | json}}</li>
@@ -153,7 +155,7 @@
 
                     <!-- ARQUIVO -->
                     <div *ngIf="arquivo2_ativado" class="fw43">
-                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 2)" />
+                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="uploadFile_to_Firestore($event, 2)" />
                     </div>
 
                     <!-- LINK -->
@@ -169,14 +171,17 @@
 
                     <!-- STATUS -->
                     <div *ngIf="!arquivo2_ativado && !camera2_ativada && !link2_ativado" class="fw43">
-                        <span *ngIf="this.dados.selected_edit.img_url2.trim()" class="result">{{this.dados.selected_edit.origem_da_imagem2}}
-                            <!-- <br>2 ({{this.dados.selected_edit.img_url2}})
-                            <br>2 ({{this.dados.selected_edit.tipo_da_imagem2}}) -->
+                        <span *ngIf="this.dados.selected_edit.img_url2" class="result">{{this.dados.selected_edit.origem_da_imagem2}}
                         </span>
-                        <span *ngIf="!this.dados.selected_edit.img_url2.trim()" class="result">(sem imagem)
-                            <!-- <br>2 ({{this.dados.selected_edit.img_url2}})
-                            <br>2 ({{this.dados.selected_edit.tipo_da_imagem2}})  -->
+                        <span *ngIf="!this.dados.selected_edit.img_url2" class="result">(sem imagem)
                         </span>
+                    </div>
+                </div>
+
+                <!-- FIRESTORES PROGRESS -->
+                <div *ngIf="arquivo2_ativado && mostrar_upload_firestore_progress">
+                    <div *ngIf="uploadPercent | async; let x">
+                        <progress *ngIf="x<100" max="100" [value]="x"></progress>
                     </div>
                 </div>
 
@@ -188,7 +193,7 @@
                         *ngIf="showWebcam"
                         [height]="200" [width]="300"
                         [trigger]="triggerObservable"
-                        (imageCapture)="uploadCamera_as_base64($event,2)"
+                        (imageCapture)="uploadCamera_to_Firestore($event,2)"
                         [allowCameraSwitch]="allowCameraSwitch"
                         [switchCamera]="nextWebcamObservable"
                         [videoOptions]="videoOptions"
@@ -197,9 +202,8 @@
                         (initError)="handleInitError($event)">
                     </webcam>
 
-                    <!-- <input id="cameraSwitchCheckbox" type="checkbox" [(ngModel)]="allowCameraSwitch"><label for="cameraSwitchCheckbox">Allow Camera Switch</label> -->
-                    <!-- DeviceId: <input id="deviceId" type="text" [(ngModel)]="deviceId" style="width: 500px"> <button (click)="showNextWebcam(deviceId);">Activate</button> -->
-
+                    <!-- ERROS -->
+                    <div *ngIf="errors.length > 0" class="espacador_vertical">&nbsp;</div>
                     <h4 *ngIf="errors.length > 0">Messages:</h4>
                     <ul *ngFor="let error of errors">
                         <li>{{error | json}}</li>
@@ -218,6 +222,19 @@
                             </span>
                             <span *ngIf="dados.selected_edit.img_url2 && (!dados.selected_edit.tipo_da_imagem2 || dados.selected_edit.tipo_da_imagem2 != 'firestore')" (click)="zoom_da_imagem(2)">
                                 <img src="{{dados.selected_edit.img_url2}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior2 ? 'img_url_maior' : 'no_display'}}">
+                            </span>
+
+                            <!-- FIRESTORE -->
+                            <span *ngIf="dados.selected_edit.img_url && (dados.selected_edit.tipo_da_imagem1 && dados.selected_edit.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                                <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
+                                    <img id="img1_firestore" [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
+                                </span>
+                            </span>
+
+                            <span *ngIf="dados.selected_edit.img_url2 && (dados.selected_edit.tipo_da_imagem2 && dados.selected_edit.tipo_da_imagem2 == 'firestore')" (click)="zoom_da_imagem(2)">
+                                <span *ngIf="downloadURLfirestore2 | async; let firestoreSrc2" >
+                                    <img id="img2_firestore" [src]="firestoreSrc2" class="{{imagem_normal ? 'img_url_menor' : imagem_maior2 ? 'img_url_maior' : 'no_display'}}" />
+                                </span>
                             </span>
                         </div>
                     </div>

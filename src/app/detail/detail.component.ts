@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+// FIRESTORE
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import {Observable} from 'rxjs';
+// import { map } from 'rxjs/operators';
+
 import { ConfigService } from '../config/config.service';
 import { UtilService } from '../util/util.service';
 import { DadosService } from '../dados/dados.service';
@@ -14,6 +20,7 @@ export class DetailComponent implements OnInit {
         public config: ConfigService,
         public util: UtilService,
         public dados: DadosService,
+        private afStorage: AngularFireStorage
     ) { }
 
 
@@ -67,6 +74,11 @@ export class DetailComponent implements OnInit {
     public tipo_da_imagem1 : string = '';
     public tipo_da_imagem2 : string = '';
 
+    // FIRESTORE
+    downloadURLfirestore1: Observable<string>;
+    downloadURLfirestore2: Observable<string>;
+    filePath : string = '';
+
 
     ngOnInit(){
         console.log("\n\nINIT detail");
@@ -75,6 +87,12 @@ export class DetailComponent implements OnInit {
         console.log("this.dados.voltar_pilha");
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
+
+
+        // Download de imagens do Firestore
+        this.download_imagem_do_firestore(1);
+        this.download_imagem_do_firestore(2);
+
 
         if(!this.dados.selected || (this.dados.selected == {}) ){
             console.log("sem selected")
@@ -866,5 +884,21 @@ export class DetailComponent implements OnInit {
     // }
 
 
+    public download_imagem_do_firestore(qual){
+        if(qual==1){
+            if(this.dados.selected.img_url && this.dados.selected.tipo_da_imagem1 == 'firestore'){
+                this.filePath = this.dados.selected.img_url;
+                this.tipo_da_imagem1 = this.dados.selected.tipo_da_imagem1;
+                this.downloadURLfirestore1 = this.afStorage.ref(this.filePath).getDownloadURL();
+            }
+        }
+        else if(qual==2){
+            if(this.dados.selected.img_url2 && this.dados.selected.tipo_da_imagem2 == 'firestore'){
+                this.filePath = this.dados.selected.img_url2;
+                this.tipo_da_imagem2 = this.dados.selected.tipo_da_imagem2;
+                this.downloadURLfirestore2 = this.afStorage.ref(this.filePath).getDownloadURL();
+            }
+        }
+    }
 
 }

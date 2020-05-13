@@ -802,6 +802,10 @@ export class DadosService {
 
     public primeira_vez : boolean = true;
 
+     public key_provisoria : string = '';
+
+     
+
     // FUNCOES
 
     public get_geolocation(){
@@ -2748,6 +2752,12 @@ export class DadosService {
     // ===================
     // SALVAR
     // ===================
+    public gera_key(parametro){
+        let key = this.db.list(this[this.config[parametro].ref]).push({}).key;
+        console.log("key provisoria = " + key)
+        this.key_provisoria = key;
+        return key;
+    }
 
     public salvar_registro(parametro : string = '', temp : any = {}){
         let x, despesa_de_venda_direta;
@@ -2846,10 +2856,13 @@ export class DadosService {
             modificacoes = this.modificacoes_no_registro();
 
             if(!temp.key) {
-                // temp é o registro selecionado
-                // se não existe em temp a chave (key), então não salvou ainda o objeto.
-                // - cria no database uma chave para identificar esse objeto
-                temp.key = this.db.list(this.ref_atendimentos).push({}).key;
+                if(!this.key_provisoria){
+                    temp.key = this.gera_key(parametro);
+                }
+                else {
+                    temp.key = this.key_provisoria;
+                    this.key_provisoria = '';
+                }
 
                 // inclui no registro o momento da criação
                 temp.criado_em = this.util.quando();
@@ -2932,7 +2945,14 @@ export class DadosService {
             let incluiu_registro = false;
 
             if(!temp.key) {
-                temp.key = this.db.list(this[this.config[parametro].ref]).push({}).key;
+                if(!this.key_provisoria){
+                    temp.key = this.gera_key(parametro);
+                }
+                else {
+                    temp.key = this.key_provisoria;
+                    this.key_provisoria = '';
+                }
+
                 console.log("Incluiu : key = " + temp.key)
                 temp.criado_em = this.util.quando();
 
@@ -3048,7 +3068,14 @@ export class DadosService {
             if(!temp.key) {
                 // Novo registro
 
-                temp.key = this.db.list(this[this.config[parametro].ref]).push({}).key;
+                if(!this.key_provisoria){
+                    temp.key = this.gera_key(parametro);
+                }
+                else {
+                    temp.key = this.key_provisoria;
+                    this.key_provisoria = '';
+                }
+
                 temp.criado_em = this.util.quando();
                 temp.criado_quando = this.util.quando_em_milisegundos();
                 temp.criado_por_nome = this.usuario_logado.nome;
@@ -3175,19 +3202,6 @@ export class DadosService {
                 // console.log("recalcula saldo do orcamento");
                 // this.atualizar_saldos_dos_orcamentos(temp.orcamento_key);
             }
-        }
-
-        else if (parametro == 'IMPRESSOS'){
-            // IMPRESSOS
-            if(!temp.key) {
-                temp.key = this.db.list(this.ref_impressos).push({}).key;
-                temp.criado_em = this.util.quando();
-            }
-            else{
-                temp.modificado_em = this.util.quando();
-            }
-            this.db.list(this.ref_impressos).update(temp.key, temp);
-            this.selected = this.util.deepClone(temp);
         }
 
         this.salvar_HISTORICOS(this.historicos);
@@ -3883,6 +3897,9 @@ export class DadosService {
                 else if (key=='data_quando'){} // ignorar
                 else if (key=='data_hora_quando'){} // ignorar
                 else if (key=='pagamento_quando'){} // ignorar
+                else if (key=='img_url'){} // ignorar
+                else if (key=='img_url1'){} // ignorar
+                else if (key=='img_url2'){} // ignorar
 
                 else if (key=='criado_por_nome'){} // ignorar
                 else if (key=='criado_por_key'){} // ignorar
