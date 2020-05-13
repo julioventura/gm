@@ -147,19 +147,23 @@
                         <img src="{{ camera1_ativada ? 'https://gestormix.com/img/camera_ativada.png'  : 'https://gestormix.com/img/camera.png' }}" (click)="ativar_camera(1)" class="img_source" />
                         <img src="{{ link1_ativado ? 'https://gestormix.com/img/link_ativado.png'  : 'https://gestormix.com/img/link.png' }}" (click)="ativar_link(1)" class="img_source" />
                     </div>
+
                     <!-- ARQUIVO -->
                     <div *ngIf="arquivo1_ativado" class="fw43">
-                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="saveFile_as_base64($event, 1)" />
+                        <input pInputText class="normal small" type="file" accept="image/x-png,image/jpeg,image/jpg,image/webp,image/gif" (change)="uploadFile_to_Firestore($event)" />
                     </div>
+
                     <!-- LINK -->
                     <div *ngIf="link1_ativado" class="fw43">
                         <input pInputText class="normal small" type="text" [(ngModel)]="img_link1" (keyup)="saveFile_as_link(1)" autocomplete="off" />
                     </div>
+
                     <!-- CAMERA -->
                     <div *ngIf="camera1_ativada && showWebcam" class="fw43">
                         <button class="actionBtn" (click)="triggerSnapshot();">Capturar Imagem</button>
                         <button class="actionBtn" (click)="showNextWebcam(true);" [disabled]="!multipleWebcamsAvailable">Mudar Câmera</button>
                     </div>
+
                     <!-- STATUS -->
                     <div *ngIf="!arquivo1_ativado && !camera1_ativada && !link1_ativado" class="fw43">
                         <span *ngIf="this.dados.selected_edit.img_url" class="result">{{this.dados.selected_edit.origem_da_imagem1}}
@@ -169,13 +173,20 @@
                     </div>
                 </div>
 
+                <!-- FIRESTORES PROGRESS -->
+                <div *ngIf="arquivo1_ativado && mostrar_upload_firestore_progress">
+                    <div *ngIf="uploadPercent | async; let x">
+                        <progress *ngIf="x<100" max="100" [value]="x"></progress>
+                    </div>
+                </div>
+
                 <!-- CAMERA -->
                 <div *ngIf="camera1_ativada && showWebcam">
                     <webcam
                         *ngIf="showWebcam"
                         [height]="200" [width]="300"
                         [trigger]="triggerObservable"
-                        (imageCapture)="uploadCamera_as_base64($event,1)"
+                        (imageCapture)="uploadCamera_to_Firestore($event,1)"
                         [allowCameraSwitch]="allowCameraSwitch"
                         [switchCamera]="nextWebcamObservable"
                         [videoOptions]="videoOptions"
@@ -201,6 +212,13 @@
                             <!-- LINK OU BASE64 -->
                             <span *ngIf="dados.selected_edit.img_url && (!dados.selected_edit.tipo_da_imagem1 || dados.selected_edit.tipo_da_imagem1 != 'firestore')" (click)="zoom_da_imagem(1)">
                                 <img src="{{dados.selected_edit.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
+                            </span>
+
+                            <!-- FIRESTORE -->
+                            <span *ngIf="dados.selected_edit.img_url && (dados.selected_edit.tipo_da_imagem1 && dados.selected_edit.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                                <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
+                                    <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
+                                </span>
                             </span>
                         </div>
                     </div>

@@ -82,7 +82,33 @@ export class HomeComponent implements OnInit {
         console.log("go(" + destino + ")")
         console.log("dataset = " + this.dados.usuario_logado.dataset)
 
-        this.dados.go(destino);
+        if(this.dados.total_de_usuarios == -1){
+            // nao está observando o database USUARIOS ainda... Aguarda a proxima tentativa.
+            return;
+        }
+
+        if (destino == 'PERFIL') {
+
+            this.dados.salvar_usuario_logado();
+
+            this.dados.meu_perfil();
+
+            console.log("this.dados.selected")
+            console.log(this.dados.selected)
+
+            if(this.dados.selected && this.dados.selected.nome){
+                this.dados.PARAMETRO = destino;
+                this.config.DISPLAY.Home = false;
+                this.config.DISPLAY.Registro = true;
+            }
+            else{
+                return;
+                this.config.DISPLAY.Home = true;
+            }
+        }
+        else {
+            this.dados.go(destino);
+        }
     }
 
 

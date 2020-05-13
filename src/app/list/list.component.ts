@@ -256,40 +256,6 @@ export class ListComponent implements OnInit {
         this.rangeDates = this.config.rangeDates;
 
 
-        // if (['CAIXA'].includes(this.dados.PARAMETRO)){
-        // if (['FINANCEIRO','CAIXA'].includes(this.dados.PARAMETRO)){
-        //     this.dados.filtra_lancamentos_por_data('LANCAMENTOS_RECEITA')
-        //     this.dados.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA')
-        // }
-        // if (['LANCAMENTOS_RECEITA'].includes(this.dados.PARAMETRO)){
-        //     this.dados.filtra_lancamentos_por_data('LANCAMENTOS_RECEITA')
-        // }
-        // if (['LANCAMENTOS_DESPESA'].includes(this.dados.PARAMETRO)){
-        //     this.dados.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA')
-        // }
-
-
-
-
-        // console.log("\n\n=================================")
-        // console.log("CALENDARIO")
-        // console.log("=================================")
-        // console.log("this.rangeDates")
-        // console.log(this.config.rangeDates)
-        //
-        // console.log(this.config.minDate);
-        // console.log(this.config.data_inicial);
-        // console.log(this.config.maxDate);
-        // console.log(this.config.data_final);
-        //
-        // console.log("this.config.rangeDates_iniciododia_data_inicial")
-        // console.log(this.config.rangeDates_iniciododia_data_inicial)
-        //
-        // console.log("this.config.rangeDates_fimdodia_data_final")
-        // console.log(this.config.rangeDates_fimdodia_data_final)
-        // console.log("=================================\n\n")
-
-
         // FLAGS
         this.enviar_whatsapp = true;
         this.confirmou_envio_mensagem = false;
@@ -306,8 +272,8 @@ export class ListComponent implements OnInit {
                 this.dados.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA');
             }
 
-            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE',
-                'HISTORICOS','RELATORIOS','BANCOS','CAIXA'].includes(this.dados.PARAMETRO)){
+            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE','HISTORICOS','RELATORIOS','BANCOS','CAIXA'].includes(this.dados.PARAMETRO)){
+
                 this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
 
                 this.dados.is_clientes_todos = true;
@@ -397,31 +363,6 @@ export class ListComponent implements OnInit {
                 }
             }
 
-            if(this.dados.PARAMETRO=="PAGAMENTOS"){
-                // if(!this.dados.mostrar_lista_de_orcamentos){
-                //     this.dados.mostrar_lista_de_orcamentos = true;
-                //     this.dados.pode_incluir_lancamento = false;
-                // }
-                //
-                // this.receitas_deste_cliente = [];
-                // this.receitas_deste_cliente_total = 0;
-                //
-                // let registro;
-                // let key = this.dados.cliente.key;
-                // console.log("cliente.key = " + this.dados.cliente.key);
-                //
-                // // Monta a lista de RECEITAS vindas deste cliente
-                // for(let i in this.dados.filtered_lancamentos_receita){
-                //     registro = this.dados.filtered_lancamentos_receita[i];
-                //     if(registro.contraparte_key == key && registro.plano_de_tratamento == this.dados.plano_de_tratamento.key ){
-                //         this.receitas_deste_cliente.push(registro);
-                //         this.receitas_deste_cliente_total = this.receitas_deste_cliente_total + this.util.converte_valores_formatados_para_numero(registro.valor);
-                //     }
-                // }
-                // this.restante_deste_cliente = this.util.converte_valores_formatados_para_numero(this.dados.plano_de_tratamento.valor_do_tratamento) - this.receitas_deste_cliente_total;
-                // // SORT
-                // this.receitas_deste_cliente = this.receitas_deste_cliente.sort((a, b) => (a.data_quando > b.data_quando) ? -1 : 1) //// sort a list of objects by a property, descending
-            }
 
             if(this.dados.PARAMETRO=='FINANCEIRO'){
                 // if(this.dados.PARAMETRO == 'PAGAMENTOS' || this.dados.PARAMETRO=='FINANCEIRO'){
@@ -464,214 +405,6 @@ export class ListComponent implements OnInit {
                 this.dados.listar_credito_dia = false;
                 this.dados.listar_rel_debito = false;
                 this.dados.listar_debito_dia = false;
-            }
-
-            if(this.dados.calcular_financeiro && this.dados.PARAMETRO=='RELATORIOS'){
-            //     console.log("calcular_financeiro == true => recalculando orcamentos e relatorios");
-            //
-            //     let registro, key;
-            //     let data;
-            //     let data_quando;
-            //     let profissional;
-            //     let orcamento;
-            //     let cliente;
-            //
-            //     let data_do_lancamento = {};
-            //     let producao_do_profissional = {};
-            //     let valor = 0;
-            //     let valor_total = 0;
-            //     let valor_total_na_data : number = 0;
-            //     let valor_total_na_data_receitas : number = 0;
-            //     let valor_total_na_data_despesas : number = 0;
-            //
-            //     this.dados.valor_total_receitas_dinheiro = 0;
-            //     this.dados.valor_total_despesas_dinheiro = 0;
-            //     this.dados.valor_total_receitas_cheque = 0;
-            //     this.dados.valor_total_despesas_cheque = 0;
-            //     this.dados.valor_total_receitas_cheque_pre = 0;
-            //     this.dados.valor_total_despesas_cheque_pre = 0;
-            //     this.dados.valor_total_receitas_debito = 0;
-            //     this.dados.valor_total_despesas_debito = 0;
-            //     this.dados.valor_total_receitas_credito = 0;
-            //     this.dados.valor_total_despesas_credito = 0;
-            //
-            //     this.dados.datas_com_lancamentos = [];
-            //     this.dados.datas_com_lancamentos_dinheiro = [];
-            //     this.dados.datas_com_lancamentos_cheque = [];
-            //     this.dados.datas_com_lancamentos_cheque_pre = [];
-            //     this.dados.datas_com_lancamentos_credito = [];
-            //     this.dados.datas_com_lancamentos_debito = [];
-            //
-            //     this.dados.lancamentos_dinheiro_receita = [];
-            //     this.dados.lancamentos_dinheiro_despesa = [];
-            //     this.dados.lancamentos_cheque_receita = [];
-            //     this.dados.lancamentos_cheque_despesa = [];
-            //     this.dados.lancamentos_cheque_pre_receita = [];
-            //     this.dados.lancamentos_cheque_pre_despesa = [];
-            //     this.dados.lancamentos_debito_receita = [];
-            //     this.dados.lancamentos_debito_despesa = [];
-            //     this.dados.lancamentos_credito_receita = [];
-            //     this.dados.lancamentos_credito_despesa = [];
-            //
-            //
-            //     // MONTAR PRODUCAO_PROFISSIONAL e SALDO DOS ORÇAMENTOS
-            //     // TODO CUIDADO!!!!!!!!!!!!!!!!!!   (NESSE CASO DOS ORÇAMENTOS DEVE SER O PERIODO TODO DESDE A CRIAÇAO DO ORCAMENTO E NAO APENAS UM PERIODO SELECIONADO!!!!!)
-            //     if (true) {
-            //     //
-            //     //     // RECEITAS PRODUCAO_PROFISSIONAL E SALDOS DOS ORCAMENTOS
-            //     //     console.log("\nContabilizando RECEITAS PRODUCAO_PROFISSIONAL");
-            //     //
-            //     //     producao_do_profissional = {};
-            //     //     this.dados.conjunto_de_orcamentos = {};
-            //     //
-            //     //     this.dados.valor_saldo_profissional = 0;
-            //     //     this.dados.valor_total_receitas_profissional = 0;
-            //     //     this.dados.lancamentos_profissional_receita = [];
-            //     //     this.dados.lancamentos_profissional_despesa = [];
-            //     //
-            //     //     for(let i in this.dados.filtered_lancamentos_receita){
-            //     //         registro = this.dados.filtered_lancamentos_receita[i];
-            //     //         // console.log("Registro em PRODUCAO_PROFISSIONAL");
-            //     //         // console.log(registro);
-            //     //
-            //     //         // Monta o objeto "producao_do_profissional"
-            //     //         // =========================================
-            //     //         profissional = registro.profissional_key;
-            //     //         // console.log("profissional key = " + profissional + " / nome = " + registro.profissional_nome);
-            //     //         valor =  this.util.converte_valores_formatados_para_numero(registro.valor);
-            //     //         this.dados.valor_total_receitas_profissional = this.dados.valor_total_receitas_profissional + valor;
-            //     //
-            //     //         if (!producao_do_profissional[profissional]){
-            //     //             producao_do_profissional[profissional] = {};
-            //     //             producao_do_profissional[profissional].nome = registro.profissional_nome;
-            //     //             producao_do_profissional[profissional].profissional_key = registro.profissional_key;
-            //     //             producao_do_profissional[profissional].valor_receitas = valor;
-            //     //         }
-            //     //         else {
-            //     //             producao_do_profissional[profissional].nome = registro.profissional_nome;
-            //     //             producao_do_profissional[profissional].profissional_key = registro.profissional_key;
-            //     //             producao_do_profissional[profissional].valor_receitas = producao_do_profissional[profissional].valor_receitas + valor;
-            //     //         }
-            //     //         this.dados.lancamentos_profissional_receita.push( registro );
-            //     //
-            //     //
-            //     //         // Monta o objeto "orcamento do cliente"
-            //     //         // ======================================
-            //     //         orcamento = registro.orcamento_key;
-            //     //         cliente = registro.contraparte_key;
-            //     //
-            //     //         // console.log("orcamento key = " + orcamento + " / nome = " + registro.orcamento_nome);
-            //     //         // console.log("cliente key = " + cliente + " / nome = " + registro.contraparte);
-            //     //
-            //     //         valor =  this.util.converte_valores_formatados_para_numero(registro.valor);
-            //     //         // this.dados.valor_total_receitas_orcamento = this.dados.valor_total_receitas_orcamento + valor;
-            //     //         // this.dados.valor_total_receitas_cliente = this.dados.valor_total_receitas_cliente + valor;
-            //     //
-            //     //         if (!this.dados.conjunto_de_orcamentos[orcamento]){
-            //     //             this.dados.conjunto_de_orcamentos[orcamento] = {};
-            //     //             this.dados.conjunto_de_orcamentos[orcamento].cliente_key = cliente;
-            //     //             this.dados.conjunto_de_orcamentos[orcamento].saldo = valor;
-            //     //         }
-            //     //         else {
-            //     //             this.dados.conjunto_de_orcamentos[orcamento].cliente_key = cliente;
-            //     //             this.dados.conjunto_de_orcamentos[orcamento].saldo = this.dados.conjunto_de_orcamentos[orcamento].saldo + valor;
-            //     //         }
-            //     //     }
-            //     //     // Sort por data
-            //     //     this.dados.lancamentos_profissional_receita =  this.dados.lancamentos_profissional_receita.sort((a, b) => (a.data_quando > b.data_quando) ? 1 :- 1) //// sort a list of objects by a property, ascending
-            //     //
-            //     //     // console.log("\n****** REGISTROS *******");
-            //     //     // console.log("this.dados.lancamentos_profissional_receita");
-            //     //     // console.log(this.dados.lancamentos_profissional_receita);
-            //     //     //
-            //     //     // console.log("this.dados.conjunto_de_orcamentos : ");
-            //     //     // console.log(this.dados.conjunto_de_orcamentos);
-            //     //
-            //     //
-            //     //
-            //     //
-            //     //     // DESPESAS PRODUCAO_PROFISSIONAL
-            //     //     console.log("\nContabilizando DESPESAS PRODUCAO_PROFISSIONAL");
-            //     //
-            //     //     // producao_do_profissional = {};   // Não zera porque, em dinheiro, optou-se por registrar receitas e despesas no mesmo relatorio por dia
-            //     //     this.dados.valor_total_despesas_profissional = 0;
-            //     //
-            //     //     for(let i in this.dados.filtered_lancamentos_despesa){
-            //     //         registro = this.dados.filtered_lancamentos_despesa[i];
-            //     //         // console.log(registro);
-            //     //         if(registro.profissional_key) {
-            //     //             // Apenas os registros de despesas com profissionais que trabalham na clinica (e tem receitas tambem) tem esse campo
-            //     //
-            //     //             // Monta o objeto "producao_do_profissional"
-            //     //             profissional = registro.profissional_key;
-            //     //             console.log("profissional key = " + profissional + " / nome = " + registro.profissional_nome);
-            //     //             valor =  this.util.converte_valores_formatados_para_numero(registro.valor);
-            //     //             this.dados.valor_total_despesas_profissional = this.dados.valor_total_despesas_profissional + valor;
-            //     //
-            //     //             if (!producao_do_profissional[profissional]){
-            //     //                 producao_do_profissional[profissional] = {};
-            //     //                 producao_do_profissional[profissional].nome = registro.profissional_nome;
-            //     //                 producao_do_profissional[profissional].profissional_key = registro.profissional_key;
-            //     //                 producao_do_profissional[profissional].valor_despesas = valor;                            }
-            //     //                 else {
-            //     //                     producao_do_profissional[profissional].nome = profissional;
-            //     //                     producao_do_profissional[profissional].profissional_key = registro.profissional_key;
-            //     //                     producao_do_profissional[profissional].valor_despesas = producao_do_profissional[profissional].valor_despesas + valor;
-            //     //                 }
-            //     //                 this.dados.lancamentos_profissional_despesa.push( registro );
-            //     //             }
-            //     //         }
-            //     //         // Sort por data
-            //     //         this.dados.lancamentos_profissional_despesa =  this.dados.lancamentos_profissional_despesa.sort((a, b) => (a.data_quando > b.data_quando) ? 1 :- 1) //// sort a list of objects by a property, ascending
-            //     //
-            //     //         console.log("****** REGISTROS *******");
-            //     //         console.log("this.dados.lancamentos_profissional_despesa");
-            //     //         console.log(this.dados.lancamentos_profissional_despesa);
-            //     //
-            //     //         this.dados.valor_saldo_profissional = this.dados.valor_total_receitas_profissional - this.dados.valor_total_despesas_profissional;
-            //     //
-            //     //
-            //     //         // Monta o relatorio
-            //     //         console.log("producao_do_profissional");
-            //     //         console.log(producao_do_profissional);
-            //     //
-            //     //         for (key of Object.keys(producao_do_profissional)) {
-            //     //             if (key=='undefined'){} // ignorar
-            //     //             else if (Number(key)==0){} // ignorar
-            //     //             else {
-            //     //                 // completa os valores vazios de receita ou despesa dos dias relacionados
-            //     //                 if(!producao_do_profissional[key].valor_despesas){
-            //     //                     producao_do_profissional[key].valor_despesas = 0;
-            //     //                 }
-            //     //                 if(!producao_do_profissional[key].valor_receitas){
-            //     //                     producao_do_profissional[key].valor_receitas = 0;
-            //     //                 }
-            //     //
-            //     //                 this.dados.selected_producao_profissional.push(producao_do_profissional[key]);
-            //     //             }
-            //     //         }
-            //     //         // Sort por data
-            //     //         this.dados.selected_producao_profissional = this.dados.selected_producao_profissional.sort((a, b) => (a.data_quando > b.data_quando) ? 1 :- 1) //// sort a list of objects by a property, ascending
-            //     //         // console.log("this.dados.selected_producao_profissional");
-            //     //         // console.log(this.dados.selected_producao_profissional);
-            //     //
-            //     //         if(this.dados.selected_producao_profissional.length <= this.config.QUANTOS_POR_PAGINA.PRODUCAO_PROFISSIONAL){
-            //     //             this.dados.paginator_selected_producao_profissional = false;
-            //     //         }
-            //     //         else {
-            //     //             this.dados.paginator_selected_producao_profissional = true;
-            //     //         }
-            //     //
-            //     //         // desliga a flag
-            //     //         this.dados.calcular_financeiro = false;
-            //     //
-            //     //         // this.dados.atualizar_saldos_dos_orcamentos();
-            //
-            //     }
-            //
-            //     // desliga a flag
-            //     this.dados.calcular_financeiro = false;
-
             }
 
             if(this.dados.PARAMETRO=='REL_DINHEIRO') {
@@ -754,13 +487,14 @@ export class ListComponent implements OnInit {
             this.calcula_saldo_lancamentos_receita();
             this.calcula_saldo_lancamentos_despesa();
 
-            this.config.DISPLAY.Lista = true;
 
             if(this.dados.origem == 'RELATORIOS'){
                 this.dados.omitir_refresh = true;
                 this.dados.pode_incluir = false;
                 this.dados.pode_incluir_lancamento = false;
             }
+
+            this.config.DISPLAY.Lista = true;
         }
         else {
             this.dados.go('CLIENTES');

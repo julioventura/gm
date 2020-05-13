@@ -18,10 +18,20 @@ export class ConfigService {
   public is_admin : boolean = false;
 
   // ===================================================
+  // DESTINO DOS UPLOADS de imagens base64
+  // firestore ou firebase
+  // o firebase causa alto trafego porque o banco de dados é carregado totalmente a cada inicialização,
+  // o que faz com que todas as imagens no banco de dados sejam carregadas, mesmo sem ser acessadas diretamente,
+  // portanto, NAO USAR o método "firebase" a não ser que por um bom motivo e com os devidos cuidados
+  // ===================================================
+  public destino_dos_uploads = 'firestore';
+
+
+  // ===================================================
   // ATIVAR GERENCIAMENTO DE CLIENTES E SOCIOS
   // ===================================================
   public ATIVAR_CLIENTES : boolean = true;
-  public ATIVAR_SOCIOS : boolean = true;
+  public ATIVAR_SOCIOS : boolean = false;
 
   // =====================================================
   // Configuração de navegação

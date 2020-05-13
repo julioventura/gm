@@ -14,6 +14,8 @@ import { Observable, Subject } from 'rxjs';
 
 // AngularFire libs
 import { AngularFireModule } from '@angular/fire';
+// Firestore
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
@@ -89,7 +91,8 @@ const firebaseConfig = {
         ConfirmDialogModule, ButtonModule,
         // Initialize Firebase
         AngularFireModule.initializeApp(firebaseConfig),
-        // AngularFirestoreModule,
+        // Firestore
+        AngularFirestoreModule,
         AngularFireAuthModule,
         ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
         WebcamModule

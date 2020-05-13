@@ -8,16 +8,16 @@
         </div>
 
         <div class="fc-right">
-            <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/vazio.png" class="img_nav">
-            <img *ngIf="config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para" src="https://gestormix.com/img/editar.png" class="img_nav" (click)="editar()" />
-            <div *ngIf="!(config[dados.PARAMETRO].pode_editar && dados.pode_editar && !dados.voltar_para)" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
+            <img *ngIf="config[dados.PARAMETRO]?.pode_editar && dados?.pode_editar && !dados?.voltar_para" src="https://gestormix.com/img/vazio.png" class="img_nav">
+            <img *ngIf="config[dados.PARAMETRO]?.pode_editar && dados?.pode_editar && !dados?.voltar_para" src="https://gestormix.com/img/editar.png" class="img_nav" (click)="editar()" />
+            <div *ngIf="!(config[dados.PARAMETRO]?.pode_editar && dados?.pode_editar && !dados?.voltar_para)" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
         </div>
 
 
         <div class="fc-center title">
             <div class="espacador_vertical">&nbsp;</div>
             <!-- <span>{{ dados.titulo_pagina ? dados.titulo_pagina : config[dados.PARAMETRO].titulo_unidade }}</span> -->
-            <span>{{config[dados.PARAMETRO].titulo_unidade }}</span>
+            <span>{{config[dados.PARAMETRO]?.titulo_unidade }}</span>
         </div>
         <div class="fc-clear"></div>
     </div>
@@ -161,11 +161,11 @@
                             <img src="{{dados.selected.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
                         </span>
                         <!-- FIRESTORE -->
-                        <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                        <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                             <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                                 <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                             </span>
-                        </span> -->
+                        </span>
                     </div>
                 </div>
                 <div class="espacador_vertical">&nbsp;</div>
@@ -352,11 +352,11 @@
                             <img src="{{dados.selected.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
                         </span>
                         <!-- FIRESTORE -->
-                        <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                        <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                             <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                                 <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                             </span>
-                        </span> -->
+                        </span>
                     </div>
                 </div>
                 <div class="espacador_vertical">&nbsp;</div>
@@ -519,11 +519,11 @@
                             <img src="{{dados.selected.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
                         </span>
                         <!-- FIRESTORE -->
-                        <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                        <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                             <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                                 <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                             </span>
-                        </span> -->
+                        </span>
                     </div>
                 </div>
                 <div class="espacador_vertical">&nbsp;</div>
@@ -742,11 +742,11 @@
                         <img src="{{dados.selected.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
                     </span>
                     <!-- FIRESTORE -->
-                    <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                    <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                         <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                             <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                         </span>
-                    </span> -->
+                    </span>
                 </div>
             </div>
             <div class="espacador_vertical">&nbsp;</div>
@@ -1148,20 +1148,19 @@
                     </span>
 
                     <!-- FIRESTORE -->
-                    <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                    <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                         <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                             <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                         </span>
-                    </span> -->
+                    </span>
 
-                    <!-- <span *ngIf="dados.selected.img_url2 && (dados.selected.tipo_da_imagem2 && dados.selected.tipo_da_imagem2 == 'firestore')" (click)="zoom_da_imagem(2)">
+                    <span *ngIf="dados.selected.img_url2 && (dados.selected.tipo_da_imagem2 && dados.selected.tipo_da_imagem2 == 'firestore')" (click)="zoom_da_imagem(2)">
                         <span *ngIf="downloadURLfirestore2 | async; let firestoreSrc2" >
                             <img id="img2_firestore" [src]="firestoreSrc2" class="{{imagem_normal ? 'img_url_menor' : imagem_maior2 ? 'img_url_maior' : 'no_display'}}" />
                         </span>
-                    </span> -->
+                    </span>
                 </div>
             </div>
-            <div class="espacador_vertical">&nbsp;</div>
         </div>
 
 
@@ -1240,9 +1239,9 @@
                 &nbsp; <span *ngIf="!dados.selected.id_para_clientes" class="config_item grey">Sem código</span>
             </div>
             <div class="float_clear"></div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
-        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div *ngIf="config.ATIVAR_SOCIOS">
             <div class="sub_title_menor left">
@@ -1257,9 +1256,9 @@
                 &nbsp; <span *ngIf="!dados.selected.id_para_socios" class="config_item grey">Sem código</span>
             </div>
             <div class="float_clear"></div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
-        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div class="sub_title_menor left">
             TÍTULO PROFISSIONAL PARA USAR NAS MENSAGENS
@@ -1496,11 +1495,11 @@
                              <img src="{{dados.selected.img_url}}" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}">
                          </span>
                          <!-- FIRESTORE -->
-                         <!-- <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
+                         <span *ngIf="dados.selected.img_url && (dados.selected.tipo_da_imagem1 && dados.selected.tipo_da_imagem1 == 'firestore')" (click)="zoom_da_imagem(1)">
                              <span *ngIf="downloadURLfirestore1 | async; let firestoreSrc1" >
                                  <img [src]="firestoreSrc1" class="{{imagem_normal ? 'img_url_menor' : imagem_maior1 ? 'img_url_maior' : 'no_display'}}" />
                              </span>
-                         </span> -->
+                         </span>
                      </div>
                  </div>
                  <div class="espacador_vertical">&nbsp;</div>
@@ -1659,24 +1658,7 @@
                  </div>
              </div>
 
-             <!-- <div *ngIf="config[dados.PARAMETRO].criado_em && dados.selected.criado_em">
-                 <div class="espacador_vertical_duplo">&nbsp;</div>
-                 <div class="espacador_vertical_duplo">&nbsp;</div>
-                 <div class="container_interno">
-                     <div class="ui-grid-row">
-                         <div class="form_label_ext0">Criado em</div>
-                         <div class="form_content left dados">{{dados.selected.criado_em}} <span *ngIf="dados.selected.criado_por_nome"> por {{dados.selected.criado_por_nome}}</span></div>
-                     </div>
-                     <div *ngIf="dados.selected.modificado_em" class="ui-grid-row">
-                         <div class="form_label_ext0">Editado em</div>
-                         <div class="form_content left dados">{{dados.selected.modificado_em}} <span *ngIf="dados.selected.modificado_por_nome"> por {{dados.selected.modificado_por_nome}}</span></div>
-                     </div>
-                 </div>
-             </div> -->
-
              <div id="x34" class="espacador_vertical">&nbsp;</div>
-
-
          </div>
 
 
