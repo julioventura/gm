@@ -4312,15 +4312,6 @@ export class ListComponent implements OnInit {
             }
         }
         else {
-            if (this.config.OBSERVADO_EM_REGISTROS[this.dados.PARAMETRO]) {
-                this.dados.registro = registro;
-                console.log("this.config.OBSERVADO_EM_REGISTROS[this.dados.PARAMETRO]");
-                console.log("registro");
-                console.log(registro);
-                this.dados.cliente = null;
-                this.dados.socio = null;
-            }
-
             // snapshot do registro clicado
             console.log(this.dados.selected);
             this.dados.selected = registro;
@@ -4428,6 +4419,10 @@ export class ListComponent implements OnInit {
 
     public mostrar_lista(opcao : string){
         console.log("mostrar_lista");
+        console.log("this.dados.selected_receitas")
+        console.log(this.dados.selected_receitas)
+        console.log("this.dados.selected_despesas")
+        console.log(this.dados.selected_despesas)
 
         this.dados.mostrar_lista_opcao = opcao;
 

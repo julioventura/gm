@@ -452,18 +452,11 @@
                                             <th>Referência</th>
                                         </tr>
 
-                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA'">
-                                            <th class="pleft">Data</th>
-                                            <th>Centro de Custos</th>
-                                            <th>Contraparte</th>
-                                            <th class="right">Valor</th>
-                                        </tr>
-
-                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_DESPESA'">
-                                            <th class="pleft">Data</th>
-                                            <th>Centro de Custos</th>
-                                            <th>Contraparte</th>
-                                            <th class="right">Valor</th>
+                                        <tr *ngIf="dados.PARAMETRO == 'LANCAMENTOS_RECEITA' || dados.PARAMETRO == 'LANCAMENTOS_DESPESA'">
+                                            <th class="w20 pleft">Data</th>
+                                            <th class="w25">Centro de Custos</th>
+                                            <th class="w35">Contraparte</th>
+                                            <th class="w20 right">Valor</th>
                                         </tr>
 
                                         <tr *ngIf="dados.PARAMETRO == 'RESULTADOS'">

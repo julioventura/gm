@@ -287,8 +287,14 @@ export class EditLancamentosComponent implements OnInit {
         this.dados.selected_edit.produto_id = registro.key;
         this.dados.selected_edit.produto_codigo = registro.codigo ? registro.codigo : '';
         this.dados.selected_edit.nome = registro.nome;
+        
         this.dados.selected_edit.img_url = registro.img_url ? registro.img_url : '';
         this.dados.selected_edit.img_url2 = registro.img_url2 ? registro.img_url2 : '';
+        this.dados.selected_edit.tipo_da_imagem1 = registro.tipo_da_imagem1 ? registro.tipo_da_imagem1 : '';
+        this.dados.selected_edit.tipo_da_imagem2 = registro.tipo_da_imagem2 ? registro.tipo_da_imagem2 : '';
+        this.dados.selected_edit.origem_da_imagem1 = registro.origem_da_imagem1 ? registro.origem_da_imagem1 : '';
+        this.dados.selected_edit.origem_da_imagem2 = registro.origem_da_imagem2 ? registro.origem_da_imagem2 : '';
+
         this.dados.selected_edit.quantidade = 1;
 
         if(this.dados.PARAMETRO=='LANCAMENTOS_RECEITA'){
