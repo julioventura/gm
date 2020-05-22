@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
 import 'firebase/database';
 
 import { DadosService } from '../dados/dados.service';

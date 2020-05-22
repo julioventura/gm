@@ -154,7 +154,9 @@ export class DadosService {
 
     public database : string = '';
     public database_caption : string = ''
+
     public registro_snapshot : any;
+
     public selected_registros : any;
     public selected_fornecedores : any;
     public selected_empresas : any;
@@ -804,7 +806,7 @@ export class DadosService {
 
      public key_provisoria : string = '';
 
-     
+
 
     // FUNCOES
 
@@ -2502,7 +2504,8 @@ export class DadosService {
     public observar_receitas(){
         // console.log("dados.observar_receitas()");
 
-        this.ref_receitas = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.RECEITAS.database;
+        // this.ref_receitas = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.RECEITAS.database;
+        this.ref_receitas = "ADMIN/" + this.config.RECEITAS.database;
         this.receitas$ = this.db.list(this.ref_receitas).valueChanges();
 
         this.receitas$.subscribe(
@@ -2516,7 +2519,8 @@ export class DadosService {
     public observar_despesas(){
         // console.log("dados.observar_despesas()");
 
-        this.ref_despesas = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.DESPESAS.database;
+        // this.ref_despesas = "LISTAS/" +  this.usuario_logado.dataset + "/" + this.config.DESPESAS.database;
+        this.ref_despesas = "ADMIN/" +  this.config.DESPESAS.database;
         this.despesas$ = this.db.list(this.ref_despesas).valueChanges();
 
         this.despesas$.subscribe(
