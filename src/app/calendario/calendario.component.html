@@ -1,0 +1,39 @@
+<div *ngIf="!dados.omitir_calendario" class="header-toolbar">
+    <span>
+        <div class="espacador_vertical">&nbsp;</div>
+
+        <p-calendar
+            [(ngModel)]="config.rangeDates"
+            (change)="onClose($event)"
+            (onFocus)="onFocus($event)"
+            (onClose)="onClose($event)"
+            [locale]="pt"
+            dateFormat="dd/mm/y"
+            name="calendario"
+            selectionMode="range"
+            [touchUI]="true"
+            [readonlyInput]="true"
+            [showTransitionOptions]="'300ms'"
+            [hideTransitionOptions]="'300ms'"
+            [showIcon]="false"
+            [showButtonBar]="false"
+            rangeSeparator=" - " >
+        </p-calendar>
+
+    </span>
+</div>
+
+<!-- <div *ngIf="['REL_DINHEIRO','REL_DEBITO','REL_CREDITO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA','REL_FUTURO'].includes(dados.PARAMETRO)
+    && !dados.listar_dinheiro_dia && !dados.listar_debito_dia && !dados.listar_credito_dia
+    && !dados.listar_cheque_pre_dia && !dados.listar_cheque_pre_dia_bom_para
+    && !dados.listar_futuro_dia && !dados.listar_futuro_dia_bom_para
+    && !dados.listar_cheque_dia"
+    class="header-toolbar">
+    <div class="espacador_vertical">&nbsp;</div>
+    <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
+</div> -->
+
+<div *ngIf="dados.omitir_calendario" class="header-toolbar">
+    <div class="espacador_vertical">&nbsp;</div>
+    <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
+</div>

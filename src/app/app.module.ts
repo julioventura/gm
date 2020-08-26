@@ -30,6 +30,8 @@ import { EditPerfilComponent } from './perfil/edit_perfil.component';
 import { EditEstoqueComponent } from './estoque/edit_estoque.component';
 import { EditLancamentosComponent } from './edit/edit-lancamentos.component';
 
+import { CalendarioComponent } from './calendario/calendario.component';
+
 // PrimeNG
 import {DataViewModule} from 'primeng/dataview';
 import {TableModule} from 'primeng/table';
@@ -77,7 +79,8 @@ const firebaseConfig = {
     AtendimentosComponent,
     EditPerfilComponent,
     EditEstoqueComponent,
-    EditLancamentosComponent
+    EditLancamentosComponent,
+    CalendarioComponent
   ],
 
   imports: [

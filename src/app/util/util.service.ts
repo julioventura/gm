@@ -304,6 +304,11 @@ export class UtilService {
         return Date.parse(data);
     }
 
+    getInteger(x : any){
+        let i = parseInt(x);
+        return i;
+    }
+
     setDiaDoMes(dia_do_mes : number, dataObj) : number {
         // input: dia do mes (1 a 31).
         // Se for 0 é o ultimo dia do mês anterior. Se for -1, é um dia antes do ultimo dia do mes anterior
@@ -608,6 +613,16 @@ export class UtilService {
     public formata_data_de_quando_em_milisegundos_com_minutos_e_segundos(quando) {
         // Input = Um valor inteiro representando o número de milisegundos desde 1 de Janeiro de 1970
         return this.myDateObj(quando).datahora_com_segundos.substr(0,16);
+    }
+
+
+    public inteiro(valor){
+        return parseInt(String(valor));
+    }
+
+    public is_integer(a){
+        // return (typeof a==='number' && (a%1)===0);  // https://jsperf.com/numbers-and-integers
+        return Number.isInteger(a);
     }
 
     public getMesDeUmaData(data : string = '') : string {
@@ -1068,16 +1083,17 @@ export class UtilService {
         return key;
     }
 
-    public url_encode(str){
+    public url_encode(str : string) : string {
         return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
             return '%' + c.charCodeAt(0).toString(16);
         });
     }
 
-
     public formata_tel(telefone : string) : string {
         // Formata telefone para (dd) ddddddddd
         // input em qualquer formato (com ddd) reduzivel para 99999 com pelo menos 9 algarismos (2 para ddd e 7 para numero)
+
+        let telefone_original = telefone;
 
         if (telefone == undefined ) {
             return '';
@@ -1086,6 +1102,11 @@ export class UtilService {
         // limpa qq caracter não numérico
         telefone = this.limpa_string_numerica(telefone);
         // telefone = telefone.replace(/\D/g, '');
+
+        // retorna sem formatr se for muito grande o conteúdo, sugerindo varios telefones ou informação complexa
+        if (telefone.length > 12) {
+            return telefone_original;
+        }
 
         // formata separador para os 4 últimos algarismos
         if (telefone.length > 4) {
@@ -1100,7 +1121,8 @@ export class UtilService {
         else{
 
             // formata ddd
-            if (telefone.length >= 10) {
+            if (telefone.length > 10) {
+                // > 10 porque telefones com 9 numeros aqui ja incluem 0 '-' antes dos últimos 4)
                 telefone = '(' + telefone.substr(0,2) + ') ' + telefone.substr(2);
             }
         }
@@ -1109,12 +1131,12 @@ export class UtilService {
     }
 
 
-    public formata_cpf(param : any = '') : string {
+    public formata_cpf(param : any = '', validar : boolean = true) : string {
         // Valida e Formata cpf para ddd.ddd.ddd-dd
 
         let cpf = param.toString();
 
-        if(!this.valida_cpf(cpf)) {
+        if(validar && !this.is_cpf_valido(cpf)) {
             return '';
         }
         else {
@@ -1129,8 +1151,8 @@ export class UtilService {
         }
     }
 
-    public valida_cpf(param : any) : boolean {
-        // https://pt.stackoverflow.com/questions/51340/como-validar-cpf-no-lado-do-cliente-com-script
+    public is_cpf_valido(param : any) : boolean {
+        // https://pt.stackoverflow.com/questions/51340/como-validar-cpf-no-lado-do-associado-com-script
         // Adaptção de Guilherme Lautert para o script da resposta do @AlbertBitencourt.
         // Removendo a parte que considera 10 e 11 como 0, pois aparentemente essa validação não existe.
         // Este script, apesar de baseado originalmente no da receita, não valida as variações 1111111111, 22222222222, etc.
@@ -1154,7 +1176,7 @@ export class UtilService {
 
         // ALGORITIMO ORIGINAL DO SITE DA RECEITA FEDERAL
         // https://www.devmedia.com.br/validar-cpf-com-javascript/23916
-        // http://www.receita.fazenda.gov.br/aplicacoes/atcta/cpf/funcoes.js
+        // https://www.receita.fazenda.gov.br/aplicacoes/atcta/cpf/funcoes.js
         //
         // let strCPF = param.toString();
         // strCPF = strCPF.replace(/\D/g, '');
@@ -1181,7 +1203,6 @@ export class UtilService {
         //     return false;
         // return true;
     }
-
 
     public formata_cnpj(param : any = '') : string {
         // Formata CNPJ para xx.xxx.xxx/xxxx-xx
@@ -1252,6 +1273,10 @@ export class UtilService {
     public formata_inscricaoestadual (string) : string {
         return this.limpa_string_numerica(string);
     }
+
+
+
+
 
     public verificaEAN13(codigo : string) : string {
         codigo = codigo.trim();

@@ -5,6 +5,8 @@ import { DadosService } from '../dados/dados.service';
 import { UtilService } from '../util/util.service';
 import { ConfigService } from '../config/config.service';
 
+import { CalendarioComponent } from '../calendario/calendario.component';
+
 // ConfirmDialog xxxxx
 import {ConfirmationService} from 'primeng/api';
 
@@ -171,9 +173,8 @@ export class ListComponent implements OnInit {
     public confirmou_envio_mensagem : boolean = false;
     public nao_confirmou_envio_mensagem : boolean = false;
 
-    // ngOnChanges() {
-    //     console.log("ngOnChanges()")
-    // }
+    public remetente : any  = {};
+
 
     ngOnInit(): void {
         console.log("\n\n==========================");
@@ -213,6 +214,9 @@ export class ListComponent implements OnInit {
         // this.dados.ajustar_campos();
 
         this.dados.imprimir_etiquetas = false;
+        this.dados.mostrar_destinatario = true;
+        this.remetente = this.config.REMETENTE;
+
 
         if(this.dados.PARAMETRO=='EQUIPE'){
             console.log("ATUALIZAR GEO-LOCALIZACAO DA EQUIPE")
@@ -272,9 +276,11 @@ export class ListComponent implements OnInit {
                 this.dados.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA');
             }
 
-            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES','ATENDIMENTOS','ESTOQUE','HISTORICOS','RELATORIOS','BANCOS','CAIXA'].includes(this.dados.PARAMETRO)){
+            if (['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES'].includes(this.dados.PARAMETRO)){
 
                 this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
+
+                this.dados.imprimir_especial = true;
 
                 this.dados.is_clientes_todos = true;
                 this.dados.is_socios_todos = true;
@@ -291,6 +297,12 @@ export class ListComponent implements OnInit {
                 this.dados.is_equipe_mensagens = false;
                 this.dados.is_fornecedores_mensagens = false;
             }
+
+
+            if (['ATENDIMENTOS','ESTOQUE','HISTORICO','RELATORIOS','BANCOS','CAIXA'].includes(this.dados.PARAMETRO)){
+                this.dados[this.config[this.dados.PARAMETRO].filtered] = this.dados[this.config[this.dados.PARAMETRO].selected];
+            }
+
 
             if(this.dados.origem){
                 console.log("origem = " + this.dados.origem);
@@ -389,7 +401,7 @@ export class ListComponent implements OnInit {
 
             if(this.dados.PARAMETRO=='MOVIMENTACAO') {
                 console.log("MOVIMENTACAO");
-                this.calcula_movimentacao();
+                this.em_caixa();
             }
 
 
@@ -3111,16 +3123,16 @@ export class ListComponent implements OnInit {
 
 
 
-    public em_caixa() {
-        this.dados.is_em_caixa = !this.dados.is_em_caixa;
 
-        if(this.dados.is_em_caixa){
-            this.dados.is_em_caixa = true;
-            this.dados.is_aguardando = false;
-            this.dados.is_quitado = false;
-        }
-        this.calcula_movimentacao();
+    public em_caixa() {
+
+        this.dados.is_em_caixa = true;
+        this.dados.is_aguardando = false;
+        this.dados.is_quitado = false;
+
+         this.calcula_movimentacao();
     }
+
 
     public aguardando_em_banco() {
         this.dados.is_aguardando = !this.dados.is_aguardando;
@@ -3129,9 +3141,13 @@ export class ListComponent implements OnInit {
             this.dados.is_em_caixa = false;
             this.dados.is_aguardando = true;
             this.dados.is_quitado = false;
+            this.calcula_movimentacao();
         }
-        this.calcula_movimentacao();
+        else {
+            this.em_caixa();
+        }
     }
+
 
     public quitado() {
         this.dados.is_quitado = !this.dados.is_quitado;
@@ -3140,8 +3156,11 @@ export class ListComponent implements OnInit {
             this.dados.is_em_caixa = false;
             this.dados.is_aguardando = false;
             this.dados.is_quitado = true;
+            this.calcula_movimentacao();
         }
-        this.calcula_movimentacao();
+        else {
+            this.em_caixa();
+        }
     }
 
 
@@ -4322,6 +4341,7 @@ export class ListComponent implements OnInit {
                 this.config.DISPLAY.Registro = true;
             }
             else {
+                console.log("else")
                 this.config.DISPLAY.Lista = false;
                 this.config.DISPLAY.Registro = true;
             }
@@ -4417,18 +4437,15 @@ export class ListComponent implements OnInit {
         }
     }
 
+
     public mostrar_lista(opcao : string){
         console.log("mostrar_lista");
-        console.log("this.dados.selected_receitas")
-        console.log(this.dados.selected_receitas)
-        console.log("this.dados.selected_despesas")
-        console.log(this.dados.selected_despesas)
 
         this.dados.mostrar_lista_opcao = opcao;
 
         if(opcao=='1'){
-            this.menu_financeiro_opcao1_classe = 'menu_financeiro float_none';
-            this.menu_financeiro_opcao2_classe = 'menu_financeiro_inativo float_none';
+            this.menu_financeiro_opcao1_classe = 'menu_financeiro_ativado';
+            this.menu_financeiro_opcao2_classe = 'menu_financeiro';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
                 this.dados.database = 'selected_receitas';
@@ -4441,8 +4458,8 @@ export class ListComponent implements OnInit {
             }
         }
         else if(opcao=='2'){
-            this.menu_financeiro_opcao1_classe = 'menu_financeiro_inativo float_none';
-            this.menu_financeiro_opcao2_classe = 'menu_financeiro float_none';
+            this.menu_financeiro_opcao1_classe = 'menu_financeiro';
+            this.menu_financeiro_opcao2_classe = 'menu_financeiro_ativado';
 
             if(this.dados.PARAMETRO=='CENTROS_DE_CUSTOS_LISTA'){
                 // this.dados.database = this.dados.filtered_despesas ? 'filtered_despesas' : 'selected_despesas';
@@ -4458,6 +4475,8 @@ export class ListComponent implements OnInit {
         console.log(this.dados.database_caption);
         console.log(this.dados[this.dados.database]);
     }
+
+
 
     public escolher_centro_de_custos(registro : any) : void {
         this.dados.centro_de_custos_escolhido = registro;
@@ -4617,7 +4636,7 @@ export class ListComponent implements OnInit {
             this.dados.historicos.registro_nome = this.dados.destinatario && this.dados.destinatario.nome ? this.dados.destinatario.nome : '';
             this.dados.historicos.registro_key = this.dados.destinatario && this.dados.destinatario.key ? this.dados.destinatario.key : '';
 
-            this.dados.salvar_HISTORICOS(this.dados.historicos);
+            this.dados.salvar_HISTORICO(this.dados.historicos);
 
             this.confirmou_envio_mensagem = true;
         }

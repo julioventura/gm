@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -802,6 +801,14 @@ export class DadosService {
 
     public position : any;
 
+    public posicao_etiqueta : number = 1;
+
+    public vinte_etiquetas : any = [];
+    public vinte_etiquetas_remetente : any = [];
+
+    public mostrar_destinatario : boolean = true;
+
+
     public primeira_vez : boolean = true;
 
      public key_provisoria : string = '';
@@ -860,7 +867,9 @@ export class DadosService {
         this.db.list(this.ref_equipe).update(registro.key, registro);
     }
 
-
+    public is_destinatario(status : boolean){
+        this.mostrar_destinatario = status;
+    }
 
     public go(destino : string = '') {
         console.log("go(" + destino + ")");
@@ -895,14 +904,6 @@ export class DadosService {
                 destino = 'LANCAMENTOS_DESPESA';
             }
 
-            else if(destino == 'ORCAMENTOS'){
-                this.origem = 'CLIENTES';
-                this.cliente = this.selected;
-
-                console.log("ORIGEM = " + this.origem);
-                console.log("this.cliente");
-                console.log(this.cliente);
-            }
 
             if (destino == 'REL_CENTROS_DE_CUSTOS'){
                 console.log("selected_rel_centros_de_custos");
@@ -1120,7 +1121,7 @@ export class DadosService {
                 }
             }
 
-            else if (this.PARAMETRO == 'HISTORICOS'){
+            else if (this.PARAMETRO == 'HISTORICO'){
                 this.titulo_barra = this.usuario_logado.nome;
             }
             else if (this.PARAMETRO == 'ESTOQUE'){
@@ -1442,13 +1443,15 @@ export class DadosService {
         this.filtered_financeiro = _.filter(this.selected_financeiro, _.conforms(this.filters_registros) );
     }
 
-    public refresh_calendar(){
+    public refresh_calendar(completo : boolean = true){
         // console.log("refresh_calendar()");
 
         this.inicializar_rangeDates();
 
-        this.filtra_lancamentos_por_data('LANCAMENTOS_RECEITA')
-        this.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA')
+        if(completo){
+            this.filtra_lancamentos_por_data('LANCAMENTOS_RECEITA')
+            this.filtra_lancamentos_por_data('LANCAMENTOS_DESPESA')
+        }
     }
 
     public inicializar_rangeDates(para_disponibilidade_financeira : boolean = false){
@@ -2258,8 +2261,16 @@ export class DadosService {
 
                 // (1) OPCAO DE SORT APÒS A LEITURA DO DATABASE
                 // this.selected_usuarios = val.sort((a, b) => (a.nome > b.nome) ? 1 : -1);  // sort a list of objects by a property, ascending
+
+                console.log("this.selected_usuarios");
+                console.log(this.selected_usuarios);
+
             }
         );
+
+        console.log("this.selected_usuarios");
+        console.log(this.selected_usuarios);
+
     }
 
     public observar_clientes(salvar_apenas : boolean = false) {
@@ -2419,7 +2430,7 @@ export class DadosService {
     public observar_historicos(){
         // console.log("dados.observar_historicos()");
 
-        this.ref_historicos = "LISTAS/" + this.usuario_logado.dataset + "/" + this.config.HISTORICOS.database;
+        this.ref_historicos = "LISTAS/" + this.usuario_logado.dataset + "/" + this.config.HISTORICO.database;
         this.historicos$ = this.db.list(this.ref_historicos).valueChanges();
 
         this.historicos$.subscribe(
@@ -2757,6 +2768,7 @@ export class DadosService {
     // SALVAR
     // ===================
     public gera_key(parametro){
+        console.log("gera_key(" + parametro + ")")
         let key = this.db.list(this[this.config[parametro].ref]).push({}).key;
         console.log("key provisoria = " + key)
         this.key_provisoria = key;
@@ -2851,7 +2863,7 @@ export class DadosService {
         }
 
         else if (parametro == 'ATENDIMENTOS'){
-            console.log("Salvando registro de ATENDIMENTO");
+            console.log("Salvando registro de ATENDIMENTOS");
 
             let incluiu_registro = false;
 
@@ -3208,7 +3220,7 @@ export class DadosService {
             }
         }
 
-        this.salvar_HISTORICOS(this.historicos);
+        this.salvar_HISTORICO(this.historicos);
     }
 
     public compartilhar_geolocalizacao(email_responsavel, email_cliente, validar){
@@ -3302,8 +3314,8 @@ export class DadosService {
         console.log(registro);
     }
 
-    public salvar_HISTORICOS(historicos : any = {}, PARAMETRO : string = ''){
-        console.log("salvar_HISTORICOS");
+    public salvar_HISTORICO(historicos : any = {}, PARAMETRO : string = ''){
+        console.log("salvar_HISTORICO");
         console.log("historicos");
         console.log(historicos);
 
@@ -3525,12 +3537,12 @@ export class DadosService {
             this.db.list(this.ref_clientes).remove(key);
             this.db.list(this.ref_clientes_ultimos_visualizados).remove(key);
             this.db.list(this.ref_clientes_ultimos_incluidos).remove(key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
             this.refresh_lista(key);
 
             // TODO --- Deve remover também os registros de exames, pagamentos, etc desse cliente!!!!
         }
-        if (this.PARAMETRO=="SOCIOS"){
+        else if (this.PARAMETRO=="SOCIOS"){
             console.log("this.voltar_pilha");
             console.log(this.voltar_pilha);
             this.voltar_pilha.pop();
@@ -3540,7 +3552,7 @@ export class DadosService {
             this.db.list(this.ref_socios).remove(key);
             this.db.list(this.ref_socios_ultimos_visualizados).remove(key);
             this.db.list(this.ref_socios_ultimos_incluidos).remove(key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
             this.refresh_lista(key);
 
             // TODO --- Deve remover também os registros de exames, pagamentos, etc desse socio!!!!
@@ -3555,7 +3567,7 @@ export class DadosService {
             key = this.selected_edit.key;
             this.db.list(this.ref_fornecedores).remove(key);
             this.db.list(this.ref_fornecedores_ultimos_incluidos).remove(key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
             this.refresh_lista(key);
             // TODO --- Deve remover também os registros relacionados a esse fornecedor ????
         }
@@ -3567,7 +3579,7 @@ export class DadosService {
 
             key = this.selected_edit.key;
             this.db.list(this.ref_equipe).remove(key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
             this.refresh_lista(key);
             // TODO --- Deve remover também os registros de atendimentos desse registro?
         }
@@ -3575,17 +3587,17 @@ export class DadosService {
         else if (this.PARAMETRO=="ESTOQUE"){
             this.db.list(this.ref_estoque).remove(this.selected_edit.key);
             this.db.list(this.ref_estoque_ultimos_incluidos).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="USUARIOS"){
             this.db.list(this.ref_usuarios).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="ORCAMENTOS"){
             this.db.list(this.ref_orcamentos).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="ATENDIMENTOS"){
@@ -3601,17 +3613,17 @@ export class DadosService {
             this.historicos.registro_obs = this.selected_edit.obs ? this.selected_edit.obs : '';
 
             this.db.list(this.ref_atendimentos).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="RECEITAS"){
             this.db.list(this.ref_receitas).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="DESPESAS"){
             this.db.list(this.ref_despesas).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="LANCAMENTOS_RECEITA"){
@@ -3650,7 +3662,7 @@ export class DadosService {
                 }
             }
 
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="LANCAMENTOS_DESPESA"){
@@ -3689,30 +3701,30 @@ export class DadosService {
                 }
             }
 
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="TRANSFERENCIAS"){
             this.db.list(this.ref_transferencias).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="CONCILIACAO"){
             this.db.list(this.ref_conciliacao).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="REL_BANCOS"){
             this.db.list(this.ref_rel_bancos).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
         else if (this.PARAMETRO=="BANCOS"){
             this.db.list(this.ref_bancos).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
         }
 
-        else if (this.PARAMETRO=="HISTORICOS"){
+        else if (this.PARAMETRO=="HISTORICO"){
             this.db.list(this.ref_historicos).remove(this.selected_edit.key);
         }
 
@@ -3741,7 +3753,7 @@ export class DadosService {
             this.historicos.modificacoes = "Excluiu o registro de " + this.registro.nome;
             this.historicos.nome = this.registro.nome;
             this.db.list(this.ref_registros).remove(this.selected_edit.key);
-            this.salvar_HISTORICOS(this.historicos);
+            this.salvar_HISTORICO(this.historicos);
             this.registro = null;
         }
 
@@ -3846,7 +3858,7 @@ export class DadosService {
             }
         }
 
-        this.salvar_HISTORICOS(this.historicos);
+        this.salvar_HISTORICO(this.historicos);
 
         // Popup de aviso
         // this.aviso_titulo = "ESTORNO";

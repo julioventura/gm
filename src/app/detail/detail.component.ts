@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import {Observable} from 'rxjs';
-// import { map } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
 import { UtilService } from '../util/util.service';
@@ -74,6 +73,9 @@ export class DetailComponent implements OnInit {
     public tipo_da_imagem1 : string = '';
     public tipo_da_imagem2 : string = '';
 
+    public remetente : any  = {};
+
+
     // FIRESTORE
     downloadURLfirestore1: Observable<string>;
     downloadURLfirestore2: Observable<string>;
@@ -88,6 +90,11 @@ export class DetailComponent implements OnInit {
         console.log(this.dados.voltar_pilha);
         console.log("===========================");
 
+        // ETIQUETA AVULSA
+        this.dados.posicao_etiqueta = 1;
+        this.posicao_etiqueta();
+        this.dados.mostrar_destinatario = true;
+        this.remetente = this.config.REMETENTE;
 
         // Download de imagens do Firestore
         this.download_imagem_do_firestore(1);
@@ -328,7 +335,7 @@ export class DetailComponent implements OnInit {
         else if(this.dados.PARAMETRO == 'RESULTADOS'){
             this.dados.set_titulo_pagina('LANÇAMENTO');
         }
-        else if(this.dados.PARAMETRO == 'HISTORICOS'){
+        else if(this.dados.PARAMETRO == 'HISTORICO'){
             this.dados.set_titulo_barra(this.dados.selected.criado_em);
         }
         else if (this.dados.selected.nome){
@@ -438,6 +445,89 @@ export class DetailComponent implements OnInit {
 
         this.mostrar_tela();
     }
+
+
+        public etiqueta_avulsa(){
+            console.log("etiqueta_avulsa()");
+
+            this.dados.imprimir_etiquetas = ! this.dados.imprimir_etiquetas;
+
+            // let mensagem = 'Imprimir etiqueta avulsa?';
+            // let cabecalho = 'ETIQUETA';
+            //
+            // this.confirmationService.confirm({
+            //     message: mensagem,
+            //     header: cabecalho,
+            //     acceptLabel: 'Sim',
+            //     rejectLabel: 'Não',
+            //     rejectVisible: true,
+            //
+            //     accept: () => {
+            //         this.dados.imprimir_etiquetas = true;
+            //         return true;
+            //     },
+            //     reject: () => {
+            //         this.dados.imprimir_etiquetas = false;
+            //         return true;
+            //     }
+            // });
+        }
+
+        public imprimir(){
+            console.log("imprimir()");
+            window.print();
+        }
+
+        public muda_posicao(sentido : string){
+            if(sentido=='-'){
+                this.dados.posicao_etiqueta--;
+            }
+            else if(sentido=='+'){
+                this.dados.posicao_etiqueta++;
+            }
+            if(this.dados.posicao_etiqueta > 20){
+                this.dados.posicao_etiqueta = 20;
+            }
+            if(this.dados.posicao_etiqueta <= 0){
+                this.dados.posicao_etiqueta = 1;
+            }
+            this.posicao_etiqueta();
+        }
+
+        public posicao_etiqueta(){
+            if(this.dados.posicao_etiqueta > 20){
+                this.dados.posicao_etiqueta = 20;
+            }
+            if(this.dados.posicao_etiqueta <= 0){
+                this.dados.posicao_etiqueta = 1;
+            }
+
+            let x = {
+                nome : '',
+                endereco : '',
+                bairro : '',
+                cidade : '',
+                estado : '',
+                cep : ''
+            };
+
+            for (let i=1; i<=20; i++){
+
+                if (i == this.dados.posicao_etiqueta){
+                    this.dados.vinte_etiquetas[i-1] = this.dados.selected;
+                    this.dados.vinte_etiquetas_remetente[i-1] = this.remetente;
+                }
+                else {
+                    this.dados.vinte_etiquetas[i-1] = x;
+                    this.dados.vinte_etiquetas_remetente[i-1] = x;
+                }
+            }
+        }
+
+        public is_destinatario(status : boolean){
+            this.dados.mostrar_destinatario = status;
+            this.posicao_etiqueta();
+        }
 
 
     //
@@ -605,7 +695,7 @@ export class DetailComponent implements OnInit {
                 this.dados.historicos.registro_key = this.dados.fornecedor && this.dados.fornecedor.key ? this.dados.fornecedor.key : '';
             }
 
-            this.dados.salvar_HISTORICOS(this.dados.historicos);
+            this.dados.salvar_HISTORICO(this.dados.historicos);
         }
     }
 

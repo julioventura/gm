@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
-// import { AngularFireAuth } from '@angular/fire/auth';
-// import { auth } from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +8,20 @@ import * as firebase from 'firebase/app';
 export class ConfigService {
 
   constructor() { }
+
+  // =====================================================
+  // CONFIGURAR ESSES VALORES NA SECAO CONFIGURACAO DO APP
+  // =====================================================
+  public REMETENTE : any = {
+      nome : 'GESTORMIX.COM',
+      endereco : 'Av. Pres. Vargas, 482 / 1805',
+      bairro : 'Centro',
+      cidade : 'Rio de Janeiro',
+      estado : 'RJ',
+      cep : '20071-909'
+  }
+
+  public ETIQUETAS_POR_FOLHA : number = 20;
 
 
   // ===================================================
@@ -134,7 +146,7 @@ export class ConfigService {
       FABRICANTES : 5,
       FINANCEIRO : 10,
       GESTAO : 5,
-      HISTORICOS : 5,
+      HISTORICO : 5,
       IMPRESSOS : 5,
       INDICADOR : 5,
       MOVIMENTACAO : 5,
@@ -149,14 +161,16 @@ export class ConfigService {
       RECEITAS : 10,
       REL_CENTROS_DE_CUSTOS : 5,
       REL_CENTROS_DE_CUSTOS_TOTALIZADOS : 5,
-      REL_DINHEIRO : 31,
-      REL_CHEQUES_PRE : 31,
-      REL_CHEQUES_A_VISTA : 31,
-      DISPONIBILIDADE : 31,
+      REL_DINHEIRO : 5,
+      REL_DEBITO : 5,
+      REL_CREDITO : 5,
+      REL_CHEQUES_PRE : 5,
+      REL_CHEQUES_A_VISTA : 5,
+      DISPONIBILIDADE : 10,
       REL_EXTRATO_DE_CONTAS : 5,
       REL_RECEITAS_E_DESPESAS : 5,
       RELATORIOS : 10,
-      RESULTADOS : 31,
+      RESULTADOS : 10,
       REVISOES : 5,
       TRANSFERENCIAS : 10,
       USUARIOS : 5,
@@ -268,7 +282,7 @@ export class ConfigService {
           FORNECEDORES : "fornecedores$",
           EQUIPE : "equipe$",
           FINANCEIRO : "financeiro$",
-          HISTORICOS : "historicos$",
+          HISTORICO : "historicos$",
           IMPRESSOS : "impressos$",
           INDICADOR : "indicador$",
           MOVIMENTACAO : "movimentacao$",
@@ -508,7 +522,6 @@ export class ConfigService {
           linkedin : true,
           identidade : true,
           img_url : true,
-          indicacao : false,
           nacionalidade : true,
           nascimento : true,
           naturalidade : true,
@@ -548,7 +561,6 @@ export class ConfigService {
           linkedin : true,
           identidade : true,
           img_url : true,
-          indicacao : false,
           nacionalidade : true,
           nascimento : true,
           naturalidade : true,
@@ -617,7 +629,6 @@ export class ConfigService {
           estadocivil : true,
           identidade : true,
           img_url : true,
-          indicacao : true,
           nacionalidade : true,
           nascimento : true,
           naturalidade : true,
@@ -675,7 +686,6 @@ export class ConfigService {
         estadocivil : true,
         identidade : true,
         img_url : true,
-        indicacao : true,
         nacionalidade : true,
         nascimento : true,
         naturalidade : true,
@@ -741,7 +751,7 @@ export class ConfigService {
       img_url : true,
       obs: true,
       cpf : true,
-      cnpj : true,
+      cnpj : false,
       especialidade : true,
       nascimento : true,
       funcao : true,
@@ -1048,6 +1058,7 @@ export class ConfigService {
           selected : "selected_atendimentos",
           filtered : "filtered_atendimentos",
           total_de : "total_de_atendimentos",
+          ref : "ref_atendimentos",
           criado_em : true,
           modificado_em : true,
           nome : true,
@@ -1072,9 +1083,9 @@ export class ConfigService {
       };
 
 
-      HISTORICOS : any = {
+      HISTORICO : any = {
           retorno : '',
-          database : "HISTORICOS",
+          database : "HISTORICO",
           titulo_lista : "Histórico",
           titulo_unidade : "Histórico",
           singular : "registro",
@@ -1743,8 +1754,8 @@ export class ConfigService {
       DISPONIBILIDADE : any = {
           retorno : 'RELATORIOS',
           database : "DISPONIBILIDADE",
-          titulo_lista : "Disponibilidade Financeira",
-          titulo_unidade : "Disponibilidade Financeira",
+          titulo_lista : "Disponibilidade Futura",
+          titulo_unidade : "Disponibilidade Futura",
           singular : "registro",
           plural : "registros",
           listar : "listar_disponibilidade",

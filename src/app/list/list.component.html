@@ -2,36 +2,28 @@
 
     <!-- Cabeçalho -->
     <div class="header-toolbar">
+
         <div class="fc-left">
             <img src="https://gestormix.com/img/sair.png" class="img_nav" (click)="voltar()">
             <img src="https://gestormix.com/img/home.png" class="img_nav" (click)="dados.home()">
         </div>
 
+
+
         <div class="fc-right">
-            <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS','HISTORICOS'].includes(dados.PARAMETRO)">
+            <div *ngIf="['FINANCEIRO','RELATORIOS','MOVIMENTACAO','RESULTADOS','HISTORICO'].includes(dados.PARAMETRO)">
                 <!-- A exibição do dia ocupa a largura dos 2 ícones de navegação -->
                 <div class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
 
             <!-- PARA USUARIOS INCLUIREM REGISTROS -->
-            <div *ngIf="dados.PARAMETRO=='PAGAMENTOS'
-			|| dados.PARAMETRO=='LANCAMENTOS_RECEITA'
-            || dados.PARAMETRO=='LANCAMENTOS_DESPESA'
-            ">
+            <div *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO)">
                 <img *ngIf="dados.pode_incluir_lancamento" src="https://gestormix.com/img/vazio.png" class="img_nav">
                 <img *ngIf="dados.pode_incluir_lancamento" src="https://gestormix.com/img/novo.png" class="img_nav" (click)="incluir()">
                 <div *ngIf="!dados.pode_incluir_lancamento" class="hoje">Hoje<br /><span class="bold">{{util.diminui_data(dados.HOJE)}}</span></div>
             </div>
 
-            <div *ngIf="dados.PARAMETRO!='PAGAMENTOS'
-                && dados.PARAMETRO!='LANCAMENTOS_RECEITA'
-                && dados.PARAMETRO!='LANCAMENTOS_DESPESA'
-                && dados.PARAMETRO!='RELATORIOS'
-                && dados.PARAMETRO!='MOVIMENTACAO'
-                && dados.PARAMETRO!='HISTORICOS'
-                && dados.PARAMETRO!='RESULTADOS'
-                && dados.PARAMETRO!='FINANCEIRO'">
-
+            <div *ngIf="!['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RELATORIOS','MOVIMENTACAO','HISTORICO','RESULTADOS','FINANCEIRO'].includes(dados.PARAMETRO)">
                 <img *ngIf="dados.imprimir_especial && !config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/impressos.png" class="img_nav {{dados.imprimir_etiquetas ? 'disabled' : ''}}" (click)="preview_imprimir()">
                 <img *ngIf="!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp" src="https://gestormix.com/img/vazio.png" class="img_nav">
                 <img *ngIf="(!dados.imprimir_especial || config.DISPLAY.PopupWhatsapp)
@@ -45,64 +37,49 @@
 
         </div>
 
-        <div *ngIf="!dados.imprimir_etiquetas" class="print">
 
+
+
+
+        <!-- <div *ngIf="!dados.imprimir_etiquetas" class="print">
             <div class="fc-center title">
                 <div class="espacador_vertical">&nbsp;</div>
                 <div *ngIf="titulo_lista">{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
                     <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
-                    <!-- <span *ngIf="dados.PARAMETRO=='REVISOES' && dados.mes_de_revisao!=''"> de {{dados.mes_de_revisao}}</span> -->
                 </div>
 
                 <div *ngIf="(dados.usuario_logado.dataset != dados.usuario_logado.key)" class="fc-center sub_title red">
                     <span class="red">Usando clientes de {{ dados.usuario_logado.dataset_nome }}</span>
                 </div>
             </div>
-            <div class="fc-clear"></div>
+        </div> -->
 
+        <div *ngIf="!dados.imprimir_etiquetas" class="fc-center title screen_only">
+                <div class="espacador_vertical">&nbsp;</div>
+                <div *ngIf="titulo_lista">{{ dados.titulo_pagina ? dados.titulo_pagina : titulo_lista }}
+                    <span *ngIf="dados.PARAMETRO=='ANIVERSARIOS' && dados.mes_de_aniversario!=''"> de {{dados.mes_de_aniversario}}</span>
+                </div>
         </div>
+
+        <div *ngIf="dados.imprimir_etiquetas" class="fc-center title screen_only">
+            <div class="espacador_vertical">&nbsp;</div>
+            <img src="https://gestormix.com/img/envelope_f.png" class="enderecamento {{dados.mostrar_destinatario ? '' : ' disabled'}}" (click)="dados.is_destinatario(true)"> &nbsp;
+            <img src="https://gestormix.com/img/envelope_v.png" class="enderecamento {{dados.mostrar_destinatario ? ' disabled' : ''}}" (click)="dados.is_destinatario(false)">
+        </div>
+
+
+
+        <div class="fc-clear"></div>
     </div>
 
 
     <!-- CALENDARIO  -->
-
-
-    <div *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','CAIXA','RESULTADOS','DISPONIBILIDADE', 'REL_CENTROS_DE_CUSTOS_TOTALIZADOS','MOVIMENTACAO'].includes(dados.PARAMETRO) && !dados.omitir_calendario" class="header-toolbar">
-        <span class="xx">
-            <div class="espacador_vertical">&nbsp;</div>
-
-            <p-calendar
-                [(ngModel)]="this.config.rangeDates"
-                (change)="onClose($event)"
-                (onFocus)="onFocus($event)"
-                (onClose)="onClose($event)"
-                [locale]="pt"
-                dateFormat="dd/mm/y"
-                name="calendario"
-                selectionMode="range"
-                [touchUI]="true"
-                [readonlyInput]="true"
-                [showTransitionOptions]="'300ms'"
-                [hideTransitionOptions]="'300ms'"
-                [showIcon]="false"
-                [showButtonBar]="false"
-                rangeSeparator=" - "
-            >
-            </p-calendar>
-        </span>
-
-        <!-- <span class="yy" *ngIf="['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO) && !dados.omitir_refresh">
-            &nbsp; <img src="https://gestormix.com/img/refresh.png" (click)="refresh_calendar()" class="refresh_button">
-        </span> -->
-
-        <!-- Para escolher mês: -->
-        <!-- <p-calendar [(ngModel)]="dateValue" view="month"  [locale]="pt" dateFormat="mm/yy" [yearNavigator]="true" yearRange="2000:2030"></p-calendar> -->
+    <div *ngIf="['FINANCEIRO','RELATORIOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','CAIXA','RESULTADOS','DISPONIBILIDADE', 'REL_CENTROS_DE_CUSTOS_TOTALIZADOS','MOVIMENTACAO'].includes(dados.PARAMETRO) && !dados.omitir_calendario" class="header-toolbar">
+        <app-calendario></app-calendario>
     </div>
 
-    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
 
-
-    <div *ngIf="['REL_DINHEIRO','REL_DEBITO','REL_CREDITO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)
+    <!-- <div *ngIf="['REL_DINHEIRO','REL_DEBITO','REL_CREDITO','REL_CHEQUES_PRE','REL_CHEQUES_A_VISTA'].includes(dados.PARAMETRO)
         && !dados.listar_dinheiro_dia && !dados.listar_debito_dia && !dados.listar_credito_dia && !dados.listar_cheque_pre_dia && !dados.listar_cheque_pre_dia_bom_para
         && !dados.listar_cheque_dia"
         class="header-toolbar">
@@ -112,7 +89,12 @@
     <div *ngIf="dados.omitir_calendario" class="header-toolbar">
         <div class="espacador_vertical">&nbsp;</div>
         <span class="data_range">{{util.diminui_data(config.data_inicial)}} a {{util.diminui_data(config.data_final)}}</span>
-    </div>
+    </div> -->
+
+
+    <!-- CONFIRMATION SERVICE -->
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
 
 
     <!-- LISTAGENS com primeNG dataView -->
@@ -175,7 +157,7 @@
                    <ng-template let-registro pTemplate="listItem">
                        <div (click)="verRegistro(registro)">
                            <div>{{registro.nome}}</div>
-                           <div *ngIf="registro.id && dados.usuario_logado.id_para_clientes" class="float-right bold">{{registro.id}}</div>
+                           <div *ngIf="registro.id && dados.usuario_logado.id_para_clientes" class="float_right bold">{{registro.id}}</div>
                            <div class="fc-clear"></div>
                        </div>
                    </ng-template>
@@ -191,8 +173,8 @@
 
 
     <!-- LISTAGENS com primeNG dataTable -->
-    <div *ngIf="['ATENDIMENTOS','CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ESTOQUE','HISTORICOS','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RESULTADOS','BANCOS','DISPONIBILIDADE'].includes(dados.PARAMETRO)">
-        <div *ngIf="!['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO)" class="{{dados.imprimir_etiquetas ? 'espacador_vertical' : 'espacador_vertical_printable'}}">&nbsp;</div>
+    <div *ngIf="['ATENDIMENTOS','CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ESTOQUE','HISTORICO','LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA','RESULTADOS','BANCOS','DISPONIBILIDADE'].includes(dados.PARAMETRO)">
+        <div *ngIf="!['LANCAMENTOS_RECEITA','LANCAMENTOS_DESPESA'].includes(dados.PARAMETRO)" class="espacador_vertical">&nbsp;</div>
 
         <!-- FILTRO -->
         <div *ngIf="!dados.voltar_para  && !config.DISPLAY.PopupWhatsapp && !dados.imprimir_etiquetas && ['CLIENTES','SOCIOS','FORNECEDORES','EQUIPE','ESTOQUE'].includes(dados.PARAMETRO)">
@@ -265,7 +247,7 @@
                     <div *ngIf="!dados.is_equipe_aniversarios" class="w50 menu_ficha" (click)="equipe_aniversarios()">ANIVERSARIANTES</div>
                 </div>
             </div>
-
+<!--
             <div *ngIf="dados.PARAMETRO == 'FORNECEDORES' && !config.DISPLAY.PopupWhatsapp">
                 <div class="ui-grid ui-grid-responsive ui-fluid">
                     <div *ngIf="dados.is_fornecedores_todos" class="w50 menu_ficha_ativado" (click)="fornecedores_todos()">TODOS</div>
@@ -274,7 +256,7 @@
                     <div *ngIf="dados.is_fornecedores_aniversarios" class="w50 menu_ficha_ativado" (click)="fornecedores_aniversarios()">ANIVERSARIANTES</div>
                     <div *ngIf="!dados.is_fornecedores_aniversarios" class="w50 menu_ficha" (click)="fornecedores_aniversarios()">ANIVERSARIANTES</div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div *ngIf="dados[config[dados.PARAMETRO].total_de] > 0">
@@ -282,7 +264,7 @@
             <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
                 <div class="espacador_vertical">&nbsp;</div>
                 <!-- <ng-template pTemplate="caption">&nbsp;</ng-template> -->
-                <p-table [value]="[{}]" [resizableColumns]="true">
+                <p-table [value]="[{}]" >
                      <ng-template pTemplate="header">
                           <tr>
                               <th>Receita</th>
@@ -305,7 +287,7 @@
             <div *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">
                 <div class="espacador_vertical">&nbsp;</div>
                 <!-- <ng-template pTemplate="caption">&nbsp;</ng-template> -->
-                <p-table [value]="[{}]" [resizableColumns]="true">
+                <p-table [value]="[{}]" >
                      <ng-template pTemplate="header">
                           <tr>
                               <th>Receita</th>
@@ -378,7 +360,7 @@
 
                                     <p-table
                                     [value]="dados[config[dados.PARAMETRO].filtered]"
-                                    [resizableColumns]="true"
+
                                     [paginator]="dados[config[dados.PARAMETRO].filtered].length>config.QUANTOS_POR_PAGINA[dados.PARAMETRO]"
                                     [rows]="config.QUANTOS_POR_PAGINA[dados.PARAMETRO]">
 
@@ -425,10 +407,10 @@
 
                                         <tr *ngIf="dados.PARAMETRO == 'FORNECEDORES'">
                                             <th>Nome</th>
-                                            <th class="w8em">Nascimento</th>
-                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="w4em center">Idade</th>
+                                            <!-- <th class="w8em">Nascimento</th> -->
+                                            <!-- <th *ngIf="dados.is_fornecedores_aniversarios" class="w4em center">Idade</th>
                                             <th *ngIf="dados.is_fornecedores_aniversarios" class="w8em">Última msg</th>
-                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="left w37px"></th>
+                                            <th *ngIf="dados.is_fornecedores_aniversarios" class="left w37px"></th> -->
                                         </tr>
 
                                         <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'">
@@ -445,7 +427,7 @@
                                             <th>Conta</th>
                                         </tr>
 
-                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'">
+                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICO'">
                                             <th class="pleft">Quando</th>
                                             <th>Seção</th>
                                             <th>Ação</th>
@@ -522,13 +504,13 @@
 
                                         <tr *ngIf="dados.PARAMETRO == 'FORNECEDORES'">
                                             <td class="left" (click)="verRegistro(registro)">{{registro.nome}}</td>
-                                            <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td>
-                                            <td *ngIf="dados.is_fornecedores_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
+                                            <!-- <td class="center" (click)="verRegistro(registro)">{{util.diminui_data(registro.nascimento)}}</td> -->
+                                            <!-- <td *ngIf="dados.is_fornecedores_aniversarios" class="center" (click)="verRegistro(registro)">{{registro.idade}}</td>
                                             <td *ngIf="dados.is_fornecedores_aniversarios" class="right" (click)="verRegistro(registro)">{{util.diminui_data(registro.aniv_mail)}}</td>
                                             <td *ngIf="dados.is_fornecedores_aniversarios" class="center" (click)="PopupWhatsapp(registro,'ANIVERSÁRIO')">
                                                 <img *ngIf="registro.aniv_mail" class="img_url_22 disabled" src="https://gestormix.com/img/whatsapp.png" />
                                                 <img *ngIf="!registro.aniv_mail" class="img_url_22" src="https://gestormix.com/img/whatsapp.png" />
-                                            </td>
+                                            </td> -->
                                         </tr>
 
                                         <tr *ngIf="dados.PARAMETRO == 'ESTOQUE'" (click)="verRegistro(registro)">
@@ -545,7 +527,7 @@
                                             <td class="center">{{registro.conta}}</td>
                                         </tr>
 
-                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICOS'" (click)="verRegistro(registro)">
+                                        <tr *ngIf="dados.PARAMETRO == 'HISTORICO'" (click)="verRegistro(registro)">
                                             <td>{{registro.criado_em}}</td>
                                             <td>{{util.capitalizar(registro.database)}}</td>
                                             <td>{{registro.titulo}}</td>
@@ -621,46 +603,48 @@
                                 </div>
 
                                 <div *ngIf="dados.imprimir_etiquetas" class="print_container">
-                                    <div class="espacador_vertical_printable">&nbsp;</div>
+                                    <div *ngFor = "let etiqueta of dados[config[dados.PARAMETRO].filtered]; let i = index">
+                                        <!-- <div class="print_header"> &nbsp; </div> -->
 
-                                    <p-table [value]="dados[config[dados.PARAMETRO].filtered]">
-
-                                            <ng-template name="registro" pTemplate="body" let-registro>
-                                                    <div class="column">
-                                                        <span class="left print_label">{{registro.nome}}<br /></span>
-                                                        <span class="left print_label">{{registro.endereco}}<br /></span>
-                                                        <span *ngIf="registro.bairro" class="left print_label">{{registro.bairro}}<br /></span>
-                                                        <span class="left print_label">{{registro.cep ? registro.cep + ' - ' : '        '}}{{registro.cidade}} - {{registro.estado}}</span>
-                                                    </div>
-                                            </ng-template>
-                                    </p-table>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    <!-- ETIQUETAS DE IMPRESSÂO -->
-                    <!-- <div *ngIf="!dados.imprimir_etiquetas && ['CLIENTES','SOCIOS','EQUIPE','FORNECEDORES'].includes(dados.PARAMETRO) && dados.imprimir_especial" class="print_only">
-                        <div *ngIf="config[dados.PARAMETRO].filtered && !(!dados[config[dados.PARAMETRO].filtered] || dados[config[dados.PARAMETRO].filtered].length==0)">
-
-                            <div *ngIf="(!config.DISPLAY.PopupWhatsapp && !dados.mostrar_lancamentos_do_dia) && (!dados.mostrar_lancamentos_futuros_do_dia)">
-                                <p-table [value]="dados[config[dados.PARAMETRO].filtered]">
-
-                                    <ng-template name="registro" pTemplate="body" let-registro>
-
-                                        <div class="column">
-                                            <span class="left print_label">{{registro.nome}}<br /></span>
-                                            <span class="left print_label">{{registro.endereco}}<br /></span>
-                                            <span *ngIf="registro.bairro" class="left print_label">{{registro.bairro}}<br /></span>
-                                            <span class="left print_label">{{registro.cep ? registro.cep + ' - ' : '        '}}{{registro.cidade}} - {{registro.estado}}</span>
+                                        <div *ngIf="dados.mostrar_destinatario" class="column">
+                                            <span class="left bold print_label">{{etiqueta.nome ? etiqueta.nome : '            ' }}<br /></span>
+                                            <span class="left print_label">{{etiqueta.endereco ? etiqueta.endereco : '              '}}<br /></span>
+                                            <span class="left print_label">{{etiqueta.bairro ? etiqueta.bairro : '         '}}<br /></span>
+                                            <span class="left print_label">{{etiqueta.cep ? etiqueta.cep + ' - ' : '         '}}{{etiqueta.cidade ? etiqueta.cidade : '            '}} {{etiqueta.estado ? ' - ' + etiqueta.estado : '  '}}</span>
                                         </div>
 
-                                    </ng-template>
+                                        <div *ngIf="!dados.mostrar_destinatario" class="column">
+                                            <span class="left bold print_label">{{remetente.nome ? remetente.nome : '                 ' }}<br /></span>
+                                            <span class="left print_label">{{remetente.endereco ? remetente.endereco : '                   '}}<br /></span>
+                                            <span class="left print_label">{{remetente.bairro ? remetente.bairro : '                '}}<br /></span>
+                                            <span class="left print_label">{{remetente.cep ? remetente.cep + ' - ' : '        '}}{{remetente.cidade ? remetente.cidade : '             '}} {{remetente.estado ? ' - ' + remetente.estado : '  '}}</span>
+                                        </div>
 
-                                </p-table>
+                                        <div *ngIf="util.is_integer((i+1)/config.ETIQUETAS_POR_FOLHA)" class="page_break"> </div>
+                                        <!-- <div class="print_header"> &nbsp; </div> -->
+                                        <div class="screen_only left" *ngIf="util.is_integer((i+1)/config.ETIQUETAS_POR_FOLHA)">
+                                            <div>
+                                                &nbsp;<br />
+                                                <span>=========================</span><br />
+                                                <span class="italico">&nbsp; Página {{(i+1)/config.ETIQUETAS_POR_FOLHA}}</span><br />
+                                                <span>=========================</span><br />
+                                            </div>
+
+                                            <div>
+                                                <br />&nbsp;
+                                                <br />&nbsp;
+                                                <br />&nbsp;<br />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
-                    </div> -->
+
+
 
                     <!-- POPUP DE VISUALIZAÇÃO DE MENSAGEM DE ANIVERSARIO -->
                     <div *ngIf="config.DISPLAY.PopupWhatsapp">
@@ -739,7 +723,7 @@
             <div *ngIf="dados.mostrar_lancamentos_do_dia">
                <div *ngIf="dados.PARAMETRO == 'RESULTADOS'">
 
-                   <p-table [value]="dados.lancamentos_do_dia" [resizableColumns]="true">
+                   <p-table [value]="dados.lancamentos_do_dia" >
                        <ng-template pTemplate="caption">
                            DETALHAMENTO DO DIA {{util.formata_maiusculas(util.formata_data_por_extenso(dados.data_selecionada))}}
                         </ng-template>
@@ -775,7 +759,7 @@
 
                <div *ngIf="dados.PARAMETRO == 'DISPONIBILIDADE'">
                    <!-- <div id="x3" class="espacador_vertical">&nbsp;</div> -->
-                   <p-table [value]="dados.lancamentos_futuros_do_dia" [resizableColumns]="true">
+                   <p-table [value]="dados.lancamentos_futuros_do_dia" >
                        <ng-template pTemplate="caption">
                            DETALHAMENTO DO DIA {{util.formata_maiusculas(util.formata_data_por_extenso(dados.data_selecionada))}}
                         </ng-template>
@@ -810,26 +794,27 @@
     </div>
 
 
+
 	<!-- CENTROS_DE_CUSTOS_LISTA -->
     <div *ngIf="dados.listar_centros_de_custos_lista">
-		<div id="x11" class="espacador_vertical_duplo">&nbsp;</div>
+		<div class="espacador_vertical_duplo">&nbsp;</div>
 
-        <div class="center">
-            <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span> &nbsp;
-            <span class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </span>
-
-            <div id="x12" class="espacador_vertical_duplo">&nbsp;</div>
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+            <div class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </div>
+            <div class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </div>
         </div>
+
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
 		<p-table
 			[value]="dados[dados.database]"
-            [resizableColumns]="true"
+
             [paginator]="dados[dados.database] && dados[dados.database].length>config.QUANTOS_POR_PAGINA['RECEITAS']"
             [rows]="config.QUANTOS_POR_PAGINA['RECEITAS']">
 			<ng-template pTemplate="caption">&nbsp;{{dados.database_caption}}&nbsp;</ng-template>
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Nome</th>
+					<th class="left">Nome</th>
 					<th class="right">Código</th>
 				</tr>
 			</ng-template>
@@ -850,22 +835,21 @@
     </div>
 
 
+
     <!-- REL_CENTROS_DE_CUSTOS_TOTALIZADOS -->
     <div *ngIf="dados.PARAMETRO=='REL_CENTROS_DE_CUSTOS_TOTALIZADOS'">
-    <!-- <div *ngIf="dados.listar_rel_centros_de_custos_totalizados"> -->
-
         <div class="espacador_vertical_duplo">&nbsp;</div>
 
-        <div class="center">
-            <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span> &nbsp;
+        <div class="ui-grid ui-grid-responsive ui-fluid">
+            <span class="{{menu_financeiro_opcao1_classe}}" (click)="mostrar_lista('1')"> RECEITAS </span>
             <span class="{{menu_financeiro_opcao2_classe}}" (click)="mostrar_lista('2')"> DESPESAS </span>
 
-            <div id="x13" class="espacador_vertical_duplo">&nbsp;</div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
         </div>
 
         <p-table
             [value]="dados[dados.database]"
-            [resizableColumns]="true"
+
             [paginator]="dados[dados.database] && dados[dados.database].length>config.QUANTOS_POR_PAGINA['REL_CENTROS_DE_CUSTOS_TOTALIZADOS']"
             [rows]="config.QUANTOS_POR_PAGINA['REL_CENTROS_DE_CUSTOS_TOTALIZADOS']">
 
@@ -885,7 +869,6 @@
 			</ng-template>
 
             <ng-template pTemplate="summary">
-                &nbsp;
                 <span *ngIf="dados[dados.database]?.length>0">
                     {{ util.complementa(dados[dados.database].length, config[dados.PARAMETRO].singular, config[dados.PARAMETRO].plural)}}<br />
                     Total:
@@ -893,7 +876,6 @@
                         {{util.formata_valor(dados.valor_total_centros_de_custos)}}
                     </span>
                 </span>
-                &nbsp;
             </ng-template>
         </p-table>
 
@@ -922,9 +904,9 @@
         <div *ngIf="dados.listar_rel_dinheiro && !dados.listar_dinheiro_dia && dados.datas_com_lancamentos_dinheiro.length > 0">
             <p-table
             [value]="dados.datas_com_lancamentos_dinheiro"
-            [resizableColumns]="true"
             [rows]="10"
-            [paginator]="dados.datas_com_lancamentos_dinheiro>10">
+            [paginator]="dados.datas_com_lancamentos_dinheiro.length>config.QUANTOS_POR_PAGINA['REL_DINHEIRO']"
+            [rows]="config.QUANTOS_POR_PAGINA['REL_DINHEIRO']">
                 <ng-template pTemplate="caption">&nbsp;</ng-template>
 
                 <ng-template pTemplate="header">
@@ -960,7 +942,7 @@
             <div *ngIf="dados.despesa_ou_receita=='receita'">
                 <p-table
                 [value]="dados.receitas_dinheiro_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.receitas_dinheiro_dia.length>10">
                     <ng-template pTemplate="caption">Receitas com dinheiro em {{dados.listar_data}}</ng-template>
@@ -989,7 +971,7 @@
 
                 <p-table
                 [value]="dados.despesas_dinheiro_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.despesas_dinheiro_dia.length>10">
 
@@ -1046,7 +1028,7 @@
         && !dados.listar_cheque_pre_dia_bom_para
         && dados.datas_com_lancamentos_cheque_pre.length >= 0">
 
-            <p-table [value]="dados.datas_com_lancamentos_cheque_pre" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre.length>10">
+            <p-table [value]="dados.datas_com_lancamentos_cheque_pre"  [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre.length>10">
 
                 <ng-template pTemplate="caption">Agrupados por data do lançamento</ng-template>
 
@@ -1087,7 +1069,7 @@
 
             <div id="x19" class="espacador_vertical_duplo">&nbsp;</div>
 
-            <p-table [value]="dados.datas_com_lancamentos_cheque_pre_bom_para" [resizableColumns]="true"
+            <p-table [value]="dados.datas_com_lancamentos_cheque_pre_bom_para"
             [rows]="10" [paginator]="dados.datas_com_lancamentos_cheque_pre_bom_para.length>10">
 
                 <ng-template pTemplate="caption">Agrupados por data de disponibilidade</ng-template>
@@ -1121,7 +1103,7 @@
 
 
         <div *ngIf="dados.listar_cheque_pre_dia">
-            <p-table [value]="dados.lancamentos_cheque_pre_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia.length>10">
+            <p-table [value]="dados.lancamentos_cheque_pre_dia"  [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia.length>10">
 
                 <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
                 <ng-template pTemplate="header">
@@ -1152,7 +1134,7 @@
         </div>
 
         <div *ngIf="dados.listar_cheque_pre_dia_bom_para">
-                <p-table [value]="dados.lancamentos_cheque_pre_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia_bom_para.length>10">
+                <p-table [value]="dados.lancamentos_cheque_pre_dia_bom_para"  [rows]="10" [paginator]="dados.lancamentos_cheque_pre_dia_bom_para.length>10">
 
                     <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
                     <ng-template pTemplate="header">
@@ -1208,7 +1190,7 @@
             <div *ngIf="dados.listar_rel_cheque && !dados.listar_cheque_dia && dados.datas_com_lancamentos_cheque.length > 0">
                 <p-table
                 [value]="dados.datas_com_lancamentos_cheque"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.datas_com_lancamentos_cheque.length>10">
 
@@ -1247,7 +1229,7 @@
             <div *ngIf="dados.despesa_ou_receita=='receita'">
                 <p-table
                 [value]="dados.receitas_cheque_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.receitas_cheque_dia.length>10">
 
@@ -1276,7 +1258,7 @@
             <div *ngIf="dados.despesa_ou_receita=='despesa'">
                 <p-table
                 [value]="dados.despesas_cheque_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.despesas_cheque_dia.length>10">
 
@@ -1344,9 +1326,8 @@
             <div *ngIf="dados.datas_com_lancamentos && dados.datas_com_lancamentos.length > 0">
                 <p-table
                 [value]="dados.datas_com_lancamentos"
-                [resizableColumns]="true"
-                [rows]="50"
-                [paginator]="dados.datas_com_lancamentos.length>50">
+                [paginator]="dados.datas_com_lancamentos.length>config.QUANTOS_POR_PAGINA['MOVIMENTACAO']"
+                [rows]="config.QUANTOS_POR_PAGINA['MOVIMENTACAO']">
 
                     <ng-template pTemplate="caption">&nbsp;</ng-template>
 
@@ -1454,7 +1435,7 @@
             <div *ngIf="dados.despesa_ou_receita=='receita'">
                 <p-table
                 [value]="dados.receitas_lancamento_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.receitas_lancamento_dia.length>10">
 
@@ -1483,7 +1464,7 @@
             <div *ngIf="dados.despesa_ou_receita=='despesa'">
                 <p-table
                 [value]="dados.despesas_lancamento_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.despesas_lancamento_dia.length>10">
 
@@ -1536,9 +1517,9 @@
         <div *ngIf="dados.listar_rel_debito && !dados.listar_debito_dia && dados.datas_com_lancamentos_debito.length > 0">
             <p-table
             [value]="dados.datas_com_lancamentos_debito"
-            [resizableColumns]="true"
-            [rows]="10"
-            [paginator]="dados.datas_com_lancamentos_debito>10">
+            [paginator]="dados.datas_com_lancamentos_debito.length>config.QUANTOS_POR_PAGINA['REL_DEBITO']"
+            [rows]="config.QUANTOS_POR_PAGINA['REL_DEBITO']">
+
                 <ng-template pTemplate="caption">&nbsp;</ng-template>
 
                 <ng-template pTemplate="header">
@@ -1574,7 +1555,7 @@
             <div *ngIf="dados.despesa_ou_receita=='receita'">
                 <p-table
                 [value]="dados.receitas_debito_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.receitas_debito_dia.length>10">
                     <ng-template pTemplate="caption">Receitas com debito em {{dados.listar_data}}</ng-template>
@@ -1603,7 +1584,7 @@
 
                 <p-table
                 [value]="dados.despesas_debito_dia"
-                [resizableColumns]="true"
+
                 [rows]="10"
                 [paginator]="dados.despesas_debito_dia.length>10">
 
@@ -1660,7 +1641,9 @@
         && !dados.listar_credito_dia_bom_para
         && dados.datas_com_lancamentos_credito.length > 0">
 
-            <p-table [value]="dados.datas_com_lancamentos_credito" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_credito.length>10">
+            <p-table [value]="dados.datas_com_lancamentos_credito"
+            [paginator]="dados.datas_com_lancamentos_credito.length>config.QUANTOS_POR_PAGINA['REL_CREDITO']"
+            [rows]="config.QUANTOS_POR_PAGINA['REL_CREDITO']">
 
                 <ng-template pTemplate="caption">Agrupados por data do lançamento</ng-template>
 
@@ -1699,7 +1682,7 @@
 
             <div id="x7" class="espacador_vertical">&nbsp;</div>
 
-            <p-table [value]="dados.datas_com_lancamentos_credito_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.datas_com_lancamentos_credito_bom_para.length>10">
+            <p-table [value]="dados.datas_com_lancamentos_credito_bom_para"  [rows]="10" [paginator]="dados.datas_com_lancamentos_credito_bom_para.length>10">
 
                 <ng-template pTemplate="caption">Agrupados por data de disponibilidade</ng-template>
 
@@ -1732,7 +1715,7 @@
 
         <div *ngIf="dados.listar_credito_dia">
             <div *ngIf="dados.despesa_ou_receita=='receita'">
-                <p-table [value]="dados.receitas_credito_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.receitas_credito_dia.length>10">
+                <p-table [value]="dados.receitas_credito_dia"  [rows]="10" [paginator]="dados.receitas_credito_dia.length>10">
 
                     <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
                     <ng-template pTemplate="header">
@@ -1758,7 +1741,7 @@
             </div>
 
             <div *ngIf="dados.despesa_ou_receita=='despesa'">
-                <p-table [value]="dados.despesas_credito_dia" [resizableColumns]="true" [rows]="10" [paginator]="dados.despesas_credito_dia.length>10">
+                <p-table [value]="dados.despesas_credito_dia"  [rows]="10" [paginator]="dados.despesas_credito_dia.length>10">
 
                     <ng-template pTemplate="caption">Cheques lançados em {{dados.listar_data}}</ng-template>
                     <ng-template pTemplate="header">
@@ -1788,7 +1771,7 @@
 
         <div *ngIf="dados.listar_credito_dia_bom_para">
             <div *ngIf="dados.despesa_ou_receita=='receita'">
-                <p-table [value]="dados.receitas_credito_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.receitas_credito_dia_bom_para.length>10">
+                <p-table [value]="dados.receitas_credito_dia_bom_para"  [rows]="10" [paginator]="dados.receitas_credito_dia_bom_para.length>10">
 
                     <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
                     <ng-template pTemplate="header">
@@ -1814,7 +1797,7 @@
             </div>
 
             <div *ngIf="dados.despesa_ou_receita=='despesa'">
-                <p-table [value]="dados.despesas_credito_dia_bom_para" [resizableColumns]="true" [rows]="10" [paginator]="dados.despesas_credito_dia_bom_para.length>10">
+                <p-table [value]="dados.despesas_credito_dia_bom_para"  [rows]="10" [paginator]="dados.despesas_credito_dia_bom_para.length>10">
 
                 <ng-template pTemplate="caption">Cheques disponíveis para {{dados.listar_data}}</ng-template>
                     <ng-template pTemplate="header">
@@ -1884,7 +1867,7 @@
 
 
         <div *ngIf="dados.selected_usuarios.length > 0">
-            <p-table [value]="dados.selected_usuarios" [resizableColumns]="true" [rows]="10" [paginator]="dados.selected_usuarios.length>10">
+            <p-table [value]="dados.selected_usuarios"  [rows]="10" [paginator]="dados.selected_usuarios.length>10">
 
                 <ng-template pTemplate="caption">USUÁRIOS</ng-template>
                 <ng-template pTemplate="header">

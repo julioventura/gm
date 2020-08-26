@@ -1,0 +1,1391 @@
+{
+  "CAIXA" : {
+    "-005" : {
+      "key" : "-005",
+      "nome" : "Cartões de Crédito",
+      "posicao" : 5,
+      "sublista" : "REL_CREDITO"
+    },
+    "-004" : {
+      "key" : "-004",
+      "nome" : "Cartões de Débito",
+      "posicao" : 4,
+      "sublista" : "REL_DEBITO"
+    },
+    "-003" : {
+      "key" : "-003",
+      "nome" : "Cheques pré-datados",
+      "posicao" : 3,
+      "sublista" : "REL_CHEQUES_PRE"
+    },
+    "-002" : {
+      "key" : "-002",
+      "nome" : "Cheques à vista",
+      "posicao" : 2,
+      "sublista" : "REL_CHEQUES_A_VISTA"
+    },
+    "-001" : {
+      "key" : "-001",
+      "nome" : "Dinheiro",
+      "posicao" : 1,
+      "sublista" : "REL_DINHEIRO"
+    }
+  },
+  "CENTROS_DE_CUSTOS" : {
+    "-LzP6GtEHdVQEH" : {
+      "nome" : "Receitas",
+      "sublista" : "RECEITAS"
+    },
+    "-LzP6JaVS2HctiP" : {
+      "nome" : "Despesas",
+      "sublista" : "DESPESAS"
+    }
+  },
+  "CODIGOS_DE_BANCOS" : {
+    "-00757" : {
+      "codigo" : "757",
+      "key" : "-00757",
+      "nome" : "Banco Keb Hana do Brasil S.A."
+    },
+    "-00756" : {
+      "codigo" : "756",
+      "key" : "-00756",
+      "nome" : "Banco Cooperativo do Brasil S.A. – Bancoob"
+    },
+    "-00755" : {
+      "codigo" : "755",
+      "key" : "-00755",
+      "nome" : "Bank of America Merrill Lynch Banco Múltiplo S.A."
+    },
+    "-00754" : {
+      "codigo" : "754",
+      "key" : "-00754",
+      "nome" : "Banco Sistema S.A."
+    },
+    "-00753" : {
+      "codigo" : "753",
+      "key" : "-00753",
+      "nome" : "Novo Banco Continental S.A. – Banco Múltiplo"
+    },
+    "-00752" : {
+      "codigo" : "752",
+      "key" : "-00752",
+      "nome" : "Banco BNP Paribas Brasil S.A."
+    },
+    "-00751" : {
+      "codigo" : "751",
+      "key" : "-00751",
+      "nome" : "Scotiabank Brasil S.A. Banco Múltiplo"
+    },
+    "-00748" : {
+      "codigo" : "748",
+      "key" : "-00748",
+      "nome" : "Banco Cooperativo Sicredi S.A."
+    },
+    "-00747" : {
+      "codigo" : "747",
+      "key" : "-00747",
+      "nome" : "Banco Rabobank International Brasil S.A."
+    },
+    "-00746" : {
+      "codigo" : "746",
+      "key" : "-00746",
+      "nome" : "Banco Modal S.A."
+    },
+    "-00745" : {
+      "codigo" : "745",
+      "key" : "-00745",
+      "nome" : "Banco Citibank S.A."
+    },
+    "-00743" : {
+      "codigo" : "743",
+      "key" : "-00743",
+      "nome" : "Banco Semear S.A."
+    },
+    "-00741" : {
+      "codigo" : "741",
+      "key" : "-00741",
+      "nome" : "Banco Ribeirão Preto S.A."
+    },
+    "-00740" : {
+      "codigo" : "740",
+      "key" : "-00740",
+      "nome" : "Banco Barclays S.A."
+    },
+    "-00739" : {
+      "codigo" : "739",
+      "key" : "-00739",
+      "nome" : "Banco Cetelem S.A."
+    },
+    "-00735" : {
+      "codigo" : "735",
+      "key" : "-00735",
+      "nome" : "Banco Neon S.A."
+    },
+    "-00719" : {
+      "codigo" : "719",
+      "key" : "-00719",
+      "nome" : "Banco Internacional do Funchal (Brasil) S.A. – Banif"
+    },
+    "-00712" : {
+      "codigo" : "712",
+      "key" : "-00712",
+      "nome" : "Banco Ourinvest S.A."
+    },
+    "-00707" : {
+      "codigo" : "707",
+      "key" : "-00707",
+      "nome" : "Banco Daycoval S.A."
+    },
+    "-00655" : {
+      "codigo" : "655",
+      "key" : "-00655",
+      "nome" : "Banco Votorantim S.A."
+    },
+    "-00654" : {
+      "codigo" : "654",
+      "key" : "-00654",
+      "nome" : "Banco A.J. Renner S.A."
+    },
+    "-00653" : {
+      "codigo" : "653",
+      "key" : "-00653",
+      "nome" : "Banco Indusval S.A."
+    },
+    "-00652" : {
+      "codigo" : "652",
+      "key" : "-00652",
+      "nome" : "Banco Itaú Unibanco Holding S.A."
+    },
+    "-00643" : {
+      "codigo" : "643",
+      "key" : "-00643",
+      "nome" : "Banco Pine S.A."
+    },
+    "-00641" : {
+      "codigo" : "641",
+      "key" : "-00641",
+      "nome" : "Banco Alvorada S.A."
+    },
+    "-00637" : {
+      "codigo" : "637",
+      "key" : "-00637",
+      "nome" : "Banco Sofisa S.A."
+    },
+    "-00634" : {
+      "codigo" : "634",
+      "key" : "-00634",
+      "nome" : "Banco Triângulo S.A."
+    },
+    "-00633" : {
+      "codigo" : "633",
+      "key" : "-00633",
+      "nome" : "Banco Rendimento S.A."
+    },
+    "-00630" : {
+      "codigo" : "630",
+      "key" : "-00630",
+      "nome" : "Banco Intercap S.A."
+    },
+    "-00626" : {
+      "codigo" : "626",
+      "key" : "-00626",
+      "nome" : "Banco Ficsa S.A."
+    },
+    "-00623" : {
+      "codigo" : "623",
+      "key" : "-00623",
+      "nome" : "Banco Pan S.A."
+    },
+    "-00613" : {
+      "codigo" : "613",
+      "key" : "-00613",
+      "nome" : "Omni Banco S.A. "
+    },
+    "-00612" : {
+      "codigo" : "612",
+      "key" : "-00612",
+      "nome" : "Banco Guanabara S.A."
+    },
+    "-00611" : {
+      "codigo" : "611",
+      "key" : "-00611",
+      "nome" : "Banco Paulista S.A."
+    },
+    "-00610" : {
+      "codigo" : "610",
+      "key" : "-00610",
+      "nome" : "Banco VR S.A."
+    },
+    "-00604" : {
+      "codigo" : "604",
+      "key" : "-00604",
+      "nome" : "Banco Industrial do Brasil S.A."
+    },
+    "-00600" : {
+      "codigo" : "600",
+      "key" : "-00600",
+      "nome" : "Banco Luso Brasileiro S.A."
+    },
+    "-00545" : {
+      "codigo" : "545",
+      "key" : "-00545",
+      "nome" : "Senso Corretora de Câmbio e Valores Mobiliários S.A. "
+    },
+    "-00505" : {
+      "codigo" : "505",
+      "key" : "-00505",
+      "nome" : "Banco de Investimento Credit Suisse (Brasil) S.A."
+    },
+    "-00495" : {
+      "codigo" : "495",
+      "key" : "-00495",
+      "nome" : "Banco de La Provincia de Buenos Aires"
+    },
+    "-00494" : {
+      "codigo" : "494",
+      "key" : "-00494",
+      "nome" : "Banco de La Republica Oriental del Uruguay"
+    },
+    "-00492" : {
+      "codigo" : "492",
+      "key" : "-00492",
+      "nome" : "ING Bank N.V."
+    },
+    "-00488" : {
+      "codigo" : "488",
+      "key" : "-00488",
+      "nome" : "JPMorgan Chase Bank, National Association"
+    },
+    "-00487" : {
+      "codigo" : "487",
+      "key" : "-00487",
+      "nome" : "Deutsche Bank S.A. – Banco Alemão"
+    },
+    "-00479" : {
+      "codigo" : "479",
+      "key" : "-00479",
+      "nome" : "Banco ItauBank S.A"
+    },
+    "-00477" : {
+      "codigo" : "477",
+      "key" : "-00477",
+      "nome" : "Citibank N.A."
+    },
+    "-00473" : {
+      "codigo" : "473",
+      "key" : "-00473",
+      "nome" : "Banco Caixa Geral – Brasil S.A."
+    },
+    "-00464" : {
+      "codigo" : "464",
+      "key" : "-00464",
+      "nome" : "Banco Sumitomo Mitsui Brasileiro S.A."
+    },
+    "-00456" : {
+      "codigo" : "456",
+      "key" : "-00456",
+      "nome" : "Banco MUFG Brasil S.A."
+    },
+    "-00422" : {
+      "codigo" : "422",
+      "key" : "-00422",
+      "nome" : "Banco Safra S.A."
+    },
+    "-00412" : {
+      "codigo" : "412",
+      "key" : "-00412",
+      "nome" : "Banco Capital S.A."
+    },
+    "-00399" : {
+      "codigo" : "399",
+      "key" : "-00399",
+      "nome" : "Kirton Bank S.A. (Banco Múltiplo)"
+    },
+    "-00394" : {
+      "codigo" : "394",
+      "key" : "-00394",
+      "nome" : "Banco Bradesco Financiamentos S.A."
+    },
+    "-00389" : {
+      "codigo" : "389",
+      "key" : "-00389",
+      "nome" : "Banco Mercantil do Brasil S.A."
+    },
+    "-00376" : {
+      "codigo" : "376",
+      "key" : "-00376",
+      "nome" : "Banco J. P. Morgan S.A."
+    },
+    "-00370" : {
+      "codigo" : "370",
+      "key" : "-00370",
+      "nome" : "Banco Mizuho do Brasil S.A."
+    },
+    "-00366" : {
+      "codigo" : "366",
+      "key" : "-00366",
+      "nome" : "Banco Société Générale Brasil S.A."
+    },
+    "-00341" : {
+      "codigo" : "341",
+      "key" : "-00341",
+      "nome" : "Banco Itaú Unibanco S.A."
+    },
+    "-00320" : {
+      "codigo" : "320",
+      "key" : "-00320",
+      "nome" : "China Construction Bank (Brasil) Banco Múltiplo S.A."
+    },
+    "-00318" : {
+      "codigo" : "318",
+      "key" : "-00318",
+      "nome" : "Banco BMG S.A."
+    },
+    "-00300" : {
+      "codigo" : "300",
+      "key" : "-00300",
+      "nome" : "Banco de La Nacion Argentina"
+    },
+    "-00271" : {
+      "codigo" : "271",
+      "key" : "-00271",
+      "nome" : "IB Corretora de Câmbio, Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00269" : {
+      "codigo" : "269",
+      "key" : "-00269",
+      "nome" : "HSBC Brasil S.A. Banco de Investimento"
+    },
+    "-00268" : {
+      "codigo" : "268",
+      "key" : "-00268",
+      "nome" : "Barigui Companhia Hipotecária"
+    },
+    "-00266" : {
+      "codigo" : "266",
+      "key" : "-00266",
+      "nome" : "Banco Cédula S.A."
+    },
+    "-00265" : {
+      "codigo" : "265",
+      "key" : "-00265",
+      "nome" : "Banco Fator S.A."
+    },
+    "-00260" : {
+      "codigo" : "260",
+      "key" : "-00260",
+      "nome" : "Nu Pagamentos S.A"
+    },
+    "-00254" : {
+      "codigo" : "254",
+      "key" : "-00254",
+      "nome" : "Paraná Banco S.A."
+    },
+    "-00253" : {
+      "codigo" : "253",
+      "key" : "-00253",
+      "nome" : "Bexs Corretora de Câmbio S.A."
+    },
+    "-00250" : {
+      "codigo" : "250",
+      "key" : "-00250",
+      "nome" : "Banco de Crédito e Varejo S.A. – BCV"
+    },
+    "-00249" : {
+      "codigo" : "249",
+      "key" : "-00249",
+      "nome" : "Banco Investcred Unibanco S.A."
+    },
+    "-00248" : {
+      "codigo" : "248",
+      "key" : "-00248",
+      "nome" : "Banco Boavista Interatlântico S.A."
+    },
+    "-00246" : {
+      "codigo" : "246",
+      "key" : "-00246",
+      "nome" : "Banco ABC Brasil S.A."
+    },
+    "-00243" : {
+      "codigo" : "243",
+      "key" : "-00243",
+      "nome" : "Banco Máxima S.A."
+    },
+    "-00241" : {
+      "codigo" : "241",
+      "key" : "-00241",
+      "nome" : "Banco Clássico S.A."
+    },
+    "-00237" : {
+      "codigo" : "237",
+      "key" : "-00237",
+      "nome" : "Banco Bradesco S.A."
+    },
+    "-00233" : {
+      "codigo" : "233",
+      "key" : "-00233",
+      "nome" : "Banco Cifra S.A."
+    },
+    "-00224" : {
+      "codigo" : "224",
+      "key" : "-00224",
+      "nome" : "Banco Fibra S.A."
+    },
+    "-00222" : {
+      "codigo" : "222",
+      "key" : "-00222",
+      "nome" : "Banco Credit Agricole Brasil S.A."
+    },
+    "-00218" : {
+      "codigo" : "218",
+      "key" : "-00218",
+      "nome" : "Banco BS2 S.A."
+    },
+    "-00217" : {
+      "codigo" : "217",
+      "key" : "-00217",
+      "nome" : "Banco John Deere S.A."
+    },
+    "-00213" : {
+      "codigo" : "213",
+      "key" : "-00213",
+      "nome" : "Banco Arbi S.A."
+    },
+    "-00212" : {
+      "codigo" : "212",
+      "key" : "-00212",
+      "nome" : "Banco Original S.A."
+    },
+    "-00208" : {
+      "codigo" : "208",
+      "key" : "-00208",
+      "nome" : "Banco BTG Pactual S.A."
+    },
+    "-00204" : {
+      "codigo" : "204",
+      "key" : "-00204",
+      "nome" : "Banco Bradesco Cartões S.A."
+    },
+    "-00197" : {
+      "codigo" : "197",
+      "key" : "-00197",
+      "nome" : "Stone Pagamentos S.A. "
+    },
+    "-00196" : {
+      "codigo" : "196",
+      "key" : "-00196",
+      "nome" : "Fair Corretora de Câmbio S.A. "
+    },
+    "-00194" : {
+      "codigo" : "194",
+      "key" : "-00194",
+      "nome" : "Parmetal Distribuidora de Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00191" : {
+      "codigo" : "191",
+      "key" : "-00191",
+      "nome" : "Nova Futura Corretora de Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00190" : {
+      "codigo" : "190",
+      "key" : "-00190",
+      "nome" : "Servicoop – Cooperativa de Economia e Crédito Mútuo dos Servidores Públicos Estaduais do Rio"
+    },
+    "-00189" : {
+      "codigo" : "189",
+      "key" : "-00189",
+      "nome" : "HS Financeira S/A Crédito, Financiamento e Investimentos"
+    },
+    "-00188" : {
+      "codigo" : "188",
+      "key" : "-00188",
+      "nome" : "Ativa Investimentos S.A. Corretora de Títulos Câmbio e Valores"
+    },
+    "-00184" : {
+      "codigo" : "184",
+      "key" : "-00184",
+      "nome" : "Banco Itaú BBA S.A."
+    },
+    "-00183" : {
+      "codigo" : "183",
+      "key" : "-00183",
+      "nome" : "Socred S.A. – Sociedade de Crédito ao Microempreendedor"
+    },
+    "-00182" : {
+      "codigo" : "182",
+      "key" : "-00182",
+      "nome" : "Dacasa Financeira S/A – Sociedade de Crédito, Financiamento e Investimento "
+    },
+    "-00177" : {
+      "codigo" : "177",
+      "key" : "-00177",
+      "nome" : "Guide Investimentos S.A. Corretora de Valores"
+    },
+    "-00174" : {
+      "codigo" : "174",
+      "key" : "-00174",
+      "nome" : "Pernambucanas Financiadora S.A. Crédito, Financiamento e Investimento"
+    },
+    "-00173" : {
+      "codigo" : "173",
+      "key" : "-00173",
+      "nome" : "BRL Trust Distribuidora de Títulos e Valores Mobiliários S.A. "
+    },
+    "-00172" : {
+      "codigo" : "172",
+      "key" : "-00172",
+      "nome" : "Albatross Corretora de Câmbio e Valores S.A "
+    },
+    "-00169" : {
+      "codigo" : "169",
+      "key" : "-00169",
+      "nome" : "Banco Olé Bonsucesso Consignado S.A."
+    },
+    "-00163" : {
+      "codigo" : "163",
+      "key" : "-00163",
+      "nome" : "Commerzbank Brasil S.A. – Banco Múltiplo"
+    },
+    "-00159" : {
+      "codigo" : "159",
+      "key" : "-00159",
+      "nome" : "Casa do Crédito S.A. Sociedade de Crédito ao Microempreendedor"
+    },
+    "-00157" : {
+      "codigo" : "157",
+      "key" : "-00157",
+      "nome" : "ICAP do Brasil Corretora de Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00149" : {
+      "codigo" : "149",
+      "key" : "-00149",
+      "nome" : "Facta Financeira S.A. – Crédito Financiamento e Investimento"
+    },
+    "-00146" : {
+      "codigo" : "146",
+      "key" : "-00146",
+      "nome" : "Guitta Corretora de Câmbio Ltda. "
+    },
+    "-00145" : {
+      "codigo" : "145",
+      "key" : "-00145",
+      "nome" : "Levycam – Corretora de Câmbio e Valores Ltda. "
+    },
+    "-00144" : {
+      "codigo" : "144",
+      "key" : "-00144",
+      "nome" : "Bexs Banco de Câmbio S.A. "
+    },
+    "-00143" : {
+      "codigo" : "143",
+      "key" : "-00143",
+      "nome" : "Treviso Corretora de Câmbio S.A. "
+    },
+    "-00142" : {
+      "codigo" : "142",
+      "key" : "-00142",
+      "nome" : "Broker Brasil Corretora de Câmbio Ltda. "
+    },
+    "-00140" : {
+      "codigo" : "140",
+      "key" : "-00140",
+      "nome" : "Easynvest – Título Corretora de Valores SA "
+    },
+    "-00139" : {
+      "codigo" : "139",
+      "key" : "-00139",
+      "nome" : "Intesa Sanpaolo Brasil S.A. – Banco Múltiplo"
+    },
+    "-00138" : {
+      "codigo" : "138",
+      "key" : "-00138",
+      "nome" : "Get Money Corretora de Câmbio S.A."
+    },
+    "-00137" : {
+      "codigo" : "137",
+      "key" : "-00137",
+      "nome" : "Multimoney Corretora de Câmbio Ltda"
+    },
+    "-00136" : {
+      "codigo" : "136",
+      "key" : "-00136",
+      "nome" : "Confederação Nacional das Cooperativas Centrais Unicred Ltda (Unicred do Brasil)"
+    },
+    "-00135" : {
+      "codigo" : "135",
+      "key" : "-00135",
+      "nome" : "Gradual Corretora de Câmbio, Títulos e Valores Mobiliários S.A. "
+    },
+    "-00134" : {
+      "codigo" : "134",
+      "key" : "-00134",
+      "nome" : "BGC Liquidez Distribuidora de Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00133" : {
+      "codigo" : "133",
+      "key" : "-00133",
+      "nome" : "Cresol – Confederação Nacional Cooperativas Centrais de Crédito e Econ Familiar"
+    },
+    "-00132" : {
+      "codigo" : "132",
+      "key" : "-00132",
+      "nome" : "ICBC do Brasil Banco Múltiplo S.A."
+    },
+    "-00131" : {
+      "codigo" : "131",
+      "key" : "-00131",
+      "nome" : "Tullett Prebon Brasil Corretora de Valores e Câmbio Ltda. "
+    },
+    "-00130" : {
+      "codigo" : "130",
+      "key" : "-00130",
+      "nome" : "Caruana S.A. Sociedade de Crédito, Financiamento e Investimento "
+    },
+    "-00129" : {
+      "codigo" : "129",
+      "key" : "-00129",
+      "nome" : "UBS Brasil Banco de Investimento S.A."
+    },
+    "-00128" : {
+      "codigo" : "128",
+      "key" : "-00128",
+      "nome" : "MS Bank S.A. Banco de Câmbio"
+    },
+    "-00127" : {
+      "codigo" : "127",
+      "key" : "-00127",
+      "nome" : "Codepe Corretora de Valores e Câmbio S.A. "
+    },
+    "-00126" : {
+      "codigo" : "126",
+      "key" : "-00126",
+      "nome" : "BR Partners Banco de Investimento S.A. "
+    },
+    "-00125" : {
+      "codigo" : "125",
+      "key" : "-00125",
+      "nome" : "Banco Brasil Plural S.A. – Banco Múltiplo"
+    },
+    "-00124" : {
+      "codigo" : "124",
+      "key" : "-00124",
+      "nome" : "Banco Woori Bank do Brasil S.A."
+    },
+    "-00122" : {
+      "codigo" : "122",
+      "key" : "-00122",
+      "nome" : "Banco Bradesco BERJ S.A."
+    },
+    "-00121" : {
+      "codigo" : "121",
+      "key" : "-00121",
+      "nome" : "Banco Agibank S.A."
+    },
+    "-00120" : {
+      "codigo" : "120",
+      "key" : "-00120",
+      "nome" : "Banco Rodobens S.A."
+    },
+    "-00119" : {
+      "codigo" : "119",
+      "key" : "-00119",
+      "nome" : "Banco Western Union do Brasil S.A."
+    },
+    "-00118" : {
+      "codigo" : "118",
+      "key" : "-00118",
+      "nome" : "Standard Chartered Bank (Brasil) S.A. Banco de Investimento"
+    },
+    "-00117" : {
+      "codigo" : "117",
+      "key" : "-00117",
+      "nome" : "Advanced Corretora de Câmbio Ltda. "
+    },
+    "-00114" : {
+      "codigo" : "114",
+      "key" : "-00114",
+      "nome" : "Central Cooperativa de Crédito no Estado do Espírito Santo – CECOOP"
+    },
+    "-00113" : {
+      "codigo" : "113",
+      "key" : "-00113",
+      "nome" : "Magliano S.A. Corretora de Cambio e Valores Mobiliarios "
+    },
+    "-00111" : {
+      "codigo" : "111",
+      "key" : "-00111",
+      "nome" : "Oliveira Trust Distribuidora de Títulos e Valores Mobiliários S.A. "
+    },
+    "-00108" : {
+      "codigo" : "108",
+      "key" : "-00108",
+      "nome" : "PortoCred S.A. Crédito, Financiamento e Investimento"
+    },
+    "-00107" : {
+      "codigo" : "107",
+      "key" : "-00107",
+      "nome" : "Banco Bocom BBM S.A. "
+    },
+    "-00105" : {
+      "codigo" : "105",
+      "key" : "-00105",
+      "nome" : "Lecca Crédito, Financiamento e Investimento S/A"
+    },
+    "-00104" : {
+      "codigo" : "104",
+      "key" : "-00104",
+      "nome" : "Caixa Econômica Federal"
+    },
+    "-00102" : {
+      "codigo" : "102",
+      "key" : "-00102",
+      "nome" : "XP Investimentos Corretora de Câmbio, Títulos e Valores Mobiliários S/A"
+    },
+    "-00101" : {
+      "codigo" : "101",
+      "key" : "-00101",
+      "nome" : "Renascença Distribuidora de Títulos e Valores Mobiliários Ltda. "
+    },
+    "-00100" : {
+      "codigo" : "100",
+      "key" : "-00100",
+      "nome" : "Planner Corretora de Valores S.A."
+    },
+    "-0099" : {
+      "codigo" : "099",
+      "key" : "-0099",
+      "nome" : "Uniprime Central – Central Interestadual de Cooperativas de Crédito Ltda."
+    },
+    "-0097" : {
+      "codigo" : "097",
+      "key" : "-0097",
+      "nome" : "Cooperativa Central de Crédito Noroeste Brasileiro Ltda. (CentralCredi)"
+    },
+    "-0096" : {
+      "codigo" : "096",
+      "key" : "-0096",
+      "nome" : "Banco BM&FBovespa"
+    },
+    "-0095" : {
+      "codigo" : "095",
+      "key" : "-0095",
+      "nome" : "Banco Confidence de Câmbio S.A."
+    },
+    "-0094" : {
+      "codigo" : "094",
+      "key" : "-0094",
+      "nome" : "Banco Finaxis S.A."
+    },
+    "-0093" : {
+      "codigo" : "093",
+      "key" : "-0093",
+      "nome" : "Pólocred Sociedade de Crédito ao Microempreendedor e Empresa de Pequeno Porte"
+    },
+    "-0092" : {
+      "codigo" : "092",
+      "key" : "-0092",
+      "nome" : "Brickell (BRK) S.A. Crédito, Financiamento e Investimento"
+    },
+    "-0091" : {
+      "codigo" : "091",
+      "key" : "-0091",
+      "nome" : "Central de Cooperativas de Economia e Crédito Mútuo do Estado RS – Unicred "
+    },
+    "-0089" : {
+      "codigo" : "089",
+      "key" : "-0089",
+      "nome" : "Cooperativa de Crédito Rural da Região da Mogiana"
+    },
+    "-0088" : {
+      "codigo" : "088",
+      "key" : "-0088",
+      "nome" : "Banco Randon S.A."
+    },
+    "-0085" : {
+      "codigo" : "085",
+      "key" : "-0085",
+      "nome" : "Cooperativa Central de Crédito Urbano – Cecred"
+    },
+    "-0084" : {
+      "codigo" : "084",
+      "key" : "-0084",
+      "nome" : "Uniprime Norte do Paraná – Cooperativa de Crédito Ltda. "
+    },
+    "-0083" : {
+      "codigo" : "083",
+      "key" : "-0083",
+      "nome" : "Banco da China Brasil S.A."
+    },
+    "-0082" : {
+      "codigo" : "082",
+      "key" : "-0082",
+      "nome" : "Banco Topázio S.A."
+    },
+    "-0081" : {
+      "codigo" : "081",
+      "key" : "-0081",
+      "nome" : "Banco Brasileiro de Negócios S.A. – BBN"
+    },
+    "-0080" : {
+      "codigo" : "080",
+      "key" : "-0080",
+      "nome" : "BT Corretora de Câmbio Ltda. "
+    },
+    "-0079" : {
+      "codigo" : "079",
+      "key" : "-0079",
+      "nome" : "Banco Original do Agronegócio S.A."
+    },
+    "-0078" : {
+      "codigo" : "078",
+      "key" : "-0078",
+      "nome" : "Haitong Banco de Investimento do Brasil S.A. "
+    },
+    "-0077" : {
+      "codigo" : "077",
+      "key" : "-0077",
+      "nome" : "Banco Inter S.A."
+    },
+    "-0076" : {
+      "codigo" : "076",
+      "key" : "-0076",
+      "nome" : "Banco KDB S.A."
+    },
+    "-0075" : {
+      "codigo" : "075",
+      "key" : "-0075",
+      "nome" : "Banco ABN Amro S.A."
+    },
+    "-0074" : {
+      "codigo" : "074",
+      "key" : "-0074",
+      "nome" : "Banco J. Safra S.A."
+    },
+    "-0070" : {
+      "codigo" : "070",
+      "key" : "-0070",
+      "nome" : "Banco de Brasília S.A. (BRB)"
+    },
+    "-0069" : {
+      "codigo" : "069",
+      "key" : "-0069",
+      "nome" : "Banco Crefisa S.A."
+    },
+    "-0066" : {
+      "codigo" : "066",
+      "key" : "-0066",
+      "nome" : "Banco Morgan Stanley S.A."
+    },
+    "-0065" : {
+      "codigo" : "065",
+      "key" : "-0065",
+      "nome" : "Banco Andbank (Brasil) S.A."
+    },
+    "-0064" : {
+      "codigo" : "064",
+      "key" : "-0064",
+      "nome" : "Goldman Sachs do Brasil Banco Múltiplo S.A."
+    },
+    "-0063" : {
+      "codigo" : "063",
+      "key" : "-0063",
+      "nome" : "Banco Bradescard S.A."
+    },
+    "-0062" : {
+      "codigo" : "062",
+      "key" : "-0062",
+      "nome" : "Hipercard Banco Múltiplo S.A."
+    },
+    "-0060" : {
+      "codigo" : "060",
+      "key" : "-0060",
+      "nome" : "Confidence Corretora de Câmbio S.A."
+    },
+    "-0047" : {
+      "codigo" : "047",
+      "key" : "-0047",
+      "nome" : "Banco do Estado de Sergipe S.A."
+    },
+    "-0041" : {
+      "codigo" : "041",
+      "key" : "-0041",
+      "nome" : "Banco do Estado do Rio Grande do Sul S.A."
+    },
+    "-0040" : {
+      "codigo" : "040",
+      "key" : "-0040",
+      "nome" : "Banco Cargill S.A."
+    },
+    "-0037" : {
+      "codigo" : "037",
+      "key" : "-0037",
+      "nome" : "Banco do Estado do Pará S.A."
+    },
+    "-0036" : {
+      "codigo" : "036",
+      "key" : "-0036",
+      "nome" : "Banco Bradesco BBI S.A."
+    },
+    "-0033" : {
+      "codigo" : "033",
+      "key" : "-0033",
+      "nome" : "Banco Santander (Brasil) S.A."
+    },
+    "-0029" : {
+      "codigo" : "029",
+      "key" : "-0029",
+      "nome" : "Banco Itaú Consignado S.A."
+    },
+    "-0025" : {
+      "codigo" : "025",
+      "key" : "-0025",
+      "nome" : "Banco Alfa S.A."
+    },
+    "-0024" : {
+      "codigo" : "024",
+      "key" : "-0024",
+      "nome" : "Banco Bandepe S.A."
+    },
+    "-0021" : {
+      "codigo" : "021",
+      "key" : "-0021",
+      "nome" : "Banco do Estado do Espírito Santo – Baneste S.A."
+    },
+    "-0018" : {
+      "codigo" : "018",
+      "key" : "-0018",
+      "nome" : "Banco Tricury S.A."
+    },
+    "-0017" : {
+      "codigo" : "017",
+      "key" : "-0017",
+      "nome" : "BNY Mellon Banco S.A."
+    },
+    "-0016" : {
+      "codigo" : "016",
+      "key" : "-0016",
+      "nome" : "Cooperativa de Crédito Mútuo dos Despachantes de Trânsito de Sta.Catarina e RS"
+    },
+    "-0015" : {
+      "codigo" : "015",
+      "key" : "-0015",
+      "nome" : "UBS Brasil Corretora de Câmbio, Títulos e Valores Mobiliários S.A."
+    },
+    "-0014" : {
+      "codigo" : "014",
+      "key" : "-0014",
+      "nome" : "Natixis Brasil S.A. Banco Múltiplo"
+    },
+    "-0012" : {
+      "codigo" : "012",
+      "key" : "-0012",
+      "nome" : "Banco Inbursa S.A."
+    },
+    "-0011" : {
+      "codigo" : "011",
+      "key" : "-0011",
+      "nome" : "Credit Suisse Hedging-Griffo Corretora de Valores S.A."
+    },
+    "-0010" : {
+      "codigo" : "010",
+      "key" : "-0010",
+      "nome" : "Credicoamo Crédito Rural Cooperativa"
+    },
+    "-007" : {
+      "codigo" : "007",
+      "key" : "-007",
+      "nome" : "Banco Nacional de Desenvolvimento Econômico e Social – BNDES"
+    },
+    "-004" : {
+      "codigo" : "004",
+      "key" : "-004",
+      "nome" : "Banco do Nordeste do Brasil S.A."
+    },
+    "-003" : {
+      "codigo" : "003",
+      "key" : "-003",
+      "nome" : "Banco da Amazônia S.A."
+    },
+    "-001" : {
+      "codigo" : "001",
+      "key" : "-001",
+      "nome" : "Banco do Brasil S.A."
+    }
+  },
+  "CONFIG_FINANCEIRO" : {
+    "-003" : {
+      "key" : "-003",
+      "nome" : "Lista dos Centros de Custos",
+      "posicao" : 1,
+      "sublista" : "CENTROS_DE_CUSTOS_LISTA"
+    },
+    "-002" : {
+      "key" : "-002",
+      "nome" : "Configurar Bancos",
+      "posicao" : 3,
+      "sublista" : "BANCOS"
+    },
+    "-001" : {
+      "key" : "-001",
+      "nome" : "Configurar Centros de Custos",
+      "posicao" : 2,
+      "sublista" : "CENTROS_DE_CUSTOS"
+    }
+  },
+  "DESPESAS" : {
+    "-0016" : {
+      "fixo" : true,
+      "id" : "D-046",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0016",
+      "nome" : "Mercado"
+    },
+    "-0015" : {
+      "fixo" : true,
+      "id" : "D-047",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0015",
+      "nome" : "Venda Direta"
+    },
+    "-0014" : {
+      "fixo" : true,
+      "id" : "D-045",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0014",
+      "nome" : "Compras para Revenda"
+    },
+    "-0013" : {
+      "fixo" : true,
+      "id" : "D-043",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0013",
+      "nome" : "Diversos"
+    },
+    "-0012" : {
+      "fixo" : true,
+      "id" : "D-042",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0012",
+      "nome" : "Saúde"
+    },
+    "-0011" : {
+      "fixo" : true,
+      "id" : "D-041",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0011",
+      "nome" : "Material de Limpeza, Manutenção e Elétrico"
+    },
+    "-0010" : {
+      "fixo" : true,
+      "id" : "D-040",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-0010",
+      "nome" : "Serviços"
+    },
+    "-009" : {
+      "fixo" : true,
+      "id" : "D-033",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-009",
+      "nome" : "Alimentação"
+    },
+    "-008" : {
+      "fixo" : true,
+      "id" : "D-032",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-008",
+      "nome" : "Transportes"
+    },
+    "-007" : {
+      "fixo" : true,
+      "id" : "D-026",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-007",
+      "nome" : "Material de Trabalho"
+    },
+    "-006" : {
+      "fixo" : true,
+      "id" : "D-015",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-006",
+      "nome" : "Impostos"
+    },
+    "-005" : {
+      "fixo" : true,
+      "id" : "D-014",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-005",
+      "nome" : "Taxas Bancárias"
+    },
+    "-004" : {
+      "fixo" : true,
+      "id" : "D-021",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-004",
+      "nome" : "Aluguéis"
+    },
+    "-003" : {
+      "descricao" : "Água, Luz, Telefone, Internet, Gás",
+      "fixo" : true,
+      "id" : "D-005",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-003",
+      "nome" : "Contas Prediais"
+    },
+    "-002" : {
+      "fixo" : true,
+      "id" : "D-009",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-002",
+      "nome" : "Seguros"
+    },
+    "-001" : {
+      "fixo" : true,
+      "id" : "D-010",
+      "is_despesa" : true,
+      "is_receita" : false,
+      "key" : "-001",
+      "nome" : "Salários"
+    }
+  },
+  "FINANCEIRO" : {
+    "-010" : {
+      "embreve" : false,
+      "key" : "-010",
+      "nome" : "Caixa",
+      "posicao" : 3,
+      "sublista" : "CAIXA"
+    },
+    "-009" : {
+      "embreve" : false,
+      "key" : "-009",
+      "nome" : "Movimentação Financeira",
+      "posicao" : 5,
+      "sublista" : "MOVIMENTACAO"
+    },
+    "-008" : {
+      "embreve" : false,
+      "key" : "-008",
+      "nome" : "Relatórios",
+      "posicao" : 6,
+      "sublista" : "RELATORIOS"
+    },
+    "-007" : {
+      "embreve" : false,
+      "key" : "-007",
+      "nome" : "Lançar Receita",
+      "posicao" : 1,
+      "sublista" : "LANCAMENTOS_RECEITA"
+    },
+    "-006" : {
+      "embreve" : false,
+      "key" : "-006",
+      "nome" : "Lançar Despesa",
+      "posicao" : 2,
+      "sublista" : "LANCAMENTOS_DESPESA"
+    },
+    "-003" : {
+      "embreve" : false,
+      "key" : "-003",
+      "nome" : "Bancos",
+      "posicao" : 4,
+      "sublista" : "BANCOS"
+    }
+  },
+  "LANCAMENTOS" : {
+    "-003" : {
+      "key" : "-003",
+      "nome" : "Estorno",
+      "posicao" : 3,
+      "sublista" : "ESTORNOS"
+    },
+    "-002" : {
+      "key" : "-002",
+      "nome" : "Despesa",
+      "posicao" : 2,
+      "sublista" : "LANCAMENTOS_DESPESA"
+    },
+    "-001" : {
+      "key" : "-001",
+      "nome" : "Receita",
+      "posicao" : 1,
+      "sublista" : "LANCAMENTOS_RECEITA"
+    }
+  },
+  "MOVIMENTACAO" : {
+    "-LzT7-uG5l_UTPheRd5X" : {
+      "nome" : "Lançamentos",
+      "sublista" : "LANCAMENTOS"
+    },
+    "-LzT73SMb_KALCCFsNP4" : {
+      "nome" : "Estornos",
+      "sublista" : "ESTORNOS"
+    },
+    "-LzT76Yrm32WcWobcinR" : {
+      "nome" : "Transferências",
+      "sublista" : "TRANSFERENCIAS"
+    },
+    "-LzT7ArjCaQbwrbRlO9F" : {
+      "nome" : "Conciliação Bancária",
+      "sublista" : "CONCILIACAO"
+    },
+    "-LzT89WobnR" : {
+      "nome" : "Relatórios",
+      "sublista" : "RELATORIOS"
+    }
+  },
+  "RECEITAS" : {
+    "-007" : {
+      "fixo" : true,
+      "id" : "R-007",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-007",
+      "nome" : "Consulta Médica"
+    },
+    "-006" : {
+      "fixo" : true,
+      "id" : "R-006",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-006",
+      "nome" : "Consulta Odontológica"
+    },
+    "-005" : {
+      "fixo" : true,
+      "id" : "R-005",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-005",
+      "nome" : "Salários"
+    },
+    "-004" : {
+      "fixo" : true,
+      "id" : "R-004",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-004",
+      "nome" : "Serviços"
+    },
+    "-003" : {
+      "fixo" : true,
+      "id" : "R-003",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-003",
+      "nome" : "Diversos"
+    },
+    "-002" : {
+      "fixo" : true,
+      "id" : "R-002",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-002",
+      "nome" : "Venda Direta"
+    },
+    "-001" : {
+      "fixo" : true,
+      "id" : "R-001",
+      "is_despesa" : false,
+      "is_receita" : true,
+      "key" : "-001",
+      "nome" : "Venda do Estoque"
+    }
+  },
+  "RELATORIOS" : {
+    "-009" : {
+      "embreve" : false,
+      "key" : "-009",
+      "nome" : "Despesas",
+      "posicao" : 2,
+      "sublista" : "LANCAMENTOS_DESPESA"
+    },
+    "-008" : {
+      "embreve" : false,
+      "key" : "-008",
+      "nome" : "Receitas",
+      "posicao" : 1,
+      "sublista" : "LANCAMENTOS_RECEITA"
+    },
+    "-007" : {
+      "embreve" : false,
+      "key" : "-007",
+      "nome" : "Resultado Financeiro",
+      "posicao" : 7,
+      "sublista" : "RESULTADOS"
+    },
+    "-006" : {
+      "embreve" : false,
+      "key" : "-006",
+      "nome" : "Disponibilidade Futura",
+      "posicao" : 6,
+      "sublista" : "DISPONIBILIDADE"
+    },
+    "-003" : {
+      "embreve" : false,
+      "key" : "-003",
+      "nome" : "Centros de Custos Totalizados",
+      "posicao" : 4,
+      "sublista" : "REL_CENTROS_DE_CUSTOS_TOTALIZADOS"
+    },
+    "-001" : {
+      "embreve" : false,
+      "key" : "-001",
+      "nome" : "Centros de Custos",
+      "posicao" : 3,
+      "sublista" : "CENTROS_DE_CUSTOS_LISTA"
+    }
+  },
+  "REL_CENTROS_DE_CUSTOS" : {
+    "-005" : {
+      "nome" : "Lista dos Centros de Custos",
+      "posicao" : 1,
+      "sublista" : "CENTROS_DE_CUSTOS_LISTA"
+    },
+    "-002" : {
+      "nome" : "Centros de Custos Totalizados",
+      "posicao" : 2,
+      "sublista" : "REL_CENTROS_DE_CUSTOS_TOTALIZADOS"
+    }
+  },
+  "REL_CHEQUES_PRE" : {
+    "-LzPLI6rjNEKIbURAAkx" : {
+      "nome" : "Cheques Pré Dados",
+      "sublista" : "REL_CHEQUES_PRE_DADOS"
+    },
+    "-LzPLNn_dCb3EF73lmnn" : {
+      "nome" : "Cheques Pré Recebidos",
+      "sublista" : "REL_CHEQUES_PRE_RECEBIDOS"
+    }
+  },
+  "REL_EXTRATO_DE_CONTAS" : {
+    "-LzygqzP3prTXrVU-a7Y" : {
+      "key" : "-LzygqzP3prTXrVU-a7Y",
+      "nome" : "Caixa",
+      "posicao" : 1,
+      "sublista" : "CAIXA"
+    },
+    "-Lzygt47-y2CjMc6fCjR" : {
+      "key" : "-Lzygt47-y2CjMc6fCjR",
+      "nome" : "Bancos",
+      "posicao" : 2,
+      "sublista" : "BANCOS"
+    }
+  }
+}

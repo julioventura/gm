@@ -1,142 +1,233 @@
-/**
-* Print Stylesheet fuer Deinewebsite.de
-* @version         1.0
-* @lastmodified    16.06.2016
-*/
+@page {
+  size: letter portrait;
+  margin-top: 17mm;
+  margin-bottom: 0mm;
+  margin-left: 20mm;
+  margin-right: 0cm;
+}
+
+
+
+
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+
+.print_container{
+    display: block;
+}
+
+.print_container:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column {
+    float: left;
+    width: 50%;
+    display: block;
+    font-size: 10pt;
+    height: 24mm;
+    page-break-inside: avoid;
+}
+
+.print_label {
+    display: block;
+    white-space: nowrap;
+    font-size: 10pt;
+}
+.print, .print_only {
+    display: block;
+}
+.page_break {
+    page-break-after: always;
+}
+
+
+@media screen {
+    .espacador_vertical_print_only {
+        display: none;
+    }
+    .print_container{
+        margin-left: 4em;
+    }
+    .print_header{
+        display: none;
+    }
+    .screen_only {
+        display: block;
+    }
+    .print {
+        display: block;
+    }
+    .print_only {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        font-size: 5pt;
+    }
+}
+
+/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+
+
+
+
 
 @media print {
-
-/* Inhaltsbreite setzen, Floats und Margins aufheben */
-/* Achtung: Die Klassen und IDs variieren von Theme zu Theme. Hier also eigene Klassen setzen */
-#content, #page {
-width: 100%;
-margin: 0;
-float: none;
+    body {
+        background: #fff;
+    }
 }
 
-/** Seitenränder einstellen */
-@page { margin: 2cm }
 
-/* Font auf 16px/13pt setzen, Background auf Weiß und Schrift auf Schwarz setzen.*/
-/* Das spart Tinte */
-body {
-font: 13pt Georgia, "Times New Roman", Times, serif;
-line-height: 1.3;
-background: #fff !important;
-color: #000;
+@media print {
+    .print_label {
+        font-size: 11pt;
+    }
+
+    .screen_only,
+    .img_nav, .img_nav_inativo,
+    .menu_ficha, .menu_ficha_inativo, .menu_ficha_oculto, .menu_financeiro, .menu_financeiro_inativo, .menu_ficha_ativado,
+    .input_filtro,
+    .img_url_22 {
+        display: none;
+    }
+    .print, .print_only {
+        display: block;
+    }
+    .container_principal {
+        box-shadow: 0 0 0 0;
+        padding: 0em;
+        margin: 0pt;
+    }
 }
 
-h1 {
-font-size: 24pt;
+@media print {
+    /* CONFIGURAÇÔES GERAIS */
+
+    * {
+        background: transparent;
+        color: #000;
+        text-shadow: none;
+        filter: none;
+        -ms-filter:none !important;
+        font-family: sans-serif;
+    }
+
+    body {
+        margin:0;
+        padding:0;
+        line-height: 1.2em;
+    }
+
+    nav, footer, video, audio, object, embed {
+        display:none;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    .wrap {
+        width: 100%;
+        margin: 0;
+        float: none !important;
+    }
+
+    a, a:visited {
+        text-decoration: underline;
+    }
+
+    /* especificar a URL entre parenteses após o link  */
+    a:link:after, a:visited:after {
+        content: " (" attr(href) ") ";
+    }
+
+    /* Como links muito grandes podem quebrar o parágrafo vale a pena acrescentar mais uma regrinha. */
+    p a {
+        word-wrap: break-word;
+    }
+
+    /* Não é interessante mostrar links internos para imagens ou JavaScript. Para isto utilizamos o seguinte parâmetro. */
+    a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+        content: "";
+    }
+
+    /* a propriedade “widows” determina o número mínimo de linhas que podem sobrar sozinhas no topo de uma página. */
+    p {
+        /* widows: 3; */
+    }
+
+    /* número mínimo de linhas que devem ficar no final da página */
+    p {
+        /* orphans: 3; */
+    }
+
+    table {
+        page-break-inside : avoid
+    }
+
+    .print, .print_only {
+        display: block;
+    }
+
+    .screen_only {
+        display: none;
+    }
 }
 
-h2, h3, h4 {
-font-size: 14pt;
-margin-top: 25px;
-}
 
-/* Alle Seitenumbrüche definieren */
-a {
-page-break-inside:avoid
-}
-blockquote {
-page-break-inside: avoid;
-}
-h1, h2, h3, h4, h5, h6 { page-break-after:avoid;
-page-break-inside:avoid }
-img { page-break-inside:avoid;
-page-break-after:avoid; }
-table, pre { page-break-inside:avoid }
-ul, ol, dl  { page-break-before:avoid }
+@media print {
+    /* CONFIGURACOES ESPECIFICAS */
 
-/* Linkfarbe und Linkverhalten darstellen */
-a:link, a:visited, a {
-background: transparent;
-color: #520;
-font-weight: bold;
-text-decoration: underline;
-text-align: left;
-}
+    .page_break {
+        page-break-after: always;
+    }
 
-a {
-page-break-inside:avoid
-}
+    .print_header{
+        margin: 0mm;
+        height: 20mm;
+    }
 
-a[href^=http]:after {
-content:" <" attr(href) "> ";
-}
+    .espacador_vertical, .espacador_vertical_duplo {
+        display: none;
+    }
 
-$a:after > img {
-content: "";
-}
+    .espacador_vertical_print_only {
+        display: block;
+        height: 5mm;
+    }
 
-article a[href^="#"]:after {
-content: "";
-}
+    .ui-widget .ui-widget, .ui-grid  {
+        display: none;
+    }
 
-a:not(:local-link):after {
-content:" <" attr(href) "> ";
-}
+    .print_container{
+        margin: 0mm;
+        display: block;
+    }
 
-/**
-* Eingebundene Videos verschwinden lassen und den Whitespace der iframes auf null reduzieren.
-*/
-.entry iframe, ins {
-display: none;
-width: 0 !important;
-height: 0 !important;
-overflow: hidden !important;
-line-height: 0pt !important;
-white-space: nowrap;
-}
-.embed-youtube, .embed-responsive {
-position: absolute;
-height: 0;
-overflow: hidden;
-}
+    .column {
+        display: block;
+        height: 25mm;
+        page-break-inside: avoid;
+    }
 
-/* Unnötige Elemente ausblenden für den Druck */
+    .img_nav, .img_nav_inativo,
+    .menu_ficha, .menu_ficha_inativo, .menu_ficha_oculto, .menu_financeiro, .menu_financeiro_inativo, .menu_ficha_ativado,
+    .input_filtro, .input_filtro_estado, .img_url_22 {
+        display: none;
+    }
 
-#header-widgets, nav, aside.mashsb-container,
-.sidebar, .mashshare-top, .mashshare-bottom,
-.content-ads, .make-comment, .author-bio,
-.heading, .related-posts, #decomments-form-add-comment,
-#breadcrumbs, #footer, .post-byline, .meta-single,
-.site-title img, .post-tags, .readability
-{
-display: none;
-}
-
-/* Benutzerdefinierte Nachrichten vor und nach dem Inhalt einfügen */
-.entry:after {
-content: "\ Alle Rechte vorbehalten. (c) 2014 - 2016 TechBrain - techbrain.de";
-color: #999 !important;
-font-size: 1em;
-padding-top: 30px;
-}
-#header:before {
-content: "\ EXEMPLO de texto";
-color: #777 !important;
-font-size: 1em;
-padding-top: 30px;
-text-align: center !important;
-}
-
-/* Wichtige Elemente definieren */
-p, address, li, dt, dd, blockquote {
-font-size: 100%
-}
-
-/* Zeichensatz fuer Code Beispiele */
-code, pre { font-family: "Courier New", Courier, mono}
-
-ul, ol {
-list-style: square; margin-left: 18pt;
-margin-bottom: 20pt;
-}
-
-li {
-line-height: 1.6em;
-}
-
+    .container_principal {
+        box-shadow: 0 0 0 0;
+        padding: 0em;
+        margin: 0pt;
+    }
 }

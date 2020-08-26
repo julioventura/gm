@@ -11,7 +11,7 @@
             <div class="float-clear"></div>
         </div>
 
-        <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div>
             <div class="float_left_33 menu_home"><img src="https://gestormix.com/img/lista.png" class="img_nav_home" (click)="go('ATENDIMENTOS')"><br />ATENDIMENTOS</div>
@@ -20,11 +20,11 @@
             <div class="float-clear"></div>
         </div>
 
-        <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+        <div class="espacador_vertical_duplo">&nbsp;</div>
 
         <div>
             <div class="float_left_33 menu_home"> <img src="https://gestormix.com/img/perfil.png" class="img_nav_home" (click)="go('PERFIL')"><br />MEU PERFIL</div>
-            <div class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICOS')"><br />HISTÓRICO</div>
+            <div class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICO')"><br />HISTÓRICO</div>
             <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURAÇÃO</div>
             <div class="float-clear"></div>
         </div>
@@ -47,7 +47,7 @@
                 <div class="float-clear"></div>
             </div>
 
-            <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
             <div>
 
                 <div class="float_left_33 menu_home">
@@ -63,14 +63,14 @@
                 <div class="float-clear"></div>
             </div>
 
-            <div class="espacador_vertical_duplo_printable">&nbsp;</div>
+            <div class="espacador_vertical_duplo">&nbsp;</div>
 
             <div>
 
                 <div *ngIf="dados.total_de_usuarios==-1" class="float_left_33 menu_home"> <img src="https://gestormix.com/img/perfil.png" class="img_nav_home_inativo"><br />MEU PERFIL</div>
                 <div *ngIf="dados.total_de_usuarios>-1" class="float_left_33 menu_home"> <img src="https://gestormix.com/img/perfil.png" class="img_nav_home" (click)="go('PERFIL')"><br />MEU PERFIL</div>
 
-                <div *ngIf="dados.total_de_historicos>-1" class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICOS')"><br />HISTÓRICO</div>
+                <div *ngIf="dados.total_de_historicos>-1" class="float_right_33 menu_home"> <img src="https://gestormix.com/img/historico.png" class="img_nav_home" (click)="go('HISTORICO')"><br />HISTÓRICO</div>
 
                 <div class="float_center_33 menu_home"> <img src="https://gestormix.com/img/config.png" class="img_nav_home" (click)="go('CONFIGURACAO')"><br />CONFIGURAÇÃO</div>
 
